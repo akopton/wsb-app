@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 const LoginPanel = () => {
 
     const [login, setLogin] = useState('')
@@ -7,13 +6,11 @@ const LoginPanel = () => {
     const [user, setUser] = useState(0)
 
     useEffect(() => {
-        console.log('elo')
     }, [login])
     
     const loginValidation = () => {
 
     }
-
 
     return (
         <div className="login-panel">

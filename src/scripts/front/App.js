@@ -1,5 +1,4 @@
 import LoginPanel from "./LoginPanel";
-
 const App = () => {
   return (
     <div>
