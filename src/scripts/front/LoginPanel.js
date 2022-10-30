@@ -1,15 +1,31 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 const LoginPanel = () => {
 
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
-    const [user, setUser] = useState(0)
 
-    useEffect(() => {
-    }, [login])
-    
-    const loginValidation = () => {
+    const user = {
+        login: login,
+        siem: password
+    }
 
+    const sendDataToDatabase = async () => {
+        console.log('its working')
+        const settings = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        }
+        try {
+            const fetchResponse = await fetch('http://127.0.0.1:8888/users', settings)
+            const data = await fetchResponse.json()
+            console.log(data)
+            return data
+        } catch (error) {
+            return error
+        }
     }
 
     return (
@@ -36,8 +52,10 @@ const LoginPanel = () => {
                 className="login-panel__login-button"
                 type="submit"
                 value="siem mordo"
-                onClick={() =>
-                            loginValidation()
+                onClick={() => {
+                                sendDataToDatabase()
+                                console.log(user)
+                            }
                         }
             />
         </div>
