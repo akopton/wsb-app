@@ -59,6 +59,11 @@ const LoginPanel = () => {
                         }
             />
             <div></div>
+
+
+                        {/* zmiana branch ADAM */}
+                    <h1>adam</h1>
+                    <h2>korzeniowski</h2>
         </div>
     )
 }
