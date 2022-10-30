@@ -59,9 +59,6 @@ const LoginPanel = () => {
                         }
             />
             <div></div>
-
-            <div></div>
-            <h1>siemka</h1>
         </div>
     )
 }
