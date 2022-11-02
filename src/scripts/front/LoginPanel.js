@@ -1,51 +1,42 @@
-import { useEffect, useState, useSyncExternalStore } from "react";
-const LoginPanel = () => {
+import { useEffect, useState } from "react";
+const LoginPanel = ( { isLoggedIn, setLoggedUser, setIsLoggedIn, usersList } ) => {
 
-    const [login, setLogin] = useState('')
-    const [password, setPassword] = useState('')
+    const [inputLogin, setInputLogin] = useState('')
+    const [inputPassword, setInputPassword] = useState('')
+    const [fetchedUser, setFetchedUser] = useState({})
 
-    const user = {
-        login: login,
-        siem: password
+    const findUser = () => {
+        usersList.forEach(user => {
+            if (user.login == inputLogin) {
+                setFetchedUser(user)
+            } else return
+        })
     }
 
-    const sendDataToDatabase = async () => {
-        console.log('its working')
-        const settings = {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        }
-        try {
-            const fetchResponse = await fetch('http://127.0.0.1:8888/users', settings)
-            const data = await fetchResponse.json()
-            console.log(data)
-            return data
-        } catch (error) {
-            return error
-        }
+    const handleLogin = async () => {
+        if (fetchedUser.password === inputPassword && fetchedUser.login === inputLogin) setIsLoggedIn(true)
+        else return
     }
 
     return (
         <div className="login-panel">
             <input
-                id="login"
                 className="login-panel__login-input --input"
                 type='text'
                 placeholder='login'
                 onChange={(e) => {
-                            setLogin(e.target.value)
+                            setInputLogin(e.target.value)
                         }} 
+                onBlur={(e) => {
+                            findUser(e.target.value)
+                        }}
             ></input>
             <input 
-                id="password"
                 className="login-panel__password-input --input"
-                type='text'
+                type='password'
                 placeholder='password'
                 onChange={(e) => {
-                            setPassword(e.target.value)
+                            setInputPassword(e.target.value)
                         }}
             />
             <input 
@@ -53,12 +44,10 @@ const LoginPanel = () => {
                 type="submit"
                 value="siem mordo"
                 onClick={() => {
-                                sendDataToDatabase()
-                                console.log(user)
-                            }
-                        }
+                            handleLogin().then(()=>setLoggedUser(fetchedUser))
+                        }}
             />
-            <div></div>
+
         </div>
     )
 }

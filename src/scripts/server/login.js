@@ -1,68 +1,121 @@
 const express = require('express')
 const cors = require('cors')
-let request = require('request')
 const bodyParser = require('body-parser')
 const dotenv = require('dotenv');
-const app = express()
+const request = require('request')
 dotenv.config();
+const app = express()
 const port = 8888
 
-
-
-
-const mongoose = require('mongoose')
-const uri = 'mongodb+srv://olek:zaqwsxcde@app.t3wuhzm.mongodb.net/?retryWrites=true&w=majority'
-
-// const connectDB = async () => {
-//     try {
-//         const conn = await mongoose.connect(uri, {
-//             useUnifiedTopology: true,
-//             useNewUrlParser: true
-//         })
-        
-//         console.log(`MongoDB Connected: ${conn.connection.host}`)
-//         return conn
-//     } catch (err) {
-//         console.error(err.message)
-//     }
-// }
-
-mongoose.connect('mongodb+srv://olek:zaqwsxcde@app.t3wuhzm.mongodb.net/?retryWrites=true&w=majority', {
-        useUnifiedTopology: true,
-        useNewUrlParser: true
-    })
-
-const db = mongoose.connection
-    db.on('error', console.error.bind(console, 'connection server: '))
-    db.once('open', function () {
-    console.log('Connection succesfully')
-})
-
-// app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
 app.use(cors());
 app.use(express.json())
-// app.use(bodyParser.json())
 
-app.get('/', (req, res) => {
-    res.send('works')
-})
 
-let user
 
-app.post('/users', (req, res) => {
+const mongoose = require('mongoose');
+const {MongoClient} = require('mongodb')
+const uri = 'mongodb+srv://olek:zaqwsxcde@app.t3wuhzm.mongodb.net/?retryWrites=true&w=majority'
+const client = new MongoClient(uri)
+const myData = client.db('wsb_app_database').collection('usersList')
+
+
+// register and login panel
+let NEW_USER_TO_REGISTER
+let EXISTING_USER = false
+let EXISTING_USER_LOGIN
+let usersList
+
+
+// getting new user from register form
+app.post('/users', async (req, res) => {
     console.log('it works' )
     res.send(req.body)
-    user = req.body
-    // db.collection('usersList').insertOne(req.body, (err, data) => {
-    //     if (err) return console.log(err)
-    //     res.send('saved to database' + data)
-    // })
+    NEW_USER_TO_REGISTER = req.body
+    await checkIfUserExists(client, NEW_USER_TO_REGISTER)
+    if (EXISTING_USER || NEW_USER_TO_REGISTER.login == '') return
+    await registerNewUser(client, NEW_USER_TO_REGISTER)
 })
+
+// checking if user's login already exists in database
+async function checkIfUserExists(client, newUser) {
+    try {
+        await client.connect()
+        const result = await myData.findOne({login: newUser.login})
+        if (result == null) EXISTING_USER = false
+        else {
+            EXISTING_USER = true
+            EXISTING_USER_LOGIN = result
+        }
+    } catch (e) {
+        console.error(e)
+    } finally {
+        await client.close()
+    }
+}
+
+// inserting new user to collection usersList
+async function registerNewUser(client, newUser) {
+    try {
+        await client.connect()
+        const result = await myData.insertOne(newUser)
+        console.log('działa kurwisko')
+        return result
+    } catch (e) {
+        console.error(e)
+    } finally {
+        await client.close()
+    }
+}
+
+
+
+
 
 app.get('/users', (req, res) => {
-    res.send(user)
 })
 
-app.listen(8888, () => {
+
+
+
+app.get('/', (req, res) => {
+    getListOfUsers(client)
+    res.send(usersList)
+})
+
+
+
+
+app.listen(port, () => {
     console.log(`Server is running on port ${port}`)
 })
+
+
+async function getListOfUsers(client) {
+    try {
+        await client.connect()
+        const result = await myData.find({}).toArray()
+        usersList = result
+    } catch (e) {
+        console.error(e)
+    } finally {
+        await client.close()
+    }
+}
+
+
+
+
+// async function connectToMongo() {
+//     const client = new MongoClient(uri)
+//     try {
+//         await client.connect()
+//     } catch (e) {
+//         console.error(e)
+//     } finally {
+//         await client.close()
+//     }
+// }
+// connectToMongo().catch(console.error)
+
