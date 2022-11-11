@@ -1,12 +1,17 @@
 import React from "react"
 import { useEffect, useState } from "react"
+import AccountSettings from "./AccountSettings"
 import ActiveTasks from "./ActiveTasks"
-import AddTask from "./AddTask"
+import NewTask from "./AddTask"
 import DoneTasks from "./DoneTasks"
 import TodoTasks from "./ToDoTasks"
 
+const { NewTaskBtn, NewTaskForm} = NewTask
+
 const MainSite = ( { defaultUser, setIsLoggedIn, setLoggedUser, loggedUser, waitValue }: any) => {
-    const [hidden, setHidden] = useState(true)
+    const [hidden, setHidden] = useState<boolean>(true)
+    const [openNewTaskForm, setOpenNewTaskForm] = useState<boolean>(false)
+
 
     const show = () => {
         setHidden(false)
@@ -29,13 +34,21 @@ const MainSite = ( { defaultUser, setIsLoggedIn, setLoggedUser, loggedUser, wait
                 </div> 
                 : 
                 <div className="main-site">
-                    <div className="main-site__account-button">
-
+                    <div className="control-buttons">
+                        <NewTaskBtn
+                            isFormOpened={setOpenNewTaskForm}
+                        />
+                        <AccountSettings />
                     </div>
-                    <AddTask />
-                    <TodoTasks />
-                    <ActiveTasks />
-                    <DoneTasks />
+                    {openNewTaskForm && 
+                            <NewTaskForm 
+                            isFormOpened={setOpenNewTaskForm}
+                        />}
+                    <div className="task-lists">
+                        <TodoTasks />
+                        <ActiveTasks />
+                        <DoneTasks />
+                    </div>
                 </div>
             }       
         </>

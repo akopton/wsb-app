@@ -28,7 +28,7 @@ const App = () => {
   const [isRegisterPanelOpened, openRegisterPanel] = useState(Boolean)
   const [usersList, setUsersList] = useState([])
   const [loggedUser, setLoggedUser] = useState(defaultUser)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(true)
 
 
 
@@ -48,7 +48,7 @@ const App = () => {
       {!isRegisterPanelOpened ? 
       <>
         { !isLoggedIn ? 
-          <>
+          <div className="panel__wrapper">
             <LoginPanel 
               isLoggedIn={isLoggedIn}
               setIsLoggedIn={setIsLoggedIn}
@@ -59,7 +59,7 @@ const App = () => {
             <button onClick={()=>openRegisterPanel(true)}>
               Don't have an account?
             </button>
-          </>
+          </div>
           : 
           <>
             <MainSite 
@@ -74,7 +74,7 @@ const App = () => {
 
         </>
         : 
-        <>
+        <div className="panel__wrapper">
           <RegisterPanel 
             usersList={usersList}
             defaultUser={loggedUser}
@@ -83,7 +83,7 @@ const App = () => {
           <button onClick={()=>openRegisterPanel(false)}>
             Already signed in?
           </button>
-        </>
+        </div>
       }
     </div>
   )

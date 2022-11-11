@@ -1,30 +1,32 @@
 .app-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.panel__wrapper {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding-bottom: 50px;
-  border: 1px solid red;
 }
-
-.login-panel, .register-panel {
+.panel__wrapper .login-panel, .panel__wrapper .register-panel {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: 200px;
   height: 200px;
   border: 1px solid black;
 }
-.login-panel .--input, .register-panel .--input {
+.panel__wrapper .login-panel .--input, .panel__wrapper .register-panel .--input {
   margin-bottom: 10px;
 }
-.login-panel__login-button, .register-panel__login-button {
+.panel__wrapper .login-panel__login-button, .panel__wrapper .register-panel__login-button {
   width: 150px;
   height: 30px;
   border: 1px solid red;
 }
-.login-panel__login-button:hover, .register-panel__login-button:hover {
+.panel__wrapper .login-panel__login-button:hover, .panel__wrapper .register-panel__login-button:hover {
   background-color: black;
 }
 
@@ -35,6 +37,33 @@
   justify-content: center;
   width: 100%;
   height: 200px;
+  border: 1px solid black;
+}
+
+.main-site .control-buttons {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+}
+.main-site .control-buttons .button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  width: 20px;
+  height: 20px;
+  background-color: gray;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.main-site .new-task__form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 250px;
   border: 1px solid black;
 }
 
