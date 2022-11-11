@@ -1,21 +1,24 @@
+import React from "react";
 import { useEffect, useState } from "react";
-const LoginPanel = ( { isLoggedIn, setLoggedUser, setIsLoggedIn, usersList } ) => {
 
+const LoginPanel = ( { defaultUser, setLoggedUser, setIsLoggedIn, usersList }: any) => {
     const [inputLogin, setInputLogin] = useState('')
     const [inputPassword, setInputPassword] = useState('')
-    const [fetchedUser, setFetchedUser] = useState({})
+    const [fetchedUser, setFetchedUser] = useState(defaultUser)
 
-    const findUser = () => {
-        usersList.forEach(user => {
-            if (user.login == inputLogin) {
+    const findUser = (input: string) => {
+        usersList.forEach((user: any) => {
+            if (input === user.login) {
                 setFetchedUser(user)
             } else return
         })
     }
 
     const handleLogin = async () => {
-        if (fetchedUser.password === inputPassword && fetchedUser.login === inputLogin) setIsLoggedIn(true)
-        else return
+        if (!inputLogin) return
+        if (!inputPassword) return
+        if (inputPassword !== fetchedUser.password) return
+        setIsLoggedIn(true)
     }
 
     return (

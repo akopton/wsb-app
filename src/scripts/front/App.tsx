@@ -1,29 +1,41 @@
 import { useEffect, useState } from "react";
 import RegisterPanel from './RegisterPanel';
 import LoginPanel from "./LoginPanel";
-import ActualPage from "./ActualPage";
+import MainSite from "./MainSite";
+import * as React from "react";
 
 const App = () => {
-  const userInterface = {
+  interface UserInterface {
+    id: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+    login: string,
+    password: string,
+    allTasks: Array<[]>,
+  }
+
+ const defaultUser: UserInterface = {
     id: '',
+    firstName: '',
+    lastName: '',
     email: '',
     login: '',
     password: '',
     allTasks: [],
   }
 
-  const [isRegisterPanelOpened, openRegisterPanel] = useState(false)
+  const [isRegisterPanelOpened, openRegisterPanel] = useState(Boolean)
   const [usersList, setUsersList] = useState([])
-  const [loggedUser, setLoggedUser] = useState(userInterface)
+  const [loggedUser, setLoggedUser] = useState(defaultUser)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
 
 
-  const url = 'http://127.0.0.1:8888'
-  const getUsersFromDatabase = () => {
-    fetch(url)
-      .then((data) => data.json())
-      .then((res) => setUsersList(res))
+  const getUsersFromDatabase = async () => {
+    fetch('http://127.0.0.1:8888')
+      .then((data?) => data.json())
+      .then((res?) => setUsersList(res))
   }
 
   useEffect(()=>{
@@ -32,7 +44,7 @@ const App = () => {
 
   return (
     <div className="app-container">
-    <button onClick={()=>console.log(usersList)}>elo</button>
+    {/* <button onClick={()=>console.log(usersList)}>elo</button> */}
       {!isRegisterPanelOpened ? 
       <>
         { !isLoggedIn ? 
@@ -42,7 +54,7 @@ const App = () => {
               setIsLoggedIn={setIsLoggedIn}
               usersList={usersList}
               setLoggedUser={setLoggedUser}
-              user={loggedUser}
+              defaultUser={defaultUser}
             />
             <button onClick={()=>openRegisterPanel(true)}>
               Don't have an account?
@@ -50,11 +62,11 @@ const App = () => {
           </>
           : 
           <>
-            <ActualPage 
-              userInterface={userInterface}
+            <MainSite 
+              defaultUser={defaultUser}
               setIsLoggedIn={setIsLoggedIn}
               setLoggedUser={setLoggedUser}
-              loggedUser={loggedUser}  
+              loggedUser={loggedUser}
               waitValue={800}
               />
           </>
@@ -65,7 +77,8 @@ const App = () => {
         <>
           <RegisterPanel 
             usersList={usersList}
-            user={loggedUser}
+            defaultUser={loggedUser}
+            getUsersFromDatabase={getUsersFromDatabase}
           />
           <button onClick={()=>openRegisterPanel(false)}>
             Already signed in?

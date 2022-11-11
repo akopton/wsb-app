@@ -1,28 +1,37 @@
+import React from "react"
 import { useState } from "react"
 
-const RegisterPanel = ( { usersList, user } ) => {
+const RegisterPanel = ( { usersList, defaultUser }: any ) => {
 
     
     const [emailToRegister, setEmailToRegister] = useState('')
     const [loginToRegister, setLoginToRegister] = useState('')
     const [passwordToRegister, setPasswordToRegister] = useState('')
+    
     let newUser = {
         email: emailToRegister,
         login: loginToRegister,
         password: passwordToRegister,
     }
-    newUser = Object.assign(user, newUser)
+    newUser = Object.assign(defaultUser, newUser)
 
     const checkIfUserExists = async () => {
-        return usersList.some(user => user.login === loginToRegister || user.email === emailToRegister)
+        return usersList.some((user: any) => user.login === loginToRegister || user.email === emailToRegister)
     }
 
     const handleRegister = async () => {
+        if (!emailToRegister) return
+        if (!loginToRegister) return
+        if (!passwordToRegister) return
+
         checkIfUserExists()
-            .then((result) => {
+            .then(async (result) => {
                 if (!result)
-                registerNewUser()
+                await registerNewUser()
+                else
+                alert('Podany użytkownik już istnieje')
             })
+            // .then(()=>{getUsersFromDatabase()})
     }
 
     const registerNewUser = async () => {

@@ -8,7 +8,7 @@ const app = express()
 const port = 8888
 
 app.use(bodyParser.urlencoded({extended: true}))
-app.use(bodyParser.json())
+// app.use(bodyParser.json())
 app.use(cors());
 app.use(express.json())
 
@@ -23,7 +23,7 @@ const myData = client.db('wsb_app_database').collection('usersList')
 
 // register and login panel
 let NEW_USER_TO_REGISTER
-let EXISTING_USER = false
+let EXISTING_USER
 let EXISTING_USER_LOGIN
 let usersList
 
@@ -60,7 +60,7 @@ async function registerNewUser(client, newUser) {
     try {
         await client.connect()
         const result = await myData.insertOne(newUser)
-        console.log('działa kurwisko')
+        console.log('New user registered')
         return result
     } catch (e) {
         console.error(e)
@@ -70,28 +70,20 @@ async function registerNewUser(client, newUser) {
 }
 
 
-
-
-
 app.get('/users', (req, res) => {
 })
 
-
-
-
-app.get('/', (req, res) => {
-    getListOfUsers(client)
+app.get('/', async (req, res) => {
     res.send(usersList)
 })
-
-
-
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`)
 })
 
 
+
+// do poprawy!!!
 async function getListOfUsers(client) {
     try {
         await client.connect()
@@ -104,18 +96,6 @@ async function getListOfUsers(client) {
     }
 }
 
+getListOfUsers(client)
 
-
-
-// async function connectToMongo() {
-//     const client = new MongoClient(uri)
-//     try {
-//         await client.connect()
-//     } catch (e) {
-//         console.error(e)
-//     } finally {
-//         await client.close()
-//     }
-// }
-// connectToMongo().catch(console.error)
 
