@@ -7,10 +7,12 @@ import DoneTasks from "./DoneTasks"
 import TodoTasks from "./ToDoTasks"
 
 const { NewTaskBtn, NewTaskForm} = NewTask
+const { AccountSettingsPanel, AccountSettingsBtn } = AccountSettings
 
-const MainSite = ( { defaultUser, setIsLoggedIn, setLoggedUser, loggedUser, waitValue }: any) => {
+const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, loggedUser, waitValue }: any) => {
     const [hidden, setHidden] = useState<boolean>(true)
-    const [openNewTaskForm, setOpenNewTaskForm] = useState<boolean>(false)
+    const [isNewTaskFormOpened, setIsNewTaskFormOpened] = useState<boolean>(false)
+    const [isAccountSettingsPanelOpened, setIsAccountSettingsPanelOpened] = useState<boolean>(false)
 
 
     const show = () => {
@@ -36,13 +38,18 @@ const MainSite = ( { defaultUser, setIsLoggedIn, setLoggedUser, loggedUser, wait
                 <div className="main-site">
                     <div className="control-buttons">
                         <NewTaskBtn
-                            isFormOpened={setOpenNewTaskForm}
+                            setIsFormOpened={setIsNewTaskFormOpened}
                         />
-                        <AccountSettings />
+                        <AccountSettingsBtn />
                     </div>
-                    {openNewTaskForm && 
-                            <NewTaskForm 
-                            isFormOpened={setOpenNewTaskForm}
+                    {isNewTaskFormOpened && 
+                        <NewTaskForm 
+                            setIsFormOpened={setIsNewTaskFormOpened}
+                            usersList={usersList}
+                        />}
+                    {isAccountSettingsPanelOpened &&
+                        <AccountSettingsPanel 
+                            setIsPanelOpened={setIsAccountSettingsPanelOpened}
                         />}
                     <div className="task-lists">
                         <TodoTasks />

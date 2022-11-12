@@ -28,7 +28,7 @@ const App = () => {
   const [isRegisterPanelOpened, openRegisterPanel] = useState(Boolean)
   const [usersList, setUsersList] = useState([])
   const [loggedUser, setLoggedUser] = useState(defaultUser)
-  const [isLoggedIn, setIsLoggedIn] = useState(true)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
 
 
@@ -68,6 +68,7 @@ const App = () => {
               setLoggedUser={setLoggedUser}
               loggedUser={loggedUser}
               waitValue={800}
+              usersList={usersList}
               />
           </>
         }

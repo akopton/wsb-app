@@ -2,9 +2,31 @@
 @import './styles/loginPanel';
 @import './styles/registerPanel';
 @import './styles/mainSite';
+@import './styles/newTaskForm';
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+.hidden {
+    display: none;
+}
+
+.button--round {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    background-color: gray;
+    border: 1px solid black;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+ul {
+    list-style-type: none;
 }

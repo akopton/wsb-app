@@ -1,0 +1,60 @@
+.blur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    background: rgba(136, 135, 134, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1;
+
+    .close-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+
+        &:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+            width:60%;
+            height: 1px;
+            background-color: black;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%) rotate(-45deg);
+            width: 60%;
+            height: 1px;
+            background-color: black;
+        }
+    }
+}
+
+.new-task__form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 200px;
+    height: 250px;
+    border: 1px solid white;
+    z-index: 2;
+
+
+    textarea {
+        resize: none;
+    }
+
+    .picked-asignee {
+    }
+}
