@@ -55,6 +55,15 @@
         resize: none;
     }
 
-    .picked-asignee {
+    .asignee-picker {
+        border: 1px solid black;
+        width: 60%;
+        padding: 0;
+        position: relative;
+
+        .picked-asignee {
+            border: 1px solid red;
+            cursor: pointer;
+        }
     }
 }
