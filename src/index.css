@@ -99,6 +99,17 @@
 .new-task__form textarea {
   resize: none;
 }
+.new-task__form .asignee-picker {
+  border: 1px solid black;
+  width: 60%;
+  padding: 0;
+  position: relative;
+}
+.new-task__form .asignee-picker .picked-asignee {
+  border: 1px solid red;
+  cursor: pointer;
+}
+
 * {
   margin: 0;
   padding: 0;
