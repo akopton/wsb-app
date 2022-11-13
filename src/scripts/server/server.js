@@ -18,14 +18,13 @@ const mongoose = require('mongoose');
 const {MongoClient} = require('mongodb')
 const uri = 'mongodb+srv://olek:zaqwsxcde@app.t3wuhzm.mongodb.net/?retryWrites=true&w=majority'
 const client = new MongoClient(uri)
-const myData = client.db('wsb_app_database').collection('usersList')
-
+const usersCollection = client.db('wsb_app_database').collection('usersList')
+const tasksCollection = client.db('wsb_app_database').collection('tasksList')
 
 // register and login panel
 let NEW_USER_TO_REGISTER
 let EXISTING_USER
-let EXISTING_USER_LOGIN
-let usersList
+let USERS_LIST
 
 
 // getting new user from register form
@@ -42,7 +41,7 @@ app.post('/users', async (req, res) => {
 async function checkIfUserExists(client, newUser) {
     try {
         await client.connect()
-        const result = await myData.findOne({login: newUser.login})
+        const result = await usersCollection.findOne({login: newUser.login})
         if (result == null) EXISTING_USER = false
         else {
             EXISTING_USER = true
@@ -50,23 +49,19 @@ async function checkIfUserExists(client, newUser) {
         }
     } catch (e) {
         console.error(e)
-    } finally {
-        await client.close()
-    }
+    } 
 }
 
 // inserting new user to collection usersList
 async function registerNewUser(client, newUser) {
     try {
         await client.connect()
-        const result = await myData.insertOne(newUser)
+        const result = await usersCollection.insertOne(newUser)
         console.log('New user registered')
         return result
     } catch (e) {
         console.error(e)
-    } finally {
-        await client.close()
-    }
+    } 
 }
 
 
@@ -74,7 +69,7 @@ app.get('/users', (req, res) => {
 })
 
 app.get('/', async (req, res) => {
-    res.send(usersList)
+    res.send(USERS_LIST)
 })
 
 app.listen(port, () => {
@@ -83,16 +78,35 @@ app.listen(port, () => {
 
 
 
-// do poprawy!!!
+// adding new task to collection
+
+app.post('/tasks', (req, res) => {
+    console.log('adding new task')
+    res.send(req.body)
+    const newTask = req.body
+    addNewTask(client, newTask)
+})
+
+async function addNewTask(client, newTask) {
+    try {
+        await client.connect()
+        const result = tasksCollection.insertOne(newTask)
+        return result
+    } catch (e) {
+        console.error(e)
+    } 
+}
+
+
+
+
 async function getListOfUsers(client) {
     try {
         await client.connect()
-        const result = await myData.find({}).toArray()
-        usersList = result
+        const result = await usersCollection.find({}).toArray()
+        USERS_LIST = result
     } catch (e) {
         console.error(e)
-    } finally {
-        await client.close()
     }
 }
 
