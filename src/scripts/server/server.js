@@ -22,37 +22,94 @@ const usersCollection = client.db('wsb_app_database').collection('usersList')
 const tasksCollection = client.db('wsb_app_database').collection('tasksList')
 
 // register and login panel
-let NEW_USER_TO_REGISTER
-let EXISTING_USER
-let USERS_LIST
-
 
 // getting new user from register form
 app.post('/users', async (req, res) => {
     console.log('it works' )
     res.send(req.body)
-    NEW_USER_TO_REGISTER = req.body
-    await checkIfUserExists(client, NEW_USER_TO_REGISTER)
+    const NEW_USER_TO_REGISTER = req.body
+    const EXISTING_USER = await checkIfUserExists(client, NEW_USER_TO_REGISTER)
     if (EXISTING_USER || NEW_USER_TO_REGISTER.login == '') return
     await registerNewUser(client, NEW_USER_TO_REGISTER)
 })
 
-// checking if user's login already exists in database
+app.get('/users', async (req, res) => {
+    const USERS_LIST = await getListOfUsers(client)
+    res.send(USERS_LIST)
+})
+
+app.post('/tasks', async (req, res) => {
+    console.log('adding new task')
+    res.send(req.body)
+    const NEW_TASK = req.body
+    await addNewTask(client, NEW_TASK)
+
+    // try {
+    //     const NEW_TASK = await addNewTask(client, req.body)
+    //     return NEW_TASK
+    // } catch (e) {
+    //     console.log(e)
+    // }
+
+})
+
+app.post('/delete-all', (req, res) => {
+    deleteAllTasks(client)
+})
+
+ async function deleteAllTasks(client) {
+    try {
+        client.connect()
+        const result = await tasksCollection.deleteMany({})
+        return result
+    } catch (e) {
+        console.error(e)
+    } finally {
+        client.close()
+     }
+}
+
+
+app.get('/get-tasks', async (req, res) => {
+    try {
+        const TASKS_LIST = await getListOfTasks(client)
+        res.send(TASKS_LIST)
+    } catch (e) {
+        console.error(e)
+    }
+})
+
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`)
+})
+
 async function checkIfUserExists(client, newUser) {
     try {
         await client.connect()
         const result = await usersCollection.findOne({login: newUser.login})
-        if (result == null) EXISTING_USER = false
+        if (result == null) return false
         else {
-            EXISTING_USER = true
-            EXISTING_USER_LOGIN = result
+            return true
         }
     } catch (e) {
         console.error(e)
-    } 
+    } finally {
+        client.close()
+    }
 }
 
-// inserting new user to collection usersList
+async function getListOfUsers(client) {
+    try {
+        await client.connect()
+        const result = await usersCollection.find({}).toArray()
+        return result
+    } catch (e) {
+        console.error(e)
+    } finally {
+        client.close()
+    }
+}
+
 async function registerNewUser(client, newUser) {
     try {
         await client.connect()
@@ -61,55 +118,37 @@ async function registerNewUser(client, newUser) {
         return result
     } catch (e) {
         console.error(e)
-    } 
+    } finally {
+        client.close()
+    }
 }
 
-
-app.get('/users', (req, res) => {
-})
-
-app.get('/', async (req, res) => {
-    res.send(USERS_LIST)
-})
-
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`)
-})
-
-
-
-// adding new task to collection
-
-app.post('/tasks', (req, res) => {
-    console.log('adding new task')
-    res.send(req.body)
-    const newTask = req.body
-    addNewTask(client, newTask)
-})
+async function getListOfTasks(client) {
+    try {
+        await client.connect()
+        const result = await tasksCollection.find({}).toArray()
+        return result
+    } catch (e) {
+        console.error(e)
+    } finally {
+        // client.close()
+    }
+}
 
 async function addNewTask(client, newTask) {
     try {
         await client.connect()
-        const result = tasksCollection.insertOne(newTask)
+        const result = await tasksCollection.insertOne(newTask)
+        console.log('task added')
         return result
     } catch (e) {
         console.error(e)
-    } 
-}
-
-
-
-
-async function getListOfUsers(client) {
-    try {
-        await client.connect()
-        const result = await usersCollection.find({}).toArray()
-        USERS_LIST = result
-    } catch (e) {
-        console.error(e)
+    } finally {
+        client.close()
     }
 }
 
-getListOfUsers(client)
+
+
 
 

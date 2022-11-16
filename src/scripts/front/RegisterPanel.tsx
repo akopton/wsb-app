@@ -1,7 +1,7 @@
 import React from "react"
 import { useState } from "react"
 
-const RegisterPanel = ( { usersList, defaultUser }: any ) => {
+const RegisterPanel = ( { setUsersList, usersList, defaultUser }: any ) => {
 
     
     const [emailToRegister, setEmailToRegister] = useState('')
@@ -17,21 +17,6 @@ const RegisterPanel = ( { usersList, defaultUser }: any ) => {
 
     const checkIfUserExists = async () => {
         return usersList.some((user: any) => user.login === loginToRegister || user.email === emailToRegister)
-    }
-
-    const handleRegister = async () => {
-        if (!emailToRegister) return
-        if (!loginToRegister) return
-        if (!passwordToRegister) return
-
-        checkIfUserExists()
-            .then(async (result) => {
-                if (!result)
-                await registerNewUser()
-                else
-                alert('Podany użytkownik już istnieje')
-            })
-            // .then(()=>{getUsersFromDatabase()})
     }
 
     const registerNewUser = async () => {
@@ -51,6 +36,23 @@ const RegisterPanel = ( { usersList, defaultUser }: any ) => {
             return error
         }
     }
+    
+    const handleRegister = async () => {
+        if (!emailToRegister) return
+        if (!loginToRegister) return
+        if (!passwordToRegister) return
+
+        checkIfUserExists()
+            .then(async (result) => {
+                if (!result)
+                await registerNewUser()
+                else
+                alert('Podany użytkownik już istnieje')
+            })
+        setUsersList([...usersList, newUser])
+    }
+
+    
 
     return (
         <div className="register-panel">

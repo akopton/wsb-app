@@ -5,32 +5,46 @@ import ActiveTasks from "./ActiveTasks"
 import NewTask from "./AddTask"
 import DoneTasks from "./DoneTasks"
 import TodoTasks from "./ToDoTasks"
-
 const { NewTaskBtn, NewTaskForm} = NewTask
 const { AccountSettingsPanel, AccountSettingsBtn } = AccountSettings
 
 const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, loggedUser, waitValue }: any) => {
-    const [hidden, setHidden] = useState<boolean>(true)
+    const [isMainSiteLoading, setIsMainSiteLoading] = useState<boolean>(true)
     const [isNewTaskFormOpened, setIsNewTaskFormOpened] = useState<boolean>(false)
     const [isAccountSettingsPanelOpened, setIsAccountSettingsPanelOpened] = useState<boolean>(false)
+    const [tasksList, setTasksList] = useState<[]>([])
+
+    const getTasksFromDatabase = async () => {
+        fetch('http://127.0.0.1:8888/get-tasks')
+        .then((data?) => data.json())
+        .then((res?) => {
+            console.log('getting tasks...')
+            setTasksList(res)
+            setIsMainSiteLoading(false)
+        })
+    }
 
 
-    const show = () => {
-        setHidden(false)
+    const deleteAllTasks = () => {
+        fetch('http://127.0.0.1:8888/delete-all', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({})
+        }).then((data) => data)
+        setTasksList([])
     }
 
     useEffect(()=>{
-        setTimeout(()=>{
-            show()
-        }, waitValue)
-    },[])
-
-
+        setIsMainSiteLoading(true)
+        setTimeout(()=>getTasksFromDatabase(), 180)
+    },[tasksList.length])
 
     return (
         <>
             {
-                hidden ? 
+                isMainSiteLoading && !tasksList.length ? 
                 <div className="loading-screen">
                     <p>Logging in... Please wait...</p>
                 </div> 
@@ -46,15 +60,20 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                         <NewTaskForm 
                             setIsFormOpened={setIsNewTaskFormOpened}
                             usersList={usersList}
+                            tasksList={tasksList}
+                            setTasksList={setTasksList}
                         />}
                     {isAccountSettingsPanelOpened &&
                         <AccountSettingsPanel 
                             setIsPanelOpened={setIsAccountSettingsPanelOpened}
                         />}
                     <div className="task-lists">
-                        <TodoTasks />
+                        <TodoTasks
+                            tasksList={tasksList}
+                        />
                         <ActiveTasks />
                         <DoneTasks />
+                        <button onClick={()=>deleteAllTasks()}>delete all</button>
                     </div>
                 </div>
             }       

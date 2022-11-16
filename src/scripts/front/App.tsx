@@ -3,6 +3,7 @@ import RegisterPanel from './RegisterPanel';
 import LoginPanel from "./LoginPanel";
 import MainSite from "./MainSite";
 import * as React from "react";
+import { time, timeEnd, timeStamp } from "console";
 
 const App = () => {
   interface UserInterface {
@@ -26,14 +27,14 @@ const App = () => {
   }
 
   const [isRegisterPanelOpened, openRegisterPanel] = useState(Boolean)
-  const [usersList, setUsersList] = useState([])
+  const [usersList, setUsersList] = useState<[]>([])
   const [loggedUser, setLoggedUser] = useState(defaultUser)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
 
 
   const getUsersFromDatabase = async () => {
-    fetch('http://127.0.0.1:8888')
+    fetch('http://127.0.0.1:8888/users')
       .then((data?) => data.json())
       .then((res?) => setUsersList(res))
   }
@@ -80,6 +81,7 @@ const App = () => {
             usersList={usersList}
             defaultUser={loggedUser}
             getUsersFromDatabase={getUsersFromDatabase}
+            setUsersList={setUsersList}
           />
           <button onClick={()=>openRegisterPanel(false)}>
             Already signed in?

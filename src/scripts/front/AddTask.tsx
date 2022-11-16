@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useMemo, useEffect, useState, useCallback } from 'react';
 import { BiDownArrow } from 'react-icons/bi'
 
 const NewTaskBtn = ( {setIsFormOpened}:any ) => {
@@ -13,11 +13,12 @@ const NewTaskBtn = ( {setIsFormOpened}:any ) => {
     )
 }
 
-const NewTaskForm = ( {setIsFormOpened, usersList}:any ) => {
+const NewTaskForm = ( { setIsFormOpened, usersList, tasksList, setTasksList }:any ) => {
     const [title, setTitle] = useState<string>('')
     const [description, setDescription] = useState<string>('')
     const [asignee, setAsignee] = useState<string>('')
     const [isUsersListOpened, setIsUsersListOpened] = useState<boolean>(false)
+
     const newTask = {
         title: title,
         description: description,
@@ -32,18 +33,17 @@ const NewTaskForm = ( {setIsFormOpened, usersList}:any ) => {
         body: JSON.stringify(newTask)
     }
 
-    const addTaskToCollection = async () => {
-        // fetch post 
+    const addTaskToDatabase = async () => {
         fetch('http://127.0.0.1:8888/tasks', settings)
-        .then((data) => data.json())
-    } 
+        .then((data) => data)
+    }
     
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if(!title) return
         if(!description) return
-        console.table(newTask)
-        // addTaskToCollection()
+        await addTaskToDatabase()
+        await setTasksList([...tasksList, newTask])
         setIsFormOpened(false)
     }
 
@@ -116,7 +116,6 @@ const NewTaskForm = ( {setIsFormOpened, usersList}:any ) => {
                 <input 
                     className='form__submit-btn --margin'
                     type='submit'
-                    onClick={addTaskToCollection}
                 />
             </form>
             <div className='blur'>
