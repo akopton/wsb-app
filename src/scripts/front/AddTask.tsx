@@ -2,18 +2,20 @@ import React from 'react';
 import { useMemo, useEffect, useState, useCallback } from 'react';
 import { BiDownArrow } from 'react-icons/bi'
 
-const NewTaskBtn = ( {setIsFormOpened}:any ) => {
+const NewTaskBtn = ( {isNewTaskFormOpened, setIsNewTaskFormOpened, isAccountSettingsPanelOpened}:any ) => {
 
     return (
-        <div className="add-task__button button--round"
-            onClick={()=>setIsFormOpened(true)}
+        <div 
+            className="add-task__button button--round"
+            style={isAccountSettingsPanelOpened ? { position:'absolute', zIndex: '-1'} : isNewTaskFormOpened ? {transform: 'rotate(45deg)', zIndex: '5', right: '5px', transition: 'ease .2s'} : undefined}
+            onClick={()=>setIsNewTaskFormOpened(!isNewTaskFormOpened)}
         >
             <p>+</p>
         </div>
     )
 }
 
-const NewTaskForm = ( { setIsFormOpened, usersList, tasksList, setTasksList }:any ) => {
+const NewTaskForm = ( { setIsFormOpened, usersList, tasksList, setTasksList, setLoadingNewTask }:any ) => {
     const [title, setTitle] = useState<string>('')
     const [description, setDescription] = useState<string>('')
     const [asignee, setAsignee] = useState<string>('')
@@ -43,8 +45,8 @@ const NewTaskForm = ( { setIsFormOpened, usersList, tasksList, setTasksList }:an
         if(!title) return
         if(!description) return
         await addTaskToDatabase()
-        await setTasksList([...tasksList, newTask])
         setIsFormOpened(false)
+        setLoadingNewTask(true)
     }
 
     const handleTitle = (e: React.FormEvent<HTMLInputElement>) => {
@@ -119,10 +121,7 @@ const NewTaskForm = ( { setIsFormOpened, usersList, tasksList, setTasksList }:an
                 />
             </form>
             <div className='blur'>
-                <div
-                    className='close-btn button--round' 
-                    onClick={()=>setIsFormOpened(false)}
-                />
+                
             </div>
         </>
     )

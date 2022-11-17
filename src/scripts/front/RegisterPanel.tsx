@@ -3,20 +3,32 @@ import { useState } from "react"
 
 const RegisterPanel = ( { setUsersList, usersList, defaultUser }: any ) => {
 
+    const [newUserFirstName, setNewUserFirstName] = useState<string>('')
+    const [newUserLastName, setNewUserLastName] = useState<string>('')
+    const [newUserEmail, setNewUserEmail] = useState('')
+    const [newUserLogin, setNewUserLogin] = useState('')
+    const [newUserPassword, setNewUserPassword] = useState('')
     
-    const [emailToRegister, setEmailToRegister] = useState('')
-    const [loginToRegister, setLoginToRegister] = useState('')
-    const [passwordToRegister, setPasswordToRegister] = useState('')
-    
-    let newUser = {
-        email: emailToRegister,
-        login: loginToRegister,
-        password: passwordToRegister,
-    }
-    newUser = Object.assign(defaultUser, newUser)
+    interface UserInterface {
+        firstName: string,
+        lastName: string,
+        email: string,
+        login: string,
+        password: string,
+        tasks: Array<[]>,
+      }
 
+    const newUser: UserInterface = {
+        firstName: newUserFirstName,
+        lastName: newUserLastName,
+        email: newUserEmail,
+        login: newUserLogin,
+        password: newUserPassword,
+        tasks: []
+    }
+    
     const checkIfUserExists = async () => {
-        return usersList.some((user: any) => user.login === loginToRegister || user.email === emailToRegister)
+        return usersList.some((user: any) => user.login === newUserLogin || user.email === newUserEmail)
     }
 
     const registerNewUser = async () => {
@@ -38,16 +50,17 @@ const RegisterPanel = ( { setUsersList, usersList, defaultUser }: any ) => {
     }
     
     const handleRegister = async () => {
-        if (!emailToRegister) return
-        if (!loginToRegister) return
-        if (!passwordToRegister) return
+        if (!newUserEmail) return
+        if (!newUserLogin) return
+        if (!newUserPassword) return
 
         checkIfUserExists()
             .then(async (result) => {
-                if (!result)
-                await registerNewUser()
-                else
-                alert('Podany użytkownik już istnieje')
+                if (!result) await registerNewUser()
+                else {
+                    alert('Podany użytkownik już istnieje')
+                    return
+                }
             })
         setUsersList([...usersList, newUser])
     }
@@ -61,7 +74,7 @@ const RegisterPanel = ( { setUsersList, usersList, defaultUser }: any ) => {
                 type='text'
                 placeholder="email"
                 onChange={(e) => {
-                    setEmailToRegister(e.target.value)
+                    setNewUserEmail(e.target.value)
                 }}
             />
             <input
@@ -69,7 +82,7 @@ const RegisterPanel = ( { setUsersList, usersList, defaultUser }: any ) => {
                 type='text'
                 placeholder="login"
                 onChange={(e) => {
-                    setLoginToRegister(e.target.value)
+                    setNewUserLogin(e.target.value)
                 }}
             />
             <input
@@ -77,7 +90,7 @@ const RegisterPanel = ( { setUsersList, usersList, defaultUser }: any ) => {
                 type='password'
                 placeholder="password"
                 onChange={(e) => {
-                    setPasswordToRegister(e.target.value)
+                    setNewUserPassword(e.target.value)
                 }}
             />
             <button 

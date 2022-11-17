@@ -7,23 +7,21 @@ import { time, timeEnd, timeStamp } from "console";
 
 const App = () => {
   interface UserInterface {
-    id: string,
     firstName: string,
     lastName: string,
     email: string,
     login: string,
     password: string,
-    allTasks: Array<[]>,
+    tasks: Array<[]>,
   }
 
  const defaultUser: UserInterface = {
-    id: '',
     firstName: '',
     lastName: '',
     email: '',
     login: '',
     password: '',
-    allTasks: [],
+    tasks: [],
   }
 
   const [isRegisterPanelOpened, openRegisterPanel] = useState(Boolean)
@@ -41,7 +39,7 @@ const App = () => {
 
   useEffect(()=>{
     getUsersFromDatabase()
-  },[])
+  },[usersList.length])
 
   return (
     <div className="app-container">
@@ -51,11 +49,11 @@ const App = () => {
         { !isLoggedIn ? 
           <div className="panel__wrapper">
             <LoginPanel 
-              isLoggedIn={isLoggedIn}
-              setIsLoggedIn={setIsLoggedIn}
-              usersList={usersList}
               setLoggedUser={setLoggedUser}
+              setIsLoggedIn={setIsLoggedIn}
+              isLoggedIn={isLoggedIn}
               defaultUser={defaultUser}
+              usersList={usersList}
             />
             <button onClick={()=>openRegisterPanel(true)}>
               Don't have an account?
@@ -65,10 +63,9 @@ const App = () => {
           <>
             <MainSite 
               defaultUser={defaultUser}
+              loggedUser={loggedUser}
               setIsLoggedIn={setIsLoggedIn}
               setLoggedUser={setLoggedUser}
-              loggedUser={loggedUser}
-              waitValue={800}
               usersList={usersList}
               />
           </>

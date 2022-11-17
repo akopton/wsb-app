@@ -6,7 +6,7 @@ const LoginPanel = ( { defaultUser, setLoggedUser, setIsLoggedIn, usersList }: a
     const [inputPassword, setInputPassword] = useState('')
     const [fetchedUser, setFetchedUser] = useState(defaultUser)
 
-    const findUser = (input: string) => {
+    const findUser = async (input: string) => {
         usersList.forEach((user: any) => {
             if (input === user.login) {
                 setFetchedUser(user)
@@ -21,10 +21,20 @@ const LoginPanel = ( { defaultUser, setLoggedUser, setIsLoggedIn, usersList }: a
         setIsLoggedIn(true)
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
-        handleLogin().then(()=>setLoggedUser(fetchedUser))
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        try {
+            await handleLogin()
+        } catch (e) {
+
+        } finally {
+            await setLoggedUser(fetchedUser)
+        }
     }
+
+    useEffect(()=>{
+        findUser(inputLogin)
+    },[inputLogin])
 
     return (
             <form className="login-panel" onSubmit={handleSubmit}>
@@ -35,9 +45,6 @@ const LoginPanel = ( { defaultUser, setLoggedUser, setIsLoggedIn, usersList }: a
                     onChange={(e) => {
                                 setInputLogin(e.target.value)
                             }} 
-                    onBlur={(e) => {
-                                findUser(e.target.value)
-                            }}
                 ></input>
                 <input 
                     className="login-panel__password-input --input"

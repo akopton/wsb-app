@@ -25,12 +25,11 @@ const tasksCollection = client.db('wsb_app_database').collection('tasksList')
 
 // getting new user from register form
 app.post('/users', async (req, res) => {
-    console.log('it works' )
-    res.send(req.body)
     const NEW_USER_TO_REGISTER = req.body
     const EXISTING_USER = await checkIfUserExists(client, NEW_USER_TO_REGISTER)
     if (EXISTING_USER || NEW_USER_TO_REGISTER.login == '') return
     await registerNewUser(client, NEW_USER_TO_REGISTER)
+    console.log('New user added' + NEW_USER_TO_REGISTER)
 })
 
 app.get('/users', async (req, res) => {
