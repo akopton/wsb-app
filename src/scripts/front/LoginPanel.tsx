@@ -26,15 +26,15 @@ const LoginPanel = ( { defaultUser, setLoggedUser, setIsLoggedIn, usersList }: a
         try {
             await handleLogin()
         } catch (e) {
-
+            console.error(e)
         } finally {
             await setLoggedUser(fetchedUser)
         }
     }
 
-    useEffect(()=>{
-        findUser(inputLogin)
-    },[inputLogin])
+    // useEffect(()=>{
+        
+    // },[inputLogin])
 
     return (
             <form className="login-panel" onSubmit={handleSubmit}>
@@ -58,6 +58,7 @@ const LoginPanel = ( { defaultUser, setLoggedUser, setIsLoggedIn, usersList }: a
                     className="login-panel__login-button"
                     type="submit"
                     value="Sign in"
+                    onClick={()=>findUser(inputLogin)}
                 />
             </form>
     )

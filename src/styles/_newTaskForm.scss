@@ -3,38 +3,9 @@
     height: 100%;
     width: 100vw;
     z-index: 10;
-    background: rgba(136, 135, 134, 0.5);
+    background: rgba(#ffffff, 0.2);
     backdrop-filter: blur(4px);
     z-index: 3;
-
-    .close-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        top: 5px;
-        right: 5px;
-
-        &:before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%) rotate(45deg);
-            width:60%;
-            height: 1px;
-            background-color: black;
-        }
-
-        &::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%) rotate(-45deg);
-            width: 60%;
-            height: 1px;
-            background-color: black;
-        }
-    }
 }
 
 .form {
@@ -47,30 +18,35 @@
     flex-direction: column;
     align-items: center;
 
-    width: 200px;
-    height: 250px;
+    width: 100%;
+    height: 100%;
     border: 1px solid white;
-    z-index: 10;
+    z-index: 4;
 
-    padding: 10px;
+    padding: 70px 15px;
 
 
 
     &__title-input {
         width: 100%;
         margin-bottom: 5px;
+        height: 35px;
+        line-height: 35px;
+        font-size: 24px;
     }
 
     &__desc-input {
         width: 100%;
-        resize: none;
+        font-size: 20px;
+        line-height: 20px;
+        height: 160px;
     }
 
     &__asignee-picker {
         align-self: flex-start;
         padding: 0;
-        position: relative;
         width: 70%;
+        font-size: 24px;
 
         .custom-list {
             border: 1px solid black;
@@ -79,6 +55,7 @@
                 width: 100%;
                 cursor: pointer;
                 position: relative;
+                border-bottom: 1px solid red;
             }
 
             &__arrow-icon {
@@ -93,9 +70,13 @@
         }
 
         .asignee-list {
-            max-height: 30px;
+            max-height: 100px;
             overflow-y: scroll;
+            transition: ease 1s;
+
             &__item {
+                line-height: 25px;
+
                 &:hover {
                     border-bottom: 1px solid blue;
                 }

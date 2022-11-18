@@ -39,7 +39,7 @@ const App = () => {
 
   useEffect(()=>{
     getUsersFromDatabase()
-  },[usersList.length])
+  },[])
 
   return (
     <div className="app-container">

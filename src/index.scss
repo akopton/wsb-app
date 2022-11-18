@@ -3,11 +3,16 @@
 @import './styles/registerPanel';
 @import './styles/mainSite';
 @import './styles/newTaskForm';
+@import './styles/tasksList';
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+body {
+    background-color: rgba($color: #2c2c2c, $alpha: 1.0);
 }
 
 .hidden {
@@ -19,14 +24,21 @@
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    width: 35px;
-    height: 35px;
-    background-color: gray;
-    border: 1px solid black;
+    width: 45px;
+    height: 45px;
+    background-color: white;
+    color: rgba($color: #2c2c2c, $alpha: 1.0);
     border-radius: 50%;
     cursor: pointer;
 }
 
 ul {
     list-style-type: none;
+}
+
+input, textarea {
+    border: none;
+    outline: none;
+    resize: none;
+    padding: 5px 8px;
 }

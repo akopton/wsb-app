@@ -1,6 +1,6 @@
 import React from "react"
 import { useEffect, useState } from "react"
-import Nav from "./AccountSettings"
+import Nav from "./NavMenu"
 import ActiveTasks from "./ActiveTasks"
 import NewTask from "./AddTask"
 import DoneTasks from "./DoneTasks"
@@ -14,6 +14,7 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
     const [loadingNewTask, setLoadingNewTask] = useState<boolean>(false)
     const [tasksList, setTasksList] = useState<[]>([])
     const [isNavMenuOpened, setIsNavMenuOpened] = useState<boolean>(false)
+    const [isSingleTaskOpened, setIsSingleTaskOpened] = useState<boolean>(false)
 
     const getTasksFromDatabase = async () => {
         fetch('http://127.0.0.1:8888/get-tasks')
@@ -50,18 +51,17 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                     <p>Logging in... Please wait...</p>
                 </div> 
                 : 
-                <div className="main-site">
-                    
-                    
-                        <NewTaskBtn
-                            isNewTaskFormOpened={isNewTaskFormOpened}
-                            setIsNewTaskFormOpened={setIsNewTaskFormOpened}
-                            isNavMenuOpened={isNavMenuOpened}
-                        />
-                        <Hamburger 
-                            setIsNavMenuOpened={setIsNavMenuOpened}
-                            isNavMenuOpened={isNavMenuOpened}
-                        />
+                <div className="main-site" style={isNavMenuOpened ? {overflow: 'hidden'} : undefined}>
+                    <NewTaskBtn
+                        isNewTaskFormOpened={isNewTaskFormOpened}
+                        setIsNewTaskFormOpened={setIsNewTaskFormOpened}
+                        isNavMenuOpened={isNavMenuOpened}
+                    />
+                    <Hamburger 
+                        setIsNavMenuOpened={setIsNavMenuOpened}
+                        isNavMenuOpened={isNavMenuOpened}
+                        isNewTaskFormOpened={isNewTaskFormOpened}
+                    />
                     {isNewTaskFormOpened && 
                         <NewTaskForm 
                             setIsFormOpened={setIsNewTaskFormOpened}
@@ -70,12 +70,12 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                             setTasksList={setTasksList}
                             setLoadingNewTask={setLoadingNewTask}
                         />}
-                    {isNavMenuOpened &&
-                        <NavMenu />
-                    }
+                    <NavMenu isNavMenuOpened={isNavMenuOpened}/>
                     <div className="task-lists">
                         <TodoTasks
                             tasksList={tasksList}
+                            isSingleTaskOpened={isSingleTaskOpened}
+                            setIsSingleTaskOpened={setIsSingleTaskOpened}
                         />
                         <ActiveTasks />
                         <DoneTasks />

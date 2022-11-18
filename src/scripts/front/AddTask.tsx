@@ -7,10 +7,9 @@ const NewTaskBtn = ( {isNewTaskFormOpened, setIsNewTaskFormOpened, isAccountSett
     return (
         <div 
             className="add-task__button button--round"
-            style={isAccountSettingsPanelOpened ? { position:'absolute', zIndex: '-1'} : isNewTaskFormOpened ? {transform: 'rotate(45deg)', zIndex: '5', right: '5px', transition: 'ease .2s'} : undefined}
+            style={isAccountSettingsPanelOpened ? { position:'absolute', zIndex: '-1'} : isNewTaskFormOpened ? {transform: 'rotate(45deg)', zIndex: '5', right: '15px', transition: 'ease .2s'} : undefined}
             onClick={()=>setIsNewTaskFormOpened(!isNewTaskFormOpened)}
         >
-            <p>+</p>
         </div>
     )
 }
@@ -76,7 +75,7 @@ const NewTaskForm = ( { setIsFormOpened, usersList, tasksList, setTasksList, set
                 />
                 
                 <div className='form__asignee-picker asignee-picker --margin'>
-                    <span className='--margin'>Asigned person:</span><br/>
+                    <span style={{ display: 'block'}} className='--margin'>Asigned person:</span>
                     <div className='asignee-picker__custom-list custom-list'>
                         <p 
                             className='custom-list__picked-asignee'

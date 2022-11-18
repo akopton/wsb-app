@@ -1,41 +1,68 @@
 .main-site {
-    height: 100%;
-    width: 100%;
-
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    color: white;
     
 
     .nav-menu {
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
+        height: 0;
+        right: 0;
+        background: rgba(#ffffff, 0.3);
+        backdrop-filter: blur(5px);
         z-index: 2;
-        background: red;
+        transition: ease .5s;
     }
 
     .add-task__button {
         position: fixed;
-        right: 50px;
-        top: 5px;
-        font-size: 30px;
+        right: 65px;
+        top: 10px;
+        font-size: 50px;
         transition: ease .2s;
+        user-select: none;
+
+        &:before {
+            content: '';
+            position: absolute;
+            height: 4px;
+            width: 60%;
+            background-color: black;
+            border-radius: 5px;
+            transform: rotate(90deg);
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            height: 4px;
+            width: 60%;
+            border-radius: 5px;
+            background-color: black;
+        }
     }
 
     .hamburger {
         position: fixed;
-        top: 5px;
-        right: 5px;
+        top: 10px;
+        right: 15px;
         z-index: 3;
-        height: 35px;
-        width: 30px;
+        height: 45px;
+        width: 45px;
         padding: 10px 0;
+        transition: .3s ease;
 
         &__piece {
             position: absolute;
             width: 100%;
-            height: 2px;
-            background-color: black;
+            height: 5px;
+            background-color: white;
+            border-radius: 5px 5px 5px 5px;
             transition: ease .1s;
 
             &.--top {
@@ -43,23 +70,26 @@
             }
 
             &.--middle-left {
-                top: 50%;
-                transform: translateY(-50%);
-                left: 50%;
-                width: 50%;
-            }
-
-            &.--middle-right {
+                background-color: rgb(78, 243, 255);
                 top: 50%;
                 transform: translateY(-50%);
                 right: 50%;
+                width: 50%;
+                border-radius: 5px 0px 0px 5px;
+            }
+            
+            &.--middle-right {
+                background-color: rgb(253, 161, 249);
+                top: 50%;
+                transform: translateY(-50%);
+                border-radius: 0px 5px 5px 0px;
+                left: 50%;
                 width: 50%;
             }
 
             &.--bottom {
                 position: absolute;
                 bottom: 5px;
-                transition: ease .1s;
             }
         }
     }

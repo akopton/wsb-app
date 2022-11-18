@@ -1,14 +1,16 @@
 import React from "react"
 import { useEffect, useState, useCallback, useMemo } from "react"
 
-const SingleTask = ({task, id}:any) => {
+const SingleTask = ({tasksList, task, id, setOpenedTask, openedTask}:any) => {
+    
 
     return (
-        <li key={id} style={{display: 'flex', flexDirection: 'column'}}>
-            <span>Task ID: {task._id}</span>
-            <span>Title: {task.title}</span>
-            <span>Description: {task.description}</span>
-            <span>Asigned person: {task.asignee}</span>
+        <li className={openedTask ? "single-task opened" : "single-task"} key={id}
+        >
+            {/* <span>Task ID: {task._id}</span> */}
+            <span className="single-task__title">{task.title}</span>
+            <span className="single-task__desc">{task.description}</span>
+            <span className="single-task__date">26.11.2022r. 15:00</span>
         </li> 
     )
 }
