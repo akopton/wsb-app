@@ -113,5 +113,11 @@
                 cursor: pointer;
             }
         }
+
+        .submit-action {
+            &:hover {
+                color: red;
+            }
+        }
     }
 }

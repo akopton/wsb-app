@@ -100,11 +100,15 @@ async function updateTaskStatus(client, UPDATED_TASK) {
     const {status} = UPDATED_TASK
     const {title} = UPDATED_TASK
     const {id} = UPDATED_TASK
-    console.log(id)
     try {
         await client.connect()
+        if (status == 'delete') {
+            const result = await tasksCollection.deleteOne({"_id": ObjectId(id)})
+            console.log(`Deleting task: ${title}`)
+            return result
+        }
         const result = await tasksCollection.updateOne({"_id": ObjectId(id)}, {$set:{status:status}})
-        console.log(result)
+        console.log(`Updating task ${id}`)
         return result
     } catch (e) {
         console.error(e)

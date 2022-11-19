@@ -330,6 +330,9 @@
 .single-task__actions-picker .actions-window .action {
   cursor: pointer;
 }
+.single-task__actions-picker .submit-action:hover {
+  color: red;
+}
 
 * {
   margin: 0;

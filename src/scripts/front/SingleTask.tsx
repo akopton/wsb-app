@@ -26,6 +26,14 @@ const SingleTask = ({task, id, isTaskUpdated, setIsTaskUpdated, setLoadingNewTas
         body: JSON.stringify(updatedTask)
     }
 
+    const deleteTask = () => {
+        fetch('http://127.0.0.1:8888/delete-task', settings)
+        .then((data)=>{
+            setIsTaskUpdated(true)
+            return data
+        })
+    }
+
     const updateTaskStatus = async () => {
         setIsTaskUpdated(!isTaskUpdated)
        fetch('http://127.0.0.1:8888/update-task', settings)
@@ -71,6 +79,7 @@ const SingleTask = ({task, id, isTaskUpdated, setIsTaskUpdated, setLoadingNewTas
                         isActionsWindowOpened={isActionsWindowOpened}
                         updateTaskStatus={updateTaskStatus}
                         taskStatus={taskStatus}
+                        deleteTask={deleteTask}
                     />
                 }
                 {/* <div 
