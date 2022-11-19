@@ -213,7 +213,8 @@
 }
 
 .todo-tasks {
-  padding: 70px 15px 0px 15px;
+  width: 100%;
+  padding: 70px 20px 0px 20px;
 }
 .todo-tasks .single-task {
   display: flex;
@@ -224,10 +225,15 @@
   padding: 8px;
   border-radius: 8px;
   margin-bottom: 15px;
-  border: 2px solid red;
+  scale: 1;
+  transition: all 0.15s ease;
+  color: white;
+  border: 1px solid white;
 }
 .todo-tasks .single-task__title {
   font-size: 24px;
+  line-height: 24px;
+  height: 24px;
 }
 .todo-tasks .single-task__desc {
   font-size: 18px;
@@ -240,19 +246,50 @@
 .todo-tasks .single-task__date {
   font-size: 20px;
 }
-
+.todo-tasks .single-task__close-btn {
+  top: 8px;
+  right: 8px;
+  height: 15px;
+  width: 15px;
+}
+.todo-tasks .single-task__close-btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 100%;
+  height: 2px;
+  background-color: black;
+  rotate: -45deg;
+}
+.todo-tasks .single-task__close-btn::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  width: 100%;
+  height: 2px;
+  background-color: black;
+  rotate: 45deg;
+}
 .single-task.opened {
   position: absolute;
   top: 50%;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transform: translateY(-50%);
-  background-color: black;
-  height: 300px;
+  right: 50%;
+  translate: 50% -50%;
+  scale: 1.5;
+  transition: all 0.15s ease;
+  background-color: white;
+  color: black;
+  z-index: 5;
+  height: 250px;
 }
 .single-task.opened .single-task__desc {
   height: 150px;
+  border: 1px solid black;
+  overflow-y: scroll;
 }
 
 * {

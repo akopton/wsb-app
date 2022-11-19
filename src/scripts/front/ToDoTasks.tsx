@@ -3,7 +3,6 @@ import { useEffect, useState, useCallback, useMemo } from "react"
 import SingleTask from "./SingleTask"
 
 const TodoTasks = ( { tasksList }:any ) => {
-    const [openedTask, setOpenedTask] = useState<boolean>()
     
     return (
         <div className="todo-tasks">
@@ -13,9 +12,8 @@ const TodoTasks = ( { tasksList }:any ) => {
                     <SingleTask 
                         task={task} 
                         key={id} 
-                        openedTask={openedTask} 
-                        setOpenedTask={setOpenedTask} 
                         tasksList={tasksList}
+                        
                     />
                 )
             }

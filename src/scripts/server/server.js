@@ -41,15 +41,8 @@ app.post('/tasks', async (req, res) => {
     console.log('adding new task')
     res.send(req.body)
     const NEW_TASK = req.body
-    await addNewTask(client, NEW_TASK)
-
-    // try {
-    //     const NEW_TASK = await addNewTask(client, req.body)
-    //     return NEW_TASK
-    // } catch (e) {
-    //     console.log(e)
-    // }
-
+    await asignNewTaskToUser(client, NEW_TASK)
+    await addNewTaskToDatabase(client, NEW_TASK)
 })
 
 app.post('/delete-all', (req, res) => {
@@ -134,7 +127,7 @@ async function getListOfTasks(client) {
     }
 }
 
-async function addNewTask(client, newTask) {
+async function addNewTaskToDatabase(client, newTask) {
     try {
         await client.connect()
         const result = await tasksCollection.insertOne(newTask)
@@ -144,6 +137,19 @@ async function addNewTask(client, newTask) {
         console.error(e)
     } finally {
         client.close()
+    }
+}
+
+async function asignNewTaskToUser(client, newTask) {
+    const asignee = newTask.asignee
+    try {
+        await client.connect()
+        const result = await usersCollection.updateOne({login: asignee}, {$push: {allTasks: newTask}})
+        return result
+    } catch (e) {
+        console.error(e)
+    } finally {
+        await client.close()
     }
 }
 
