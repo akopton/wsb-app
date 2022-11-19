@@ -4,26 +4,28 @@
 }
 
 .panel__wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
 }
 .panel__wrapper .login-panel, .panel__wrapper .register-panel {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 200px;
-  height: 200px;
-  border: 1px solid black;
+  width: 80%;
+  margin: 0 auto;
+  padding-top: 200px;
+  gap: 20px;
 }
 .panel__wrapper .login-panel .--input, .panel__wrapper .register-panel .--input {
   margin-bottom: 10px;
+  width: 100%;
+  height: 40px;
+  font-size: 30px;
 }
 .panel__wrapper .login-panel__login-button, .panel__wrapper .register-panel__login-button {
-  width: 150px;
-  height: 30px;
+  width: 200px;
+  height: 40px;
   border: 1px solid red;
 }
 .panel__wrapper .login-panel__login-button:hover, .panel__wrapper .register-panel__login-button:hover {
@@ -212,11 +214,24 @@
   margin-bottom: 5px;
 }
 
-.todo-tasks {
+.list {
   width: 100%;
   padding: 70px 20px 0px 20px;
 }
-.todo-tasks .single-task {
+
+@media (min-width: 768px) {
+  .task-lists {
+    display: flex;
+  }
+  .task-lists .list {
+    width: 33%;
+  }
+  .task-lists .list .single-task.opened {
+    width: 500px;
+    height: 300px;
+  }
+}
+.single-task {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -225,34 +240,34 @@
   padding: 8px;
   border-radius: 8px;
   margin-bottom: 15px;
-  scale: 1;
-  transition: all 0.15s ease;
+  transition: transform 0.15s ease;
   color: white;
   border: 1px solid white;
+  position: relative;
 }
-.todo-tasks .single-task__title {
+.single-task__title {
   font-size: 24px;
   line-height: 24px;
   height: 24px;
 }
-.todo-tasks .single-task__desc {
+.single-task__desc {
   font-size: 18px;
   overflow: hidden;
   height: 42px;
 }
-.todo-tasks .single-task__asignee {
+.single-task__asignee {
   font-size: 24px;
 }
-.todo-tasks .single-task__date {
+.single-task__date {
   font-size: 20px;
 }
-.todo-tasks .single-task__close-btn {
+.single-task__close-btn {
   top: 8px;
   right: 8px;
   height: 15px;
   width: 15px;
 }
-.todo-tasks .single-task__close-btn::after {
+.single-task__close-btn::after {
   content: "";
   position: absolute;
   top: 50%;
@@ -263,7 +278,7 @@
   background-color: black;
   rotate: -45deg;
 }
-.todo-tasks .single-task__close-btn::before {
+.single-task__close-btn::before {
   content: "";
   position: absolute;
   top: 50%;
@@ -276,20 +291,44 @@
 }
 .single-task.opened {
   position: absolute;
-  top: 50%;
-  right: 50%;
-  translate: 50% -50%;
-  scale: 1.5;
-  transition: all 0.15s ease;
+  translate: -50% -50%;
+  height: 300px;
+  width: 300px;
   background-color: white;
   color: black;
   z-index: 5;
-  height: 250px;
 }
 .single-task.opened .single-task__desc {
   height: 150px;
   border: 1px solid black;
   overflow-y: scroll;
+}
+.single-task__actions-picker {
+  position: absolute;
+  bottom: 10px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  height: 25px;
+}
+.single-task__actions-picker .picked-action {
+  display: block;
+  border: 1px solid black;
+  width: 120px;
+  line-height: 25px;
+  cursor: pointer;
+}
+.single-task__actions-picker .actions-window {
+  position: absolute;
+  bottom: 25px;
+  height: 60px;
+  width: 120px;
+  background-color: white;
+  border: 1px solid black;
+  overflow-y: scroll;
+}
+.single-task__actions-picker .actions-window .action {
+  cursor: pointer;
 }
 
 * {

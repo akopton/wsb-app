@@ -32,12 +32,9 @@ const LoginPanel = ( { defaultUser, setLoggedUser, setIsLoggedIn, usersList }: a
         }
     }
 
-    // useEffect(()=>{
-        
-    // },[inputLogin])
-
     return (
             <form className="login-panel" onSubmit={handleSubmit}>
+                
                 <input
                     className="login-panel__login-input --input"
                     type='text'

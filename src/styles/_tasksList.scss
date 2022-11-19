@@ -1,97 +1,22 @@
-.todo-tasks {
+.list {
     width: 100%;
     padding: 70px 20px 0px 20px;
-    
-    .single-task {
+}
+
+
+@media (min-width: 768px) {
+    .task-lists {
         display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 120px;
-        overflow: hidden;
-        padding: 8px;
-        border-radius: 8px;
-        margin-bottom: 15px;
-        scale: 1;
-        transition: all .15s ease;
-        color: white;
-        border: 1px solid white;
+        .list {
+            width: 33%;
 
-        &__title {
-            font-size: 24px;
-            line-height: 24px;
-            height: 24px;
-        }
-
-        &__desc {
-            font-size: 18px;
-            overflow: hidden;
-            height: 42px;
-        }
-
-        &__asignee {
-            font-size: 24px;
-        }
-
-        &__date {
-            font-size: 20px;
-        }
-        
-        &__close-btn {
-            top: 8px;
-            right: 8px;
-            height: 15px;
-            width: 15px;
-            &::after {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                translate: -50% -50%;
-                width: 100%;
-                height: 2px;
-                background-color: black;
-                rotate: -45deg;
-            }
-            &::before {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                translate: -50% -50%;
-                width: 100%;
-                height: 2px;
-                background-color: black;
-                rotate: 45deg;
-            }
-
-            &:hover {
-                &::after {
+            .single-task {
+                &.opened {
+                    width: 500px;
+                    height: 300px;
                 }
             }
         }
     }
-
-}
-
-
-.single-task {
-    &.opened {
-        position: absolute;
-        top:50%;
-        right: 50%;
-        translate: 50% -50%;
-        scale: 1.5;
-        transition: all .15s ease;
-        background-color: white;
-        color: black;
-        z-index: 5;
-        // animation: taskOpen .3s;
-        height: 250px;
-
-        .single-task__desc {
-            height: 150px;
-            border: 1px solid black;
-            overflow-y: scroll;
-       }
-    }
+        
 }

@@ -1,3 +1,4 @@
+import { isDocument } from '@testing-library/user-event/dist/utils';
 import React from 'react';
 import { useMemo, useEffect, useState, useCallback } from 'react';
 import { BiDownArrow } from 'react-icons/bi'
@@ -14,7 +15,7 @@ const NewTaskBtn = ( {isNewTaskFormOpened, setIsNewTaskFormOpened, isAccountSett
     )
 }
 
-const NewTaskForm = ( { setIsFormOpened, usersList, tasksList, setTasksList, setLoadingNewTask }:any ) => {
+const NewTaskForm = ( { taskStatus, setIsFormOpened, usersList, setLoadingNewTask }:any ) => {
     const [title, setTitle] = useState<string>('')
     const [description, setDescription] = useState<string>('')
     const [asignee, setAsignee] = useState<string>('')
@@ -23,7 +24,8 @@ const NewTaskForm = ( { setIsFormOpened, usersList, tasksList, setTasksList, set
     const newTask = {
         title: title,
         description: description,
-        asignee: asignee
+        asignee: asignee,
+        status: 'todo',
     }
 
     const settings = {

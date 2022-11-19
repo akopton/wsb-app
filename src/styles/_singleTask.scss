@@ -1,0 +1,117 @@
+.single-task {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 120px;
+    overflow: hidden;
+    padding: 8px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    transition: transform .15s ease;
+    color: white;
+    border: 1px solid white;
+    position: relative;
+
+    &__title {
+        font-size: 24px;
+        line-height: 24px;
+        height: 24px;
+    }
+
+    &__desc {
+        font-size: 18px;
+        overflow: hidden;
+        height: 42px;
+    }
+
+    &__asignee {
+        font-size: 24px;
+    }
+
+    &__date {
+        font-size: 20px;
+    }
+    
+    &__close-btn {
+        top: 8px;
+        right: 8px;
+        height: 15px;
+        width: 15px;
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            translate: -50% -50%;
+            width: 100%;
+            height: 2px;
+            background-color: black;
+            rotate: -45deg;
+        }
+        &::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            translate: -50% -50%;
+            width: 100%;
+            height: 2px;
+            background-color: black;
+            rotate: 45deg;
+        }
+
+        &:hover {
+            &::after {
+            }
+        }
+    }
+
+    &.opened {
+        position: absolute;
+        translate: -50% -50%;
+        height: 300px;
+        width: 300px;
+        // transition: top .15s ease;
+        background-color: white;
+        color: black;
+        z-index: 5;
+        // animation: taskOpen .3s;
+
+        .single-task__desc {
+            height: 150px;
+            border: 1px solid black;
+            overflow-y: scroll;
+       }
+    }
+
+    &__actions-picker {
+        position: absolute;
+        bottom: 10px;
+        right: 8px;
+        display: flex;
+        align-items: center;
+        height: 25px;
+
+        .picked-action {
+            display: block;
+            border: 1px solid black;
+            width: 120px;
+            line-height: 25px;
+            cursor: pointer;
+        }
+
+        .actions-window {
+            position: absolute;
+            bottom: 25px;
+            height: 60px;
+            width: 120px;
+            background-color: white;
+            border:1px solid black;
+            overflow-y: scroll;
+
+            .action {
+                cursor: pointer;
+            }
+        }
+    }
+}

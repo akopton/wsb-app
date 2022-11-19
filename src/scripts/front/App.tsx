@@ -12,7 +12,6 @@ const App = () => {
     email: string,
     login: string,
     password: string,
-    tasks: Array<[]>,
   }
 
  const defaultUser: UserInterface = {
@@ -21,7 +20,6 @@ const App = () => {
     email: '',
     login: '',
     password: '',
-    tasks: [],
   }
 
   const [isRegisterPanelOpened, openRegisterPanel] = useState(Boolean)
@@ -47,7 +45,7 @@ const App = () => {
       {!isRegisterPanelOpened ? 
       <>
         { !isLoggedIn ? 
-          <div className="panel__wrapper">
+          <div className="panel__wrapper" style={{position:'relative'}}>
             <LoginPanel 
               setLoggedUser={setLoggedUser}
               setIsLoggedIn={setIsLoggedIn}
@@ -55,7 +53,7 @@ const App = () => {
               defaultUser={defaultUser}
               usersList={usersList}
             />
-            <button onClick={()=>openRegisterPanel(true)}>
+            <button onClick={()=>openRegisterPanel(true)} >
               Don't have an account?
             </button>
           </div>

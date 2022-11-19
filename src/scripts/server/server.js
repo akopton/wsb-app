@@ -13,13 +13,17 @@ app.use(cors());
 app.use(express.json())
 
 
-
-const mongoose = require('mongoose');
-const {MongoClient} = require('mongodb')
 const uri = 'mongodb+srv://olek:zaqwsxcde@app.t3wuhzm.mongodb.net/?retryWrites=true&w=majority'
+const {MongoClient} = require('mongodb')
 const client = new MongoClient(uri)
-const usersCollection = client.db('wsb_app_database').collection('usersList')
-const tasksCollection = client.db('wsb_app_database').collection('tasksList')
+
+const {getListOfTasks, registerNewUser, asignNewTaskToUser, addNewTaskToDatabase, getListOfUsers, checkIfUserExists, deleteAllTasks, updateTaskStatus} = require('./DB/index.js')
+// const {registerNewUser} = require('./DB/index.js')
+// const {asignNewTaskToUser} = require('./DB/index.js')
+// const {} = require('./DB/index.js')
+// const {} = require('./DB/index.js')
+// const {} = require('./DB/index.js')
+// const {} = require('./DB/index.js')
 
 // register and login panel
 
@@ -41,7 +45,7 @@ app.post('/tasks', async (req, res) => {
     console.log('adding new task')
     res.send(req.body)
     const NEW_TASK = req.body
-    await asignNewTaskToUser(client, NEW_TASK)
+    // await asignNewTaskToUser(client, NEW_TASK)
     await addNewTaskToDatabase(client, NEW_TASK)
 })
 
@@ -49,17 +53,11 @@ app.post('/delete-all', (req, res) => {
     deleteAllTasks(client)
 })
 
- async function deleteAllTasks(client) {
-    try {
-        client.connect()
-        const result = await tasksCollection.deleteMany({})
-        return result
-    } catch (e) {
-        console.error(e)
-    } finally {
-        client.close()
-     }
-}
+app.post('/update-task', async (req, res) => {
+    res.send(req.body)
+    const UPDATED_TASK = req.body
+    await updateTaskStatus(client, UPDATED_TASK)
+})
 
 
 app.get('/get-tasks', async (req, res) => {
@@ -75,83 +73,10 @@ app.listen(port, () => {
     console.log(`Server is running on port ${port}`)
 })
 
-async function checkIfUserExists(client, newUser) {
-    try {
-        await client.connect()
-        const result = await usersCollection.findOne({login: newUser.login})
-        if (result == null) return false
-        else {
-            return true
-        }
-    } catch (e) {
-        console.error(e)
-    } finally {
-        client.close()
-    }
-}
 
-async function getListOfUsers(client) {
-    try {
-        await client.connect()
-        const result = await usersCollection.find({}).toArray()
-        return result
-    } catch (e) {
-        console.error(e)
-    } finally {
-        client.close()
-    }
-}
 
-async function registerNewUser(client, newUser) {
-    try {
-        await client.connect()
-        const result = await usersCollection.insertOne(newUser)
-        console.log('New user registered')
-        return result
-    } catch (e) {
-        console.error(e)
-    } finally {
-        client.close()
-    }
-}
 
-async function getListOfTasks(client) {
-    try {
-        await client.connect()
-        const result = await tasksCollection.find({}).toArray()
-        return result
-    } catch (e) {
-        console.error(e)
-    } finally {
-        // client.close()
-    }
-}
 
-async function addNewTaskToDatabase(client, newTask) {
-    try {
-        await client.connect()
-        const result = await tasksCollection.insertOne(newTask)
-        console.log('task added')
-        return result
-    } catch (e) {
-        console.error(e)
-    } finally {
-        client.close()
-    }
-}
-
-async function asignNewTaskToUser(client, newTask) {
-    const asignee = newTask.asignee
-    try {
-        await client.connect()
-        const result = await usersCollection.updateOne({login: asignee}, {$push: {allTasks: newTask}})
-        return result
-    } catch (e) {
-        console.error(e)
-    } finally {
-        await client.close()
-    }
-}
 
 
 

@@ -15,6 +15,7 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
     const [tasksList, setTasksList] = useState<[]>([])
     const [isNavMenuOpened, setIsNavMenuOpened] = useState<boolean>(false)
     const [isSingleTaskOpened, setIsSingleTaskOpened] = useState<boolean>(false)
+    const [isTaskUpdated, setIsTaskUpdated] = useState<boolean>(false)
 
     const getTasksFromDatabase = async () => {
         fetch('http://127.0.0.1:8888/get-tasks')
@@ -24,24 +25,14 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
             setTasksList(res)
             setIsMainSiteLoading(false)
             setLoadingNewTask(false)
+            setIsTaskUpdated(false)
         })
     }
 
-
-    const deleteAllTasks = () => {
-        fetch('http://127.0.0.1:8888/delete-all', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({})
-        }).then((data) => data)
-        setTasksList([])
-    }
-
     useEffect(()=>{
+        console.log(isTaskUpdated)
         setTimeout(()=>getTasksFromDatabase(), 100)
-    },[loadingNewTask])
+    },[loadingNewTask, isTaskUpdated])
 
     return (
         <>
@@ -52,6 +43,7 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                 </div> 
                 : 
                 <div className="main-site" style={isNavMenuOpened ? {overflow: 'hidden'} : undefined}>
+                <span style={{position: 'absolute'}}>{loggedUser.login}</span>
                     <NewTaskBtn
                         isNewTaskFormOpened={isNewTaskFormOpened}
                         setIsNewTaskFormOpened={setIsNewTaskFormOpened}
@@ -69,6 +61,7 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                             tasksList={tasksList}
                             setTasksList={setTasksList}
                             setLoadingNewTask={setLoadingNewTask}
+                            // taskStatus={taskStatus}
                         />}
                     <NavMenu isNavMenuOpened={isNavMenuOpened}/>
                     <div className="task-lists">
@@ -76,10 +69,26 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                             tasksList={tasksList}
                             isSingleTaskOpened={isSingleTaskOpened}
                             setIsSingleTaskOpened={setIsSingleTaskOpened}
+                            isTaskUpdated={isTaskUpdated}
+                            setIsTaskUpdated={setIsTaskUpdated}
+                            setLoadingNewTask={setLoadingNewTask}
                         />
-                        <ActiveTasks />
-                        <DoneTasks />
-                        <button onClick={()=>deleteAllTasks()}>delete all</button>
+                        <ActiveTasks 
+                            tasksList={tasksList}
+                            isSingleTaskOpened={isSingleTaskOpened}
+                            setIsSingleTaskOpened={setIsSingleTaskOpened}
+                            isTaskUpdated={isTaskUpdated}
+                            setIsTaskUpdated={setIsTaskUpdated}
+                            setLoadingNewTask={setLoadingNewTask}
+                        />
+                        <DoneTasks 
+                            tasksList={tasksList}
+                            isSingleTaskOpened={isSingleTaskOpened}
+                            setIsSingleTaskOpened={setIsSingleTaskOpened}
+                            isTaskUpdated={isTaskUpdated}
+                            setIsTaskUpdated={setIsTaskUpdated}
+                            setLoadingNewTask={setLoadingNewTask}
+                        />
                     </div>
                 </div>
             }       

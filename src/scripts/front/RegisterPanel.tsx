@@ -15,7 +15,6 @@ const RegisterPanel = ( { setUsersList, usersList, defaultUser }: any ) => {
         email: string,
         login: string,
         password: string,
-        tasks: Array<[]>,
       }
 
     const newUser: UserInterface = {
@@ -24,7 +23,6 @@ const RegisterPanel = ( { setUsersList, usersList, defaultUser }: any ) => {
         email: newUserEmail,
         login: newUserLogin,
         password: newUserPassword,
-        tasks: []
     }
     
     const checkIfUserExists = async () => {
