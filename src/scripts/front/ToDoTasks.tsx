@@ -2,7 +2,7 @@ import React from "react"
 import { useContext, useEffect, useState, useCallback, useMemo } from "react"
 import SingleTask from "./SingleTask"
 
-const TodoTasks = ( { tasksList, setIsTaskUpdated, setLoadingNewTask, taskMethods }:any ) => {
+const TodoTasks = ( { tasksList, setIsTaskUpdated, setLoadingNewTask, taskMethods, setIsSingleTaskOpened, isSingleTaskOpened }:any ) => {
     
     return (
         <div className="todo-tasks list">
@@ -14,9 +14,8 @@ const TodoTasks = ( { tasksList, setIsTaskUpdated, setLoadingNewTask, taskMethod
                     return <SingleTask 
                         task={task} 
                         key={id} 
-                        tasksList={tasksList}
                         setIsTaskUpdated={setIsTaskUpdated}
-                        setLoadingNewTask={setLoadingNewTask}
+                        isSingleTaskOpened={isSingleTaskOpened}
                     />
                 })
             }

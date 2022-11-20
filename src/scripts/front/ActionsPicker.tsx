@@ -6,9 +6,6 @@ const ActionsPicker = ( {deleteTask, setTaskStatus, setIsActionsWindowOpened, is
 
     const [isActionPicked, setIsActionPicked] = useState<boolean>(false)
     const [pickedAction, setPickedAction] = useState<string>()
-
-    
-
     const actions = [
         {
             type: 'delete',
@@ -42,6 +39,7 @@ const ActionsPicker = ( {deleteTask, setTaskStatus, setIsActionsWindowOpened, is
                         {actions.map((action, id) => {
                             if (action.type == taskStatus) return
                             return <li className="action" key={id} onClick={() => {
+                                                    // console.log(e.currentTarget)
                                                     setTaskStatus(action.type)
                                                     setPickedAction(action.desc)
                                                     setIsActionPicked(true)

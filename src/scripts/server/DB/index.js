@@ -79,22 +79,10 @@ async function addNewTaskToDatabase(client, newTask) {
     } catch (e) {
         console.error(e)
     } finally {
-        await client.close()
+        // await client.close()
     }
 }
 
-// async function asignNewTaskToUser(client, newTask) {
-//     const {asignee} = newTask
-//     try {
-//         await client.connect()
-//         const result = await usersCollection.updateOne({login: asignee}, {$push: {tasks: newTask}})
-//         return result
-//     } catch (e) {
-//         console.error(e)
-//     } finally {
-//         // await client.close()
-//     }
-// }
 
 async function updateTaskStatus(client, UPDATED_TASK) {
     const {status} = UPDATED_TASK

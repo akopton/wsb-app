@@ -5,6 +5,8 @@ import { BiDownArrow } from 'react-icons/bi'
 
 const NewTaskBtn = ( {isNewTaskFormOpened, setIsNewTaskFormOpened, isAccountSettingsPanelOpened}:any ) => {
 
+
+
     return (
         <div 
             className="add-task__button button--round"

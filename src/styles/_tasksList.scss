@@ -1,15 +1,25 @@
 .list {
-    width: 100%;
-    padding: 70px 20px 0px 20px;
+    padding: 0 20px;
+    padding-top: 70px;
 }
 
 
+.task-lists {
+    display: flex;
+    position: absolute;
+    overflow-x: scroll;
+    .list {
+        flex: none;
+    }
+}
+
 @media (min-width: 768px) {
     .task-lists {
+        height: 100%;
+        width: 100%;
         display: flex;
         .list {
             width: 33%;
-
             .single-task {
                 &.opened {
                     width: 500px;

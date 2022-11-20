@@ -11,7 +11,6 @@
     color: white;
     border: 1px solid white;
     position: relative;
-
     &__title {
         font-size: 24px;
         line-height: 24px;
@@ -31,7 +30,7 @@
     &__date {
         font-size: 20px;
     }
-    
+
     &__close-btn {
         top: 8px;
         right: 8px;
@@ -65,20 +64,22 @@
             }
         }
     }
-
+    
     &.opened {
-        position: absolute;
+        position: fixed;
+        top: 0;
+        left: 0;
         translate: -50% -50%;
         height: 300px;
         width: 300px;
         // transition: top .15s ease;
         background-color: white;
         color: black;
-        z-index: 5;
+        z-index: 15;
         // animation: taskOpen .3s;
 
         .single-task__desc {
-            height: 150px;
+            height: 100px;
             border: 1px solid black;
             overflow-y: scroll;
        }
