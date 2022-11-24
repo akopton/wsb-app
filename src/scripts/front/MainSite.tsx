@@ -48,7 +48,7 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
 
     useEffect(()=>{
         console.log(isTaskUpdated)
-        setTimeout(()=>getTasksFromDatabase(), 100)
+        setTimeout(()=>getTasksFromDatabase(), 700)
     },[loadingNewTask, isTaskUpdated])
 
     useCallback(()=>{
@@ -71,11 +71,11 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                     {windowWidth < 768 ?
                         <div className="main-site" >
                         <Swiper
-                                style={isSingleTaskOpened ? {position: 'fixed', height: '100vh', width: '100vw', zIndex: '20', top:'0', left:'0'} : isMobile ? {height: '100vh', width: '100vw', zIndex: '20'} : undefined}
+                                style={{overflow:'scroll'}}
                                 spaceBetween={0}
                                 slidesPerView={1}
-                                allowSlideNext={isSingleTaskOpened ? false : true}
-                                allowSlidePrev={isSingleTaskOpened ? false : true}
+                                // allowSlideNext={isSingleTaskOpened ? false : true}
+                                // allowSlidePrev={isSingleTaskOpened ? false : true}
                                 onSlideChange={() => console.log('slide change')}
                                 onSwiper={(swiper) => console.log(swiper)}>
                             <NewTaskBtn
@@ -98,6 +98,7 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                                     tasksList={tasksList}
                                     setTasksList={setTasksList}
                                     setLoadingNewTask={setLoadingNewTask}
+                                    loggedUser={loggedUser}
                                     // taskStatus={taskStatus}
                                 />}
                             <NavMenu isNavMenuOpened={isNavMenuOpened}/>

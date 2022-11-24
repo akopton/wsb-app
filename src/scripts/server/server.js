@@ -17,13 +17,19 @@ const uri = 'mongodb+srv://olek:zaqwsxcde@app.t3wuhzm.mongodb.net/?retryWrites=t
 const {MongoClient} = require('mongodb')
 const client = new MongoClient(uri)
 
-const {getListOfTasks, registerNewUser, asignNewTaskToUser, addNewTaskToDatabase, getListOfUsers, checkIfUserExists, deleteAllTasks, updateTaskStatus} = require('./DB/index.js')
-// const {registerNewUser} = require('./DB/index.js')
-// const {asignNewTaskToUser} = require('./DB/index.js')
-// const {} = require('./DB/index.js')
-// const {} = require('./DB/index.js')
-// const {} = require('./DB/index.js')
-// const {} = require('./DB/index.js')
+const {
+        getListOfTasks, 
+        registerNewUser, 
+        asignNewTaskToUser, 
+        addNewTaskToDatabase, 
+        getListOfUsers, 
+        checkIfUserExists, 
+        deleteAllTasks, 
+        updateTaskStatus, 
+        getIdFromDatabase, 
+        updateIdFromDatabase
+    } = require('./DB/index.js')
+
 
 // register and login panel
 
@@ -61,12 +67,8 @@ app.post('/update-task', async (req, res) => {
 
 
 app.get('/get-tasks', async (req, res) => {
-    try {
         const TASKS_LIST = await getListOfTasks(client)
         res.send(TASKS_LIST)
-    } catch (e) {
-        console.error(e)
-    }
 })
 
 app.listen(port, () => {
@@ -74,8 +76,16 @@ app.listen(port, () => {
 })
 
 
+app.get('/get-id', async (req, res) => {
+    const generatedId = await getIdFromDatabase(client)
+    res.send(generatedId)
+})
 
-
+app.post('/update-id', async (req, res) => {
+    res.send(req.body)
+    const updatedId = req.body
+    await updateIdFromDatabase(client, updatedId)
+})
 
 
 

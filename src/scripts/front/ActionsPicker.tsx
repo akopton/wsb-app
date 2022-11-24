@@ -37,8 +37,9 @@ const ActionsPicker = ( {deleteTask, setTaskStatus, setIsActionsWindowOpened, is
                 className="submit-action"
                 onClick={()=>{
                     if (!isActionPicked) setIsActionsWindowOpened(!isActionsWindowOpened)
-                    if (isActionPicked) updateTaskStatus()
+                    updateTaskStatus()
                     setIsTaskOpened(!isTaskOpened)
+                    setIsActionsWindowOpened(false)
                 }} 
                 style={{cursor: 'pointer'}}>
                 {isActionsWindowOpened ? 

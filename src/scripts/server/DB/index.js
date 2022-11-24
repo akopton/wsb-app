@@ -4,6 +4,7 @@ const uri = 'mongodb+srv://olek:zaqwsxcde@app.t3wuhzm.mongodb.net/?retryWrites=t
 const client = new MongoClient(uri)
 const usersCollection = client.db('wsb_app_database').collection('usersList')
 const tasksCollection = client.db('wsb_app_database').collection('tasksList')
+const generatedId = client.db('wsb_app_database').collection('taskIdGenerator')
 const ObjectId = require('mongodb').ObjectId
 
 async function deleteAllTasks(client) {
@@ -79,7 +80,7 @@ async function addNewTaskToDatabase(client, newTask) {
     } catch (e) {
         console.error(e)
     } finally {
-        // await client.close()
+        await client.close()
     }
 }
 
@@ -101,13 +102,41 @@ async function updateTaskStatus(client, UPDATED_TASK) {
     } catch (e) {
         console.error(e)
     } finally {
-        // await client.close()
+        await client.close()
+    }
+}
+
+async function getIdFromDatabase(client) {
+    try {
+        await client.connect()
+        const result = await generatedId.findOne({})
+        return result
+    } catch (e) {
+        console.log(e)
+    } finally {
+        await client.close()
+    }
+}
+
+async function updateIdFromDatabase(client, updatedId) {
+    const id = updatedId.updatedId
+    console.log()
+    try {
+        await client.connect()
+        const result = await generatedId.updateOne({}, {$set:{id:id}})
+        return result
+    } catch (e) {
+        console.log(e)
+    } finally {
+        await client.close()
     }
 }
 
 
 module.exports = MongoClient
 module.exports = {
+    updateIdFromDatabase: updateIdFromDatabase,
+    getIdFromDatabase: getIdFromDatabase,
     getListOfUsers: getListOfUsers, 
     checkIfUserExists: checkIfUserExists,
     deleteAllTasks:deleteAllTasks,

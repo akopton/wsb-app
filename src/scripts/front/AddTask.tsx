@@ -17,28 +17,61 @@ const NewTaskBtn = ( {isNavMenuOpened,isSingleTaskOpened,isNewTaskFormOpened, se
     )
 }
 
-const NewTaskForm = ( { taskStatus, setIsFormOpened, usersList, setLoadingNewTask, isNewTaskFormOpened }:any ) => {
+const NewTaskForm = ( { taskStatus, setIsFormOpened, usersList, setLoadingNewTask, isNewTaskFormOpened, loggedUser }:any ) => {
     const [title, setTitle] = useState<string>('')
     const [description, setDescription] = useState<string>('')
     const [asignee, setAsignee] = useState<string>('')
     const [isUsersListOpened, setIsUsersListOpened] = useState<boolean>(false)
+    const [generatedId, setGeneratedId] = useState<number>()
+    const [updatedId, setUpdatedId] = useState<number>()
+
+    const getIdForGenerator = async () => {
+        fetch('http://127.0.0.1:8888/get-id')
+        .then((data) => data.json())
+        .then((res) => {
+            const {id} = res
+            setGeneratedId(id)
+            setUpdatedId(id+1)
+        })
+    }
+
+    const updateIdForGenerator = async () => {
+        const settings = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({updatedId})
+        }
+        fetch('http://127.0.0.1:8888/update-id', settings)
+            .then((data) => data)
+    }
+
+    useEffect(()=>{
+        setTimeout(() => {
+            getIdForGenerator() 
+        }, 250)
+    },[])
+
 
     const newTask = {
+        innerId: `PROJECT-${generatedId}`,
         title: title,
         description: description,
-        asignee: asignee,
+        asignee: asignee || loggedUser.login,
         status: 'todo',
     }
 
-    const settings = {
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify(newTask)
-    }
+    
 
     const addTaskToDatabase = async () => {
+        const settings = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(newTask)
+        }
         fetch('http://127.0.0.1:8888/tasks', settings)
         .then((data) => data)
     }
@@ -48,8 +81,10 @@ const NewTaskForm = ( { taskStatus, setIsFormOpened, usersList, setLoadingNewTas
         if(!title) return
         if(!description) return
         await addTaskToDatabase()
+        await updateIdForGenerator()
         setIsFormOpened(false)
         setLoadingNewTask(true)
+        // setUpdatedId()
     }
 
     const handleTitle = (e: React.FormEvent<HTMLInputElement>) => {
@@ -62,7 +97,10 @@ const NewTaskForm = ( { taskStatus, setIsFormOpened, usersList, setLoadingNewTas
 
     return (
         <>
-            <form className='new-task__form form' onSubmit={handleSubmit}>
+            <form 
+                className='new-task__form form' 
+                onSubmit={handleSubmit}
+            >
                 <input
                     className='form__title-input --margin'
                     placeholder='Title...'
@@ -123,10 +161,10 @@ const NewTaskForm = ( { taskStatus, setIsFormOpened, usersList, setLoadingNewTas
                     type='submit'
                 />
             </form>
-            <div className='blur'
+            {/* <div className='blur'
             >
                 
-            </div>
+            </div> */}
         </>
     )
 }
