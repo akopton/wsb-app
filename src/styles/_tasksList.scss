@@ -1,6 +1,18 @@
 .list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+.list-wrap {
     padding: 0 20px;
+    height: 100vh;
     padding-top: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
 
@@ -8,8 +20,10 @@
     display: flex;
     position: absolute;
     overflow-x: scroll;
-    .list {
+    padding-top: 70px;
+    .list-wrap {
         flex: none;
+        height: 100%;
     }
 }
 
@@ -18,8 +32,11 @@
         height: 100%;
         width: 100%;
         display: flex;
-        .list {
+        justify-content: space-between;
+        .list-wrap {
             width: 33%;
+            overflow-y: scroll;
+
             .single-task {
                 &.opened {
                     width: 500px;
@@ -28,5 +45,4 @@
             }
         }
     }
-        
 }

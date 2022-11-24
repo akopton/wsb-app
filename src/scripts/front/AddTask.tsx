@@ -3,21 +3,21 @@ import React from 'react';
 import { useMemo, useEffect, useState, useCallback } from 'react';
 import { BiDownArrow } from 'react-icons/bi'
 
-const NewTaskBtn = ( {isNewTaskFormOpened, setIsNewTaskFormOpened, isAccountSettingsPanelOpened}:any ) => {
+const NewTaskBtn = ( {isNavMenuOpened,isSingleTaskOpened,isNewTaskFormOpened, setIsNewTaskFormOpened, isAccountSettingsPanelOpened, windowWidth, }:any ) => {
 
 
 
     return (
         <div 
             className="add-task__button button--round"
-            style={isAccountSettingsPanelOpened ? { position:'absolute', zIndex: '-1'} : isNewTaskFormOpened ? {transform: 'rotate(45deg)', zIndex: '5', right: '15px', transition: 'ease .2s'} : undefined}
+            style={isNavMenuOpened ? { position:'absolute', zIndex: '1'} : isNewTaskFormOpened ? {transform: 'rotate(45deg)', zIndex: '50', right: '15px', transition: 'ease .2s'} : windowWidth > 768 ? {zIndex:'4'} : isSingleTaskOpened ? {zIndex:'-1'} : undefined}
             onClick={()=>setIsNewTaskFormOpened(!isNewTaskFormOpened)}
         >
         </div>
     )
 }
 
-const NewTaskForm = ( { taskStatus, setIsFormOpened, usersList, setLoadingNewTask }:any ) => {
+const NewTaskForm = ( { taskStatus, setIsFormOpened, usersList, setLoadingNewTask, isNewTaskFormOpened }:any ) => {
     const [title, setTitle] = useState<string>('')
     const [description, setDescription] = useState<string>('')
     const [asignee, setAsignee] = useState<string>('')
@@ -123,7 +123,8 @@ const NewTaskForm = ( { taskStatus, setIsFormOpened, usersList, setLoadingNewTas
                     type='submit'
                 />
             </form>
-            <div className='blur'>
+            <div className='blur'
+            >
                 
             </div>
         </>

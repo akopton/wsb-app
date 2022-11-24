@@ -2,7 +2,7 @@ import React from "react"
 import { useEffect, useState, useCallback, useMemo } from "react"
 import { BiDownArrow, BiUpArrow, BiRightArrow } from 'react-icons/bi'
 
-const ActionsPicker = ( {deleteTask, setTaskStatus, setIsActionsWindowOpened, isActionsWindowOpened, updateTaskStatus, taskStatus}: any ) => {
+const ActionsPicker = ( {deleteTask, setTaskStatus, setIsActionsWindowOpened, isActionsWindowOpened, updateTaskStatus, taskStatus, setIsTaskOpened, isTaskOpened, setIsSingleTaskOpened}: any ) => {
 
     const [isActionPicked, setIsActionPicked] = useState<boolean>(false)
     const [pickedAction, setPickedAction] = useState<string>()
@@ -27,15 +27,31 @@ const ActionsPicker = ( {deleteTask, setTaskStatus, setIsActionsWindowOpened, is
 
     return (
         <div className="single-task__actions-picker">
-            <span 
+            <div 
                 className="picked-action"
                 onClick={()=>setIsActionsWindowOpened(!isActionsWindowOpened)}
+                style={{display:'flex', alignItems:'center', justifyContent:'space-between', gap: '8px', borderTop:'none'}}
             >
-                {isActionPicked ? pickedAction : 'Pick an action...'}
-            </span>
-            {isActionsWindowOpened && 
-                <div className="actions-window">
-                    <ul>
+                <span style={{lineHeight: '30px'}}>{isActionPicked ? pickedAction : 'Pick an action...'}</span>
+                <div 
+                className="submit-action"
+                onClick={()=>{
+                    if (!isActionPicked) setIsActionsWindowOpened(!isActionsWindowOpened)
+                    if (isActionPicked) updateTaskStatus()
+                    setIsTaskOpened(!isTaskOpened)
+                }} 
+                style={{cursor: 'pointer'}}>
+                {isActionsWindowOpened ? 
+                    <BiUpArrow /> 
+                    : isActionPicked ? 
+                    <BiRightArrow style={{color: 'rgb(57, 255, 238)'}}/> 
+                    : 
+                    <BiDownArrow />
+                }
+                </div>
+            </div>
+                
+                    <ul className="actions-window" style={isActionsWindowOpened ? {height: '80px', transition: 'all .3s ease'} : {height: '0', padding: '0 5px', transition: 'all .3s ease', borderBottom:'none'}}>
                         {actions.map((action, id) => {
                             if (action.type == taskStatus) return
                             return <li className="action" key={id} onClick={() => {
@@ -49,22 +65,7 @@ const ActionsPicker = ( {deleteTask, setTaskStatus, setIsActionsWindowOpened, is
                                     </li>
                         })}
                     </ul>
-                </div>
-            }
-            <div 
-                className="submit-action"
-                onClick={()=>{
-                    if (!isActionPicked) setIsActionsWindowOpened(!isActionsWindowOpened)
-                    if (isActionPicked) updateTaskStatus()
-                }} 
-                style={{cursor: 'pointer', height: '100%'}}>
-                {isActionsWindowOpened ? 
-                    <BiUpArrow style={{width: '100%', height:'100%'}}/> 
-                    : isActionPicked ? 
-                    <BiRightArrow style={{width: '100%', height:'100%'}} /> 
-                    : 
-                    <BiDownArrow style={{width: '100%', height:'100%'}}/>}
-            </div>
+            
         </div>
     )
 }

@@ -41,11 +41,10 @@ const App = () => {
 
   return (
     <div className="app-container">
-    {/* <button onClick={()=>console.log(usersList)}>elo</button> */}
       {!isRegisterPanelOpened ? 
       <>
         { !isLoggedIn ? 
-          <div className="panel__wrapper" style={{position:'relative'}}>
+          <div className="panel__wrapper">
             <LoginPanel 
               setLoggedUser={setLoggedUser}
               setIsLoggedIn={setIsLoggedIn}
@@ -53,12 +52,14 @@ const App = () => {
               defaultUser={defaultUser}
               usersList={usersList}
             />
-            <button onClick={()=>openRegisterPanel(true)} >
+            <button 
+              className="panel-swtich-btn"
+              onClick={()=>openRegisterPanel(true)} 
+              >
               Don't have an account?
             </button>
           </div>
           : 
-          <>
             <MainSite 
               defaultUser={defaultUser}
               loggedUser={loggedUser}
@@ -66,7 +67,6 @@ const App = () => {
               setLoggedUser={setLoggedUser}
               usersList={usersList}
               />
-          </>
         }
 
         </>
@@ -78,7 +78,9 @@ const App = () => {
             getUsersFromDatabase={getUsersFromDatabase}
             setUsersList={setUsersList}
           />
-          <button onClick={()=>openRegisterPanel(false)}>
+          <button 
+            className="panel-swtich-btn"
+            onClick={()=>openRegisterPanel(false)}>
             Already signed in?
           </button>
         </div>

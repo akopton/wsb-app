@@ -5,9 +5,9 @@ import SingleTask from "./SingleTask"
 const TodoTasks = ( { tasksList, setIsTaskUpdated, setLoadingNewTask, taskMethods, setIsSingleTaskOpened, isSingleTaskOpened }:any ) => {
     
     return (
-        <div className="todo-tasks list">
+        <div className="todo-tasks list-wrap">
             <span>Todo-Tasks</span>
-            <ul  style={{display: 'flex', flexDirection: 'column'}}>
+            <ul className="list" >
             {
                 tasksList.map((task:any, id: any) => {
                     if (task.status == 'todo')
@@ -16,6 +16,7 @@ const TodoTasks = ( { tasksList, setIsTaskUpdated, setLoadingNewTask, taskMethod
                         key={id} 
                         setIsTaskUpdated={setIsTaskUpdated}
                         isSingleTaskOpened={isSingleTaskOpened}
+                        setIsSingleTaskOpened={setIsSingleTaskOpened}
                     />
                 })
             }

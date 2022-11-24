@@ -1,12 +1,14 @@
 import React from "react"
 import { useEffect, useState } from "react"
 
-const Hamburger = ({isNewTaskFormOpened, isNavMenuOpened, setIsNavMenuOpened}:any) => {
+const Hamburger = ({isNewTaskFormOpened, isNavMenuOpened, setIsNavMenuOpened, isSingleTaskOpened}:any) => {
     return (
             <div 
             className="hamburger"
-            onClick={()=>{setIsNavMenuOpened(!isNavMenuOpened)}}
-            style={isNewTaskFormOpened ? {width: '0px', transition: '.3s ease'} : undefined}
+            onClick={(e)=>{
+                e.preventDefault()
+                setIsNavMenuOpened(!isNavMenuOpened)}}
+            style={isNewTaskFormOpened ? {width: '0px', transition: '.1s ease'} : isSingleTaskOpened ? {zIndex:'-1'} : undefined}
             >
             <div className="hamburger__piece --top" style={isNavMenuOpened ? {top: '50%', rotate: '45deg', translate: '0 -50%',  transition: 'ease .2', backgroundColor: 'black'} : undefined}/>
             <div className="hamburger__piece --middle-left" style={isNavMenuOpened ? {height: '0px', width: '0', transition: 'ease .2s'} : undefined}/>
@@ -19,7 +21,7 @@ const Hamburger = ({isNewTaskFormOpened, isNavMenuOpened, setIsNavMenuOpened}:an
 const NavMenu = ({isNavMenuOpened}:any) => {
 
     return (
-        <div className="nav-menu" style={isNavMenuOpened ? {height: '100%', transition: 'ease .5s'} : undefined}></div>
+        <div className="nav-menu" style={isNavMenuOpened ? {height: '100%', transition: 'ease .5s', zIndex:'4'} : undefined}></div>
     )
 }
 

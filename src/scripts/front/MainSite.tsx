@@ -1,5 +1,6 @@
-import React from "react"
+import React, { useCallback } from "react"
 import {Swiper, SwiperSlide} from 'swiper/react';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 import { useEffect, useState } from "react"
 import Nav from "./NavMenu"
 import ActiveTasks from "./ActiveTasks"
@@ -7,6 +8,9 @@ import NewTask from "./AddTask"
 import DoneTasks from "./DoneTasks"
 import TodoTasks from "./ToDoTasks"
 import 'swiper/css';
+import 'swiper/css/scrollbar';
+import SingleTask from "./SingleTask";
+
 const { NewTaskBtn, NewTaskForm} = NewTask
 const { Hamburger, NavMenu } = Nav
 
@@ -28,6 +32,8 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
         window.addEventListener('resize', handleWindowWidth)
     },[windowWidth])
 
+    const isMobile = windowWidth < 768
+
     const getTasksFromDatabase = async () => {
         fetch('http://127.0.0.1:8888/get-tasks')
         .then((data?) => data.json())
@@ -45,6 +51,11 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
         setTimeout(()=>getTasksFromDatabase(), 100)
     },[loadingNewTask, isTaskUpdated])
 
+    useCallback(()=>{
+        setIsSingleTaskOpened(isSingleTaskOpened)
+    },[isSingleTaskOpened])
+
+
     return (
         <>
             {
@@ -53,37 +64,43 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                     <p>Logging in... Please wait...</p>
                 </div> 
                 : 
-                <div className="main-site" style={isNavMenuOpened ? {overflow: 'hidden'} : undefined}>
-                <span style={{position: 'absolute'}}>{loggedUser.login}</span>
-                    <NewTaskBtn
-                        isNewTaskFormOpened={isNewTaskFormOpened}
-                        setIsNewTaskFormOpened={setIsNewTaskFormOpened}
-                        isNavMenuOpened={isNavMenuOpened}
-                    />
-                    <Hamburger 
-                        setIsNavMenuOpened={setIsNavMenuOpened}
-                        isNavMenuOpened={isNavMenuOpened}
-                        isNewTaskFormOpened={isNewTaskFormOpened}
-                    />
-                    {isNewTaskFormOpened && 
-                        <NewTaskForm 
-                            setIsFormOpened={setIsNewTaskFormOpened}
-                            usersList={usersList}
-                            tasksList={tasksList}
-                            setTasksList={setTasksList}
-                            setLoadingNewTask={setLoadingNewTask}
-                            // taskStatus={taskStatus}
-                        />}
-                    <NavMenu isNavMenuOpened={isNavMenuOpened}/>
+                <div className="main-site" style={isNavMenuOpened ? {overflow: 'hidden'} : isNewTaskFormOpened ? {overflow:'hidden'} : isSingleTaskOpened ? {overflow:'hidden'} : undefined}>
+                <span style={{position: 'fixed', zIndex:'10', fontSize: '20px', left: '20px', top: '10px'}}>Logged: {loggedUser.login}</span>
+                <div className="nav-background" style={isSingleTaskOpened ? {display:'none'} : {position: 'fixed', top:'0', left:'0', height:'65px', width: '100%', background: '#red', zIndex:'1'}}></div>
+
                     {windowWidth < 768 ?
-                        <div className="task-lists">
-                        
+                        <div className="main-site" >
                         <Swiper
-                                style={{border:'1px solid blue',position:'relative',height: '100vh', width: '100vw', zIndex:'11'}}
+                                style={isSingleTaskOpened ? {position: 'fixed', height: '100vh', width: '100vw', zIndex: '20', top:'0', left:'0'} : isMobile ? {height: '100vh', width: '100vw', zIndex: '20'} : undefined}
                                 spaceBetween={0}
                                 slidesPerView={1}
+                                allowSlideNext={isSingleTaskOpened ? false : true}
+                                allowSlidePrev={isSingleTaskOpened ? false : true}
                                 onSlideChange={() => console.log('slide change')}
                                 onSwiper={(swiper) => console.log(swiper)}>
+                            <NewTaskBtn
+                                isNewTaskFormOpened={isNewTaskFormOpened}
+                                setIsNewTaskFormOpened={setIsNewTaskFormOpened}
+                                isNavMenuOpened={isNavMenuOpened}
+                                isSingleTaskOpened={isSingleTaskOpened}
+                                windowWidth={windowWidth}
+                            />
+                            <Hamburger 
+                                setIsNavMenuOpened={setIsNavMenuOpened}
+                                isNavMenuOpened={isNavMenuOpened}
+                                isNewTaskFormOpened={isNewTaskFormOpened}
+                                isSingleTaskOpened={isSingleTaskOpened}
+                            />
+                            {isNewTaskFormOpened && 
+                                <NewTaskForm 
+                                    setIsFormOpened={setIsNewTaskFormOpened}
+                                    usersList={usersList}
+                                    tasksList={tasksList}
+                                    setTasksList={setTasksList}
+                                    setLoadingNewTask={setLoadingNewTask}
+                                    // taskStatus={taskStatus}
+                                />}
+                            <NavMenu isNavMenuOpened={isNavMenuOpened}/>
                             <SwiperSlide>
                                 <TodoTasks
                                     tasksList={tasksList}
@@ -115,36 +132,59 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                                 />
                             </SwiperSlide>
                         </Swiper>
-                        
                     </div>
                     :
-                    <div className="task-lists">
-                        
-                                <TodoTasks
-                                    tasksList={tasksList}
-                                    isSingleTaskOpened={isSingleTaskOpened}
-                                    setIsSingleTaskOpened={setIsSingleTaskOpened}
-                                    isTaskUpdated={isTaskUpdated}
-                                    setIsTaskUpdated={setIsTaskUpdated}
-                                    setLoadingNewTask={setLoadingNewTask}
-                                />
-                                <ActiveTasks 
-                                    tasksList={tasksList}
-                                    isSingleTaskOpened={isSingleTaskOpened}
-                                    setIsSingleTaskOpened={setIsSingleTaskOpened}
-                                    isTaskUpdated={isTaskUpdated}
-                                    setIsTaskUpdated={setIsTaskUpdated}
-                                    setLoadingNewTask={setLoadingNewTask}
-                                />
-                                <DoneTasks 
-                                    tasksList={tasksList}
-                                    isSingleTaskOpened={isSingleTaskOpened}
-                                    setIsSingleTaskOpened={setIsSingleTaskOpened}
-                                    isTaskUpdated={isTaskUpdated}
-                                    setIsTaskUpdated={setIsTaskUpdated}
-                                    setLoadingNewTask={setLoadingNewTask}
-                                />
-                        
+                    <div className="task-lists" >
+                        <NewTaskBtn
+                            isNewTaskFormOpened={isNewTaskFormOpened}
+                            setIsNewTaskFormOpened={setIsNewTaskFormOpened}
+                            isNavMenuOpened={isNavMenuOpened}
+                            isSingleTaskOpened={isSingleTaskOpened}
+                            windowWidth={windowWidth}
+                        />
+                        <Hamburger 
+                            setIsNavMenuOpened={setIsNavMenuOpened}
+                            isNavMenuOpened={isNavMenuOpened}
+                            isNewTaskFormOpened={isNewTaskFormOpened}
+                            isSingleTaskOpened={isSingleTaskOpened}
+                        />
+                        {isNewTaskFormOpened && 
+                        <NewTaskForm 
+                            setIsFormOpened={setIsNewTaskFormOpened}
+                            usersList={usersList}
+                            tasksList={tasksList}
+                            setTasksList={setTasksList}
+                            setLoadingNewTask={setLoadingNewTask}
+                            // taskStatus={taskStatus}
+                        />}
+                        <NavMenu isNavMenuOpened={isNavMenuOpened}/>
+                        <TodoTasks
+                            tasksList={tasksList}
+                            isSingleTaskOpened={isSingleTaskOpened}
+                            setIsSingleTaskOpened={setIsSingleTaskOpened}
+                            isTaskUpdated={isTaskUpdated}
+                            setIsTaskUpdated={setIsTaskUpdated}
+                            setLoadingNewTask={setLoadingNewTask}
+                            isMobile={isMobile}
+                        />
+                        <ActiveTasks 
+                            tasksList={tasksList}
+                            isSingleTaskOpened={isSingleTaskOpened}
+                            setIsSingleTaskOpened={setIsSingleTaskOpened}
+                            isTaskUpdated={isTaskUpdated}
+                            setIsTaskUpdated={setIsTaskUpdated}
+                            setLoadingNewTask={setLoadingNewTask}
+                            isMobile={isMobile}
+                        />
+                        <DoneTasks 
+                            tasksList={tasksList}
+                            isSingleTaskOpened={isSingleTaskOpened}
+                            setIsSingleTaskOpened={setIsSingleTaskOpened}
+                            isTaskUpdated={isTaskUpdated}
+                            setIsTaskUpdated={setIsTaskUpdated}
+                            setLoadingNewTask={setLoadingNewTask}
+                            isMobile={isMobile}
+                        />
                     </div>    
                 }
                 </div>

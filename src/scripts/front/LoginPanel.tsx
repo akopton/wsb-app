@@ -42,7 +42,7 @@ const LoginPanel = ( { defaultUser, setLoggedUser, setIsLoggedIn, usersList }: a
                     onChange={(e) => {
                                 setInputLogin(e.target.value)
                             }} 
-                ></input>
+                />
                 <input 
                     className="login-panel__password-input --input"
                     type='password'
@@ -52,7 +52,7 @@ const LoginPanel = ( { defaultUser, setLoggedUser, setIsLoggedIn, usersList }: a
                             }}
                 />
                 <input 
-                    className="login-panel__login-button"
+                    className="login-panel__login-button form__btn"
                     type="submit"
                     value="Sign in"
                     onClick={()=>findUser(inputLogin)}

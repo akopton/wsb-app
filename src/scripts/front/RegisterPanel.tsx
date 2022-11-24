@@ -1,14 +1,16 @@
 import React from "react"
 import { useState } from "react"
+import { BiRightArrowCircle } from "react-icons/bi"
 
 const RegisterPanel = ( { setUsersList, usersList, defaultUser }: any ) => {
 
     const [newUserFirstName, setNewUserFirstName] = useState<string>('')
     const [newUserLastName, setNewUserLastName] = useState<string>('')
-    const [newUserEmail, setNewUserEmail] = useState('')
-    const [newUserLogin, setNewUserLogin] = useState('')
-    const [newUserPassword, setNewUserPassword] = useState('')
-    
+    const [newUserEmail, setNewUserEmail] = useState<string>('')
+    const [newUserLogin, setNewUserLogin] = useState<string>('')
+    const [newUserPassword, setNewUserPassword] = useState<string>('')
+    const [isFormFilled, setIsFormFilled] = useState<boolean>()
+
     interface UserInterface {
         firstName: string,
         lastName: string,
@@ -47,11 +49,11 @@ const RegisterPanel = ( { setUsersList, usersList, defaultUser }: any ) => {
         }
     }
     
-    const handleRegister = async () => {
+    const handleRegister = async (e: React.FormEvent) => {
+        e.preventDefault()
         if (!newUserEmail) return
         if (!newUserLogin) return
         if (!newUserPassword) return
-
         checkIfUserExists()
             .then(async (result) => {
                 if (!result) await registerNewUser()
@@ -62,24 +64,33 @@ const RegisterPanel = ( { setUsersList, usersList, defaultUser }: any ) => {
             })
         setUsersList([...usersList, newUser])
     }
-
-    
+ 
+    const handleFormFill = () => {
+        if (!newUserEmail || !newUserLogin || !newUserPassword) {
+            setIsFormFilled(false)
+            return
+        }
+        setIsFormFilled(true)
+    }
 
     return (
-        <div className="register-panel">
+        <form className="register-panel" onSubmit={(e) => handleRegister(e)}>
             <input
                 className="register-panel__mail-input --input"
                 type='text'
                 placeholder="email"
                 onChange={(e) => {
+                    handleFormFill()
                     setNewUserEmail(e.target.value)
                 }}
+                autoComplete="off"
             />
             <input
                 className="register-panel__login-input --input"
                 type='text'
                 placeholder="login"
                 onChange={(e) => {
+                    handleFormFill()
                     setNewUserLogin(e.target.value)
                 }}
             />
@@ -89,15 +100,31 @@ const RegisterPanel = ( { setUsersList, usersList, defaultUser }: any ) => {
                 placeholder="password"
                 onChange={(e) => {
                     setNewUserPassword(e.target.value)
+                    handleFormFill()
                 }}
+                autoComplete="new-password"
             />
-            <button 
-                onClick={() => {
-                    handleRegister()
-                }}>
-                Create an account
+            <button
+                className="register-panel__register-button form__btn"
+                style={{position:'relative'}}
+                type='submit'
+                onClick={(e) => {
+                    handleRegister(e)
+                }}
+            >
+                Register 
+                {/* {isFormFilled ?  */}
+                    <BiRightArrowCircle style={{
+                        position:'absolute',
+                        top:'50%',
+                        right:'5px',
+                        transform: 'translateY(-50%) scale(1.2)'
+                    }}/> 
+                    {/* : 
+                    undefined
+                } */}
             </button>
-        </div>
+        </form>
     )
 }
 

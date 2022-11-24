@@ -4,23 +4,21 @@ import SingleTask from "./SingleTask"
 
 
 
-const ActiveTasks = ({ tasksList, taskStatus, setTaskStatus, setIsTaskUpdated, setLoadingNewTask }:any) => {
+const ActiveTasks = ({ tasksList, taskStatus, setTaskStatus, setIsTaskUpdated, setLoadingNewTask, setIsSingleTaskOpened }:any) => {
 
     return (
-        <div className="active-tasks list">
+        <div className="active-tasks list-wrap">
             <span>Active-Tasks</span>
-            <ul  style={{display: 'flex', flexDirection: 'column'}}>
+            <ul className="list">
             {
                 tasksList.map((task:any, id: any) => {
                     if (task.status == 'active')
                     return <SingleTask 
                         task={task} 
                         key={id} 
-                        tasksList={tasksList}
-                        setTaskStatus={setTaskStatus}
-                        taskStatus={taskStatus}
                         setIsTaskUpdated={setIsTaskUpdated}
-                        setLoadingNewTask={setLoadingNewTask}
+                        // isSingleTaskOpened={isSingleTaskOpened}
+                        setIsSingleTaskOpened={setIsSingleTaskOpened}
                     />
                 })
             }

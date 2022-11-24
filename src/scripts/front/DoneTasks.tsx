@@ -3,12 +3,12 @@ import { useEffect, useState, useCallback, useMemo } from "react"
 import SingleTask from "./SingleTask"
 
 
-const DoneTasks = ({ tasksList, taskStatus, setTaskStatus, setIsTaskUpdated, setLoadingNewTask }:any) => {
+const DoneTasks = ({ tasksList, taskStatus, setTaskStatus, setIsTaskUpdated, setLoadingNewTask, setIsSingleTaskOpened }:any) => {
 
     return (
-        <div className="done-tasks list">
+        <div className="done-tasks list-wrap">
             <span>Done-Tasks</span>
-            <ul  style={{display: 'flex', flexDirection: 'column'}}>
+            <ul className="list">
             {
                 tasksList.map((task:any, id: any) => {
                     if (task.status == 'done')
@@ -20,6 +20,7 @@ const DoneTasks = ({ tasksList, taskStatus, setTaskStatus, setIsTaskUpdated, set
                         taskStatus={taskStatus}
                         setIsTaskUpdated={setIsTaskUpdated}
                         setLoadingNewTask={setLoadingNewTask}
+                        setIsSingleTaskOpened={setIsSingleTaskOpened}
                     />
                 })
             }
