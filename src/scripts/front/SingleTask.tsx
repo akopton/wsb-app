@@ -26,11 +26,11 @@ const TaskDescription = ({task, taskDescription, isTaskOpened, setIsEditable, is
         <div>
             {isEditable ?
                 <div 
-                    className="single-task__desc"
+                    className="task-content__desc"
                     style={{ height:'110px'}}
                 >
                     <textarea 
-                        className="single-task__desc"
+                        className="task-content__desc"
                         value={newDesc} 
                         onChange={(e)=>{
                             setNewDesc(e.target.value)
@@ -50,7 +50,7 @@ const TaskDescription = ({task, taskDescription, isTaskOpened, setIsEditable, is
                 </div>
                 :
                 <div 
-                    className="single-task__desc"
+                    className="task-content__desc"
                     onClick={()=>{
                         if (isTaskOpened) setIsEditable(true)
                     }}
@@ -75,6 +75,7 @@ const SingleTask = ({task, id, isTaskUpdated, setIsTaskUpdated, setIsSingleTaskO
     const [taskDescription, setTaskDescription] = useState<string>(description)
     const [taskStatus, setTaskStatus] = useState<string>(status)
     const [isEditable, setIsEditable] = useState<boolean>(false)
+
 
     useEffect(()=>{
         setIsSingleTaskOpened(isTaskOpened)
@@ -124,13 +125,9 @@ const SingleTask = ({task, id, isTaskUpdated, setIsTaskUpdated, setIsSingleTaskO
                 height: '300px', 
                 width:'100%',
                 zIndex:'6', 
-                display: 'flex',
-                justifyContent:'center',
                 background:'#2c2c2c', 
                 color:'white', 
                 transition: 'height .3s ease',
-                flexDirection:'column',
-                gap:'30px',
                 } 
                 : 
                 {cursor:'pointer', transition: 'height .3s ease', height:'70px'}}
@@ -138,10 +135,9 @@ const SingleTask = ({task, id, isTaskUpdated, setIsTaskUpdated, setIsSingleTaskO
             onClick={()=>{
                 if (!isTaskOpened) {
                     setIsSingleTaskOpened(true)
-                setIsTaskOpened(true)
-                setTaskStatus(status)
-                console.log(updatedTask)
-                
+                    setIsTaskOpened(true)
+                    setTaskStatus(status)
+                    console.log(updatedTask)
                 }
                 }}>
             {isTaskOpened && 
@@ -159,25 +155,36 @@ const SingleTask = ({task, id, isTaskUpdated, setIsTaskUpdated, setIsSingleTaskO
                     }
                 /> 
             }
-            <span className="single-task__id" style={{fontSize:'14px'}}>{task.innerId}</span>
-            {isTaskOpened ? <div className="single-task__title" style={{wordWrap: 'break-word', whiteSpace:'break-spaces'}}>{task.title}</div> : <div className="single-task__title" style={{textOverflow: 'ellipsis'}}>{task.title}</div>}
-            
-            {isTaskOpened && <TaskDescription task={task} taskDescription={taskDescription} isTaskOpened={isTaskOpened} isEditable={isEditable} setIsEditable={setIsEditable}/>}
-            {/* <span className="single-task__asignee" style={isTaskOpened ? {display: 'block', color:'white'} : {display: 'none'}}>{task.asignee}</span> */}
-            {/* <span className="single-task__date">26.11.2022r. 15:00</span> */}
+            <span className="single-task__id">{task.innerId}</span>
+            {isTaskOpened ? 
+                <div className="single-task__title" style={{wordWrap: 'break-word', whiteSpace:'break-spaces', lineHeight:'70px'}}>
+                    {task.title}
+                </div> 
+                :
+                <div className="single-task__title" style={{textOverflow: 'ellipsis', lineHeight:'70px'}}>
+                    {task.title}
+                </div>
+        }
             {isTaskOpened && 
-                <ActionsPicker 
-                    setTaskStatus={setTaskStatus}
-                    setIsActionsWindowOpened={setIsActionsWindowOpened}
-                    isActionsWindowOpened={isActionsWindowOpened}
-                    updateTaskStatus={updateTaskStatus}
-                    taskStatus={taskStatus}
-                    deleteTask={deleteTask}
-                    setIsTaskOpened={setIsTaskOpened}
-                    isTaskOpened={isTaskOpened}
-                    setIsSingleTaskOpened={setIsSingleTaskOpened}
-                />
+                <div className="task-content">
+                    <TaskDescription task={task} taskDescription={taskDescription} isTaskOpened={isTaskOpened} isEditable={isEditable} setIsEditable={setIsEditable}/>
+                    <span className="task-content__asignee" style={isTaskOpened ? {display: 'block', color:'white'} : {display: 'none'}}>{task.asignee}</span>
+                    <span className="task-content__date">26.11.2022r. 15:00</span>
+                    <ActionsPicker
+                        setTaskStatus={setTaskStatus}
+                        setIsActionsWindowOpened={setIsActionsWindowOpened}
+                        isActionsWindowOpened={isActionsWindowOpened}
+                        updateTaskStatus={updateTaskStatus}
+                        taskStatus={taskStatus}
+                        deleteTask={deleteTask}
+                        setIsTaskOpened={setIsTaskOpened}
+                        isTaskOpened={isTaskOpened}
+                        setIsSingleTaskOpened={setIsSingleTaskOpened}
+                        task={task}
+                    />
+                </div>
             }
+            {/* {isTaskOpened && <TaskDescription task={task} taskDescription={taskDescription} isTaskOpened={isTaskOpened} isEditable={isEditable} setIsEditable={setIsEditable}/>} */}
         </li>
         {/* <div 
             className="single-task__blur"

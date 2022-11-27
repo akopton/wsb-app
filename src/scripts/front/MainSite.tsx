@@ -126,7 +126,7 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                         <Swiper
                                 draggable={true}
                                 initialSlide={index}
-                                style={{ maxHeight: '100%', top:'70px'}}
+                                style={{height:'100vh', top:'70px'}}
                                 modules={[EffectFade]}
                                 spaceBetween={-55}
                                 slidesPerView={1}
@@ -135,7 +135,7 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                                 onSlideChange={() => console.log('slide change')}
                                 onSwiper={(swiper) => console.log(swiper)}>
                             
-                            <SwiperSlide style={{maxHeight:'100%'}}>
+                            <SwiperSlide >
                                 <TodoTasks
                                     tasksList={tasksList}
                                     isSingleTaskOpened={isSingleTaskOpened}
@@ -145,7 +145,7 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                                     setLoadingNewTask={setLoadingNewTask}
                                 />
                             </SwiperSlide>
-                            <SwiperSlide>
+                            <SwiperSlide >
                                 <ActiveTasks 
                                     tasksList={tasksList}
                                     isSingleTaskOpened={isSingleTaskOpened}
@@ -155,7 +155,7 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                                     setLoadingNewTask={setLoadingNewTask}
                                 />
                             </SwiperSlide>
-                            <SwiperSlide style={{width: '310px'}}>
+                            <SwiperSlide >
                                 <DoneTasks 
                                     tasksList={tasksList}
                                     isSingleTaskOpened={isSingleTaskOpened}

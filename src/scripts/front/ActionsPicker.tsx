@@ -2,8 +2,9 @@ import React from "react"
 import { useEffect, useState, useCallback, useMemo } from "react"
 import { BiDownArrow, BiUpArrow, BiRightArrow } from 'react-icons/bi'
 
-const ActionsPicker = ( {deleteTask, setTaskStatus, setIsActionsWindowOpened, isActionsWindowOpened, updateTaskStatus, taskStatus, setIsTaskOpened, isTaskOpened, setIsSingleTaskOpened}: any ) => {
+const ActionsPicker = ( {task, deleteTask, setTaskStatus, setIsActionsWindowOpened, isActionsWindowOpened, updateTaskStatus, taskStatus, setIsTaskOpened, isTaskOpened, setIsSingleTaskOpened}: any ) => {
 
+    const {status} = task
     const [isActionPicked, setIsActionPicked] = useState<boolean>(false)
     const [pickedAction, setPickedAction] = useState<string>()
     const actions = [
@@ -54,7 +55,7 @@ const ActionsPicker = ( {deleteTask, setTaskStatus, setIsActionsWindowOpened, is
                 
                     <ul className="actions-window" style={isActionsWindowOpened ? {height: '80px', transition: 'all .3s ease'} : {height: '0', padding: '0 5px', transition: 'all .3s ease', borderBottom:'none'}}>
                         {actions.map((action, id) => {
-                            if (action.type == taskStatus) return
+                            if (action.type == status) return
                             return <li className="action" key={id} onClick={() => {
                                                     // console.log(e.currentTarget)
                                                     setTaskStatus(action.type)

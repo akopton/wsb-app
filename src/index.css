@@ -268,34 +268,36 @@
 }
 .single-task {
   position: relative;
-  display: flex;
-  min-height: 70px;
-  width: 100%;
-  overflow: hidden;
   padding: 10px;
   border-radius: 8px;
   transition: height 0.3s ease;
   color: white;
   border: 1px solid rgb(57, 255, 238);
   margin-bottom: 20px;
+  overflow: hidden;
 }
 .single-task__id {
+  font-size: 14px;
   position: absolute;
   top: 10px;
   left: 10px;
 }
 .single-task__title {
-  align-self: center;
-  font-size: 26px;
-  line-height: 30px;
-  margin-top: 10px;
+  height: 50px;
+  font-size: 22px;
   width: 100%;
   background: none;
   color: white;
   overflow: hidden;
   white-space: nowrap;
 }
-.single-task__desc {
+.single-task .task-content {
+  border: 1px solid red;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.single-task .task-content__desc {
   font-size: 18px;
   width: 100%;
   background: none;
@@ -303,7 +305,7 @@
   overflow: hidden;
   font-family: "Times New Roman", Times, serif;
 }
-.single-task__desc textarea {
+.single-task .task-content__desc textarea {
   width: 100%;
   height: 100%;
   padding: 0;
@@ -311,10 +313,10 @@
   font-size: 18px;
   font-family: "Times New Roman", Times, serif;
 }
-.single-task__asignee {
+.single-task .task-content__asignee {
   font-size: 24px;
 }
-.single-task__date {
+.single-task .task-content__date {
   font-size: 20px;
 }
 .single-task__close-btn {
@@ -476,8 +478,4 @@ input, textarea {
 
 ::-webkit-scrollbar:horizontal {
   height: 0px;
-}
-
-.swiper-slide {
-  height: 100vh;
 }/*# sourceMappingURL=index.css.map */
