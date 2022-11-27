@@ -8,21 +8,23 @@ const ActiveTasks = ({ tasksList, taskStatus, setTaskStatus, setIsTaskUpdated, s
 
     return (
         <div className="active-tasks list-wrap">
-            <span>Active-Tasks</span>
-            <ul className="list">
-            {
-                tasksList.map((task:any, id: any) => {
-                    if (task.status == 'active')
-                    return <SingleTask 
-                        task={task} 
-                        key={id} 
-                        setIsTaskUpdated={setIsTaskUpdated}
-                        // isSingleTaskOpened={isSingleTaskOpened}
-                        setIsSingleTaskOpened={setIsSingleTaskOpened}
-                    />
-                })
-            }
-            </ul>
+            <div className="wrapper">
+                <span className="list-title">Active-Tasks</span>
+                <ul className="list">
+                {
+                    tasksList.map((task:any, id: any) => {
+                        if (task.status == 'active')
+                        return <SingleTask 
+                            task={task} 
+                            key={id} 
+                            setIsTaskUpdated={setIsTaskUpdated}
+                            // isSingleTaskOpened={isSingleTaskOpened}
+                            setIsSingleTaskOpened={setIsSingleTaskOpened}
+                        />
+                    })
+                }
+                </ul>
+            </div>
         </div>
     )
 }

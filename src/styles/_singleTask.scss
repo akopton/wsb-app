@@ -1,19 +1,29 @@
 @import './_colors';
 
 .single-task {
-    flex-direction: column;
-    height: 120px;
+    position: relative;
+    display: flex;
+    min-height: 70px;
     width: 100%;
     overflow: hidden;
-    padding: 15px;
+    padding: 10px;
     border-radius: 8px;
     transition: height .3s ease;
     color: white;
     border: 1px solid $light-blue;
-    position: relative;
+    margin-bottom: 20px;
+
+    &__id {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
 
     &__title {
-        font-size: 24px;
+        align-self: center;
+        font-size: 26px;
+        line-height: 30px;
+        margin-top: 10px;
         width: 100%;
         background: none;
         color: white;
@@ -80,26 +90,6 @@
         }
     }
     
-    &.opened {
-        position: fixed;
-        top: 0;
-        left: 0;
-        translate: -50% -50%;
-        height: 300px;
-        width: 300px;
-        // transition: top .15s ease;
-        background-color: white;
-        color: black;
-        z-index: 25;
-        // animation: taskOpen .3s;
-
-        .single-task__desc {
-            height: 100px;
-            border: 1px solid black;
-            overflow-y: scroll;
-       }
-    }
-
     &__actions-picker {
         position: absolute;
         bottom: 10px;
@@ -150,14 +140,5 @@
                 cursor: pointer;
             }
         }
-
-        
     }
-
-    
-}
-
-
-.single-task__blur {
-    display: none;
 }

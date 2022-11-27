@@ -120,24 +120,20 @@ const SingleTask = ({task, id, isTaskUpdated, setIsTaskUpdated, setIsSingleTaskO
         <li 
             className='single-task'
             style={isTaskOpened ? 
-                {position:'relative', 
-                bottom:'0', left:'0',
-                // top: `${window.scrollX}`, left:`${window.scrollY}`, 
-                // transform:'translate(-50%, -50%)',
-                height: '300px', width:'100%', 
+                {
+                height: '300px', 
+                width:'100%',
                 zIndex:'6', 
-                background:'#2c2c2c', color:'white', 
-                transition: 'height .3s ease',
                 display: 'flex',
-                flexDirection:'column',
                 justifyContent:'center',
+                background:'#2c2c2c', 
+                color:'white', 
+                transition: 'height .3s ease',
+                flexDirection:'column',
                 gap:'30px',
-                // border:'none',
-                // borderTop:'1px solid rgb(57, 255, 238)',
-                // borderRadius: '0'
                 } 
                 : 
-                {cursor:'pointer', height: '80px', transition: 'height .3s ease'}}
+                {cursor:'pointer', transition: 'height .3s ease', height:'70px'}}
             key={id}
             onClick={()=>{
                 if (!isTaskOpened) {
@@ -163,11 +159,11 @@ const SingleTask = ({task, id, isTaskUpdated, setIsTaskUpdated, setIsSingleTaskO
                     }
                 /> 
             }
+            <span className="single-task__id" style={{fontSize:'14px'}}>{task.innerId}</span>
             {isTaskOpened ? <div className="single-task__title" style={{wordWrap: 'break-word', whiteSpace:'break-spaces'}}>{task.title}</div> : <div className="single-task__title" style={{textOverflow: 'ellipsis'}}>{task.title}</div>}
             
             {isTaskOpened && <TaskDescription task={task} taskDescription={taskDescription} isTaskOpened={isTaskOpened} isEditable={isEditable} setIsEditable={setIsEditable}/>}
-            <span className="single-task__asignee" style={isTaskOpened ? {display: 'block', color:'white'} : {display: 'none'}}>{task.asignee}</span>
-            <span>{task.innerId}</span>
+            {/* <span className="single-task__asignee" style={isTaskOpened ? {display: 'block', color:'white'} : {display: 'none'}}>{task.asignee}</span> */}
             {/* <span className="single-task__date">26.11.2022r. 15:00</span> */}
             {isTaskOpened && 
                 <ActionsPicker 

@@ -6,21 +6,23 @@ const TodoTasks = ( { tasksList, setIsTaskUpdated, setLoadingNewTask, taskMethod
     
     return (
         <div className="todo-tasks list-wrap">
-            <span>Todo-Tasks</span>
-            <ul className="list" >
-            {
-                tasksList.map((task:any, id: any) => {
-                    if (task.status == 'todo')
-                    return <SingleTask 
-                        task={task} 
-                        key={id} 
-                        setIsTaskUpdated={setIsTaskUpdated}
-                        isSingleTaskOpened={isSingleTaskOpened}
-                        setIsSingleTaskOpened={setIsSingleTaskOpened}
-                    />
-                })
-            }
-            </ul>
+            <div className="wrapper">
+                <span className="list-title">Todo-Tasks</span>
+                <ul className="list" style={{position:'relative'}}>
+                {
+                    tasksList.map((task:any, id: any) => {
+                        if (task.status == 'todo')
+                        return <SingleTask 
+                            task={task} 
+                            key={id} 
+                            setIsTaskUpdated={setIsTaskUpdated}
+                            isSingleTaskOpened={isSingleTaskOpened}
+                            setIsSingleTaskOpened={setIsSingleTaskOpened}
+                        />
+                    })
+                }
+                </ul>
+            </div>
         </div>
     )
 }

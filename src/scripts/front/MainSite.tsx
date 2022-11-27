@@ -15,6 +15,33 @@ import { EffectFade } from 'swiper';
 const { NewTaskBtn, NewTaskForm} = NewTask
 const { Hamburger, NavMenu } = Nav
 
+const SwiperIndicator = () => {
+    const [currentSlide, setCurrentSlide] = useState<number>(0)
+    const [slides, setSlides] = useState<number[]>([])
+    const swiper = useSwiper()
+    swiper.on('transitionEnd', ()=>{
+        setCurrentSlide(swiper.realIndex)
+    })
+
+    useEffect(()=>{
+        setSlides(Array(swiper.wrapperEl.childElementCount).fill(0))
+
+    },[])
+
+    return (
+        <div className="slide-indicator">
+            {slides.map((slide, id) => {
+                return (
+                    currentSlide === id ? 
+                    <div key={id} style={{background: 'rgb(57, 255, 238)', borderRadius:'50%', height: '10px', width: '10px'}}/>
+                    :
+                    <div key={id} style={{background: '#1c1c1c', borderRadius:'50%', height: '10px', width: '10px'}}/>
+                )
+            })}
+        </div>
+    )
+}
+
 const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, loggedUser, waitValue }: any) => {
     const [isMainSiteLoading, setIsMainSiteLoading] = useState<boolean>(true)
     const [isNewTaskFormOpened, setIsNewTaskFormOpened] = useState<boolean>(false)
@@ -25,9 +52,10 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
     const [isTaskUpdated, setIsTaskUpdated] = useState<boolean>(false)
     const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth)
     const [index, setIndex] = useState<number>()
-
+    const [space, setSpace] = useState<number>(-55)
     const handleWindowWidth = () => {
         setWindowWidth(window.innerWidth)
+        setSpace(space-1)
     }
 
     useEffect(()=>{
@@ -57,33 +85,6 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
         setIsSingleTaskOpened(isSingleTaskOpened)
     },[isSingleTaskOpened])
 
-    const SwiperIndicator = () => {
-        const [activeSlide, setActiveSlide] = useState<number>(0)
-        const [slides, setSlides] = useState<number[]>([])
-        const swiper = useSwiper()
-        swiper.on('transitionEnd', ()=>{
-            setActiveSlide(swiper.realIndex)
-        })
- 
-        useEffect(()=>{
-            setSlides(Array(swiper.wrapperEl.childElementCount).fill(0))
-
-        },[])
-
-        return (
-            <div className="slide-indicator">
-                {slides.map((slide, id) => {
-                    return (
-                        activeSlide === id ? 
-                        <div key={id} style={{background: 'rgb(57, 255, 238)', borderRadius:'50%', height: '10px', width: '10px'}}/>
-                        :
-                        <div key={id} style={{background: '#1c1c1c', borderRadius:'50%', height: '10px', width: '10px'}}/>
-                    )
-                })}
-            </div>
-        )
-    }
-
     return (
         <>
             {
@@ -92,7 +93,7 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                     <p>Logging in... Please wait...</p>
                 </div> 
                 : 
-                <div className="main-site" style={isNavMenuOpened ? {overflow: 'hidden'} : isNewTaskFormOpened ? {overflow:'hidden'} : isSingleTaskOpened ? {overflow:'hidden'} : undefined}>
+                <div className="main-site" style={{overflow:'hidden'}}>
                 <span style={{position: 'fixed', zIndex:'10', fontSize: '20px', left: '20px', top: '10px'}}>Logged: {loggedUser.login}</span>
                 <div className="nav-background" style={isSingleTaskOpened ? {display:'none'} : {position: 'fixed', top:'0', left:'0', height:'65px', width: '100%', background: '#red', zIndex:'1'}}></div>
 
@@ -125,16 +126,16 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                         <Swiper
                                 draggable={true}
                                 initialSlide={index}
-                                style={{overflow:'scroll'}}
+                                style={{ maxHeight: '100%', top:'70px'}}
                                 modules={[EffectFade]}
-                                spaceBetween={-60}
+                                spaceBetween={-55}
                                 slidesPerView={1}
                                 // allowSlideNext={isSingleTaskOpened ? false : true}
                                 // allowSlidePrev={isSingleTaskOpened ? false : true}
                                 onSlideChange={() => console.log('slide change')}
                                 onSwiper={(swiper) => console.log(swiper)}>
                             
-                            <SwiperSlide>
+                            <SwiperSlide style={{maxHeight:'100%'}}>
                                 <TodoTasks
                                     tasksList={tasksList}
                                     isSingleTaskOpened={isSingleTaskOpened}
