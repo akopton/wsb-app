@@ -1,5 +1,5 @@
 import React, { useCallback } from "react"
-import {Swiper, SwiperSlide} from 'swiper/react';
+import {Swiper, SwiperSlide, useSwiper} from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 import { useEffect, useState } from "react"
 import Nav from "./NavMenu"
@@ -9,8 +9,9 @@ import DoneTasks from "./DoneTasks"
 import TodoTasks from "./ToDoTasks"
 import 'swiper/css';
 import 'swiper/css/scrollbar';
+import 'swiper/css/effect-fade';
 import SingleTask from "./SingleTask";
-
+import { EffectFade } from 'swiper';
 const { NewTaskBtn, NewTaskForm} = NewTask
 const { Hamburger, NavMenu } = Nav
 
@@ -23,6 +24,7 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
     const [isSingleTaskOpened, setIsSingleTaskOpened] = useState<boolean>(false)
     const [isTaskUpdated, setIsTaskUpdated] = useState<boolean>(false)
     const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth)
+    const [index, setIndex] = useState<number>()
 
     const handleWindowWidth = () => {
         setWindowWidth(window.innerWidth)
@@ -55,6 +57,32 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
         setIsSingleTaskOpened(isSingleTaskOpened)
     },[isSingleTaskOpened])
 
+    const SwiperIndicator = () => {
+        const [activeSlide, setActiveSlide] = useState<number>(0)
+        const [slides, setSlides] = useState<number[]>([])
+        const swiper = useSwiper()
+        swiper.on('transitionEnd', ()=>{
+            setActiveSlide(swiper.realIndex)
+        })
+ 
+        useEffect(()=>{
+            setSlides(Array(swiper.wrapperEl.childElementCount).fill(0))
+
+        },[])
+
+        return (
+            <div className="slide-indicator">
+                {slides.map((slide, id) => {
+                    return (
+                        activeSlide === id ? 
+                        <div key={id} style={{background: 'rgb(57, 255, 238)', borderRadius:'50%', height: '10px', width: '10px'}}/>
+                        :
+                        <div key={id} style={{background: '#1c1c1c', borderRadius:'50%', height: '10px', width: '10px'}}/>
+                    )
+                })}
+            </div>
+        )
+    }
 
     return (
         <>
@@ -69,15 +97,7 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                 <div className="nav-background" style={isSingleTaskOpened ? {display:'none'} : {position: 'fixed', top:'0', left:'0', height:'65px', width: '100%', background: '#red', zIndex:'1'}}></div>
 
                     {windowWidth < 768 ?
-                        <div className="main-site" >
-                        <Swiper
-                                style={{overflow:'scroll'}}
-                                spaceBetween={0}
-                                slidesPerView={1}
-                                // allowSlideNext={isSingleTaskOpened ? false : true}
-                                // allowSlidePrev={isSingleTaskOpened ? false : true}
-                                onSlideChange={() => console.log('slide change')}
-                                onSwiper={(swiper) => console.log(swiper)}>
+                    <>
                             <NewTaskBtn
                                 isNewTaskFormOpened={isNewTaskFormOpened}
                                 setIsNewTaskFormOpened={setIsNewTaskFormOpened}
@@ -102,6 +122,18 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                                     // taskStatus={taskStatus}
                                 />}
                             <NavMenu isNavMenuOpened={isNavMenuOpened}/>
+                        <Swiper
+                                draggable={true}
+                                initialSlide={index}
+                                style={{overflow:'scroll'}}
+                                modules={[EffectFade]}
+                                spaceBetween={-60}
+                                slidesPerView={1}
+                                // allowSlideNext={isSingleTaskOpened ? false : true}
+                                // allowSlidePrev={isSingleTaskOpened ? false : true}
+                                onSlideChange={() => console.log('slide change')}
+                                onSwiper={(swiper) => console.log(swiper)}>
+                            
                             <SwiperSlide>
                                 <TodoTasks
                                     tasksList={tasksList}
@@ -122,7 +154,7 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                                     setLoadingNewTask={setLoadingNewTask}
                                 />
                             </SwiperSlide>
-                            <SwiperSlide>
+                            <SwiperSlide style={{width: '310px'}}>
                                 <DoneTasks 
                                     tasksList={tasksList}
                                     isSingleTaskOpened={isSingleTaskOpened}
@@ -132,8 +164,9 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                                     setLoadingNewTask={setLoadingNewTask}
                                 />
                             </SwiperSlide>
+                            <SwiperIndicator/>
                         </Swiper>
-                    </div>
+                        </>
                     :
                     <div className="task-lists" >
                         <NewTaskBtn
