@@ -32,9 +32,10 @@ const {
     } = require('./DB/index.js')
 
 
-// register and login panel
 
-// getting new user from register form
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`)
+})
 
 
 app.get('/users', async (req, res) => {
@@ -66,9 +67,6 @@ app.get('/get-tasks', async (req, res) => {
         res.send(TASKS_LIST)
 })
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`)
-})
 
 
 app.get('/get-id', async (req, res) => {
@@ -86,9 +84,6 @@ app.post('/sign-in', async (req, res) => {
     const loginData = req.body
     const result = await findUserInDatabase(client, loginData)
     res.send(result)
-})
-
-app.post('/users', async (req, res) => {
 })
 
 app.post('/register', async (req, res) => {

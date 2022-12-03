@@ -1,7 +1,7 @@
 import React, { useReducer } from "react";
 import { useEffect, useState } from "react";
 
-const LoginPanel = ( { defaultUser, setLoggedUser, setIsLoggedIn, usersList, setUsersList }: any) => {
+const LoginPanel = ( { setLoggedUser, setIsLoggedIn }: any) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     
     const loginData = {

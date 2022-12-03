@@ -1,16 +1,6 @@
 @import './_colors';
     
-.blur {
-    position: absolute;
-    height: 100%;
-    width: 100vw;
-    z-index: 10;
-    background: $blur;
-    backdrop-filter: blur(4px);
-    z-index: 1;
-}
-
-.new-task__form {
+.new-task-form {
     position: fixed;
     top: 0;
     left: 0;
@@ -24,73 +14,68 @@
     padding: 70px 15px;
     gap: 20px;
 
-    &__title-input {
-        width: 100%;
-        margin-bottom: 5px;
-        height: 35px;
-        line-height: 35px;
-        font-size: 24px;
-        border: 1px solid $light-blue;
-    }
-
-    &__desc-input {
-        width: 100%;
-        font-size: 20px;
-        line-height: 20px;
-        height: 160px;
-        border: 1px solid $light-blue;
-    }
-
-    &__asignee-picker {
+    .asignee-picker {
         align-self: flex-start;
         padding: 0;
-        width: 70%;
         font-size: 24px;
-
+        z-index: 10;
         .custom-list {
-            border: 1px solid black;
-
+            border: 1px solid white;
+            position: relative;
             &__picked-asignee {
-                width: 100%;
+                width: 250px;
+                padding: 10px 10px;
                 cursor: pointer;
                 position: relative;
-                border-bottom: 1px solid red;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
             }
 
             &__arrow-icon {
-                position: absolute;
-                top:50%;
-                right: 0;
-                height: 10px;
-                width: 10px;
-                margin-left: 5px;
+                height: 20px;
+                width: 20px;
             }
 
-        }
+            .asignee-list {
+                padding: 15px 15px;
+                max-height: 200px;
+                overflow-y: scroll;
+                transition: ease 1s;
+                position: absolute;
+                left: -1px;
+                border: 1px solid white;
+                background: $background-grey;
+                width: calc(100% + 2px);
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
 
-        .asignee-list {
-            max-height: 100px;
-            overflow-y: scroll;
-            transition: ease 1s;
-
-            &__item {
-                line-height: 25px;
-
-                &:hover {
-                    border-bottom: 1px solid blue;
+                &__item {
+                    line-height: 25px;
+    
+                    &:hover {
+                        border-bottom: 1px solid blue;
+                    }
                 }
             }
         }
     }
 
-    &__submit-btn {
-        position: absolute;
-        bottom: 0;
-        right: 0;
+    .submit-btn {
     }
 }
 
 
 .--margin {
     margin-bottom: 5px;
+}
+
+.blur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
 }

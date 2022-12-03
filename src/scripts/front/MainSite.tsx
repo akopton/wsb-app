@@ -52,7 +52,7 @@ const SwiperIndicator = ({slides} : any) => {
     )
 }
 
-const MainSite = ( { usersList, defaultUser, loggedUser }: any) => {
+const MainSite = ( { usersList, loggedUser, TUser }: any) => {
     const [isMainSiteLoading, setIsMainSiteLoading] = useState<boolean>(false)
     const [isNewTaskFormOpened, setIsNewTaskFormOpened] = useState<boolean>(false)
     const [loadingNewTask, setLoadingNewTask] = useState<boolean>(false)
@@ -124,6 +124,7 @@ const MainSite = ( { usersList, defaultUser, loggedUser }: any) => {
                                 setTasksList={setTasksList}
                                 setLoadingNewTask={setLoadingNewTask}
                                 loggedUser={loggedUser}
+                                TUser
                             />
                         }
                         <NavMenu isNavMenuOpened={isNavMenuOpened}/>

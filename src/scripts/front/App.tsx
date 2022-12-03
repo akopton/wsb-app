@@ -4,7 +4,8 @@ import LoginPanel from "./LoginPanel";
 import MainSite from "./MainSite";
 
 const App = () => {
-  interface UserInterface {
+
+  type TUser = {
     firstName: string,
     lastName: string,
     email: string,
@@ -12,7 +13,7 @@ const App = () => {
     password: string,
   }
 
- const defaultUser: UserInterface = {
+ const defaultUser: TUser = {
     firstName: '',
     lastName: '',
     email: '',
@@ -20,14 +21,9 @@ const App = () => {
     password: '',
   }
 
-  const [isRegisterPanelOpened, setIsRegisterPanelOpened] = useState<boolean>(true)
-  const [usersList, setUsersList] = useState<[]>()
+  const [isRegisterPanelOpened, setIsRegisterPanelOpened] = useState<boolean>(false)
   const [loggedUser, setLoggedUser] = useState<{}>(defaultUser)
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
-
-
-
-  
 
   return (
     <div className="app-container">
@@ -38,10 +34,6 @@ const App = () => {
               <LoginPanel 
                 setLoggedUser={setLoggedUser}
                 setIsLoggedIn={setIsLoggedIn}
-                isLoggedIn={isLoggedIn}
-                defaultUser={defaultUser}
-                setUsersList={setUsersList}
-                usersList={usersList}
               />
               <div className="site-aside">
                 <span>
@@ -58,22 +50,16 @@ const App = () => {
             </div>
             : 
             <MainSite 
-              defaultUser={defaultUser}
               loggedUser={loggedUser}
               setIsLoggedIn={setIsLoggedIn}
               setLoggedUser={setLoggedUser}
-              usersList={usersList}
+              TUser
             />
           }
         </>
         : 
         <div className="register-site">
-          <RegisterPanel 
-            usersList={usersList}
-            defaultUser={loggedUser}
-            // getUsersFromDatabase={getUsersFromDatabase}
-            setUsersList={setUsersList}
-          />
+          <RegisterPanel defaultUser={defaultUser}/>
           <div className="site-aside">
             <span>Already have an accout?</span>
             <button 

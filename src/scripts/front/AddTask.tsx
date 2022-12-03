@@ -2,6 +2,7 @@ import { isDocument } from '@testing-library/user-event/dist/utils';
 import React from 'react';
 import { useMemo, useEffect, useState, useCallback } from 'react';
 import { BiDownArrow } from 'react-icons/bi'
+import { TUser } from './interfaces';
 
 const NewTaskBtn = ( {isNavMenuOpened,isSingleTaskOpened,isNewTaskFormOpened, setIsNewTaskFormOpened, isAccountSettingsPanelOpened, windowWidth, }:any ) => {
 
@@ -25,10 +26,13 @@ const NewTaskBtn = ( {isNavMenuOpened,isSingleTaskOpened,isNewTaskFormOpened, se
     )
 }
 
-const NewTaskForm = ( {setIsFormOpened, usersList, setLoadingNewTask, loggedUser }:any ) => {
+const NewTaskForm = ( {setIsFormOpened, setLoadingNewTask, loggedUser }:any ) => {
+    const [usersList, setUsersList] = useState<[]>([])
+    const [isUsersListLoading, setIsUsersListLoading] = useState<boolean>(false)
+
     const [title, setTitle] = useState<string>('')
     const [description, setDescription] = useState<string>('')
-    const [asignee, setAsignee] = useState<string>('')
+    const [asignee, setAsignee] = useState<TUser>()
     const [isUsersListOpened, setIsUsersListOpened] = useState<boolean>(false)
     const [generatedId, setGeneratedId] = useState<number>()
     const [updatedId, setUpdatedId] = useState<number>()
@@ -104,60 +108,74 @@ const NewTaskForm = ( {setIsFormOpened, usersList, setLoadingNewTask, loggedUser
         setDescription(e.currentTarget.value)
     }
 
+    const getUsersFromDatabase = async () => {
+        if (usersList.length) return
+        setIsUsersListLoading(true)
+        fetch('http://127.0.0.1:8888/users')
+        .then(data => data.json())
+        .then(res => setUsersList(res))
+        .catch(e => console.log(e))
+        .finally(()=>setIsUsersListLoading(false))
+    }
+
     return (
         <>
             <form 
-                className='new-task__form' 
+                className='new-task-form' 
                 onSubmit={handleSubmit}
             >
                 <input
-                    className='form__title-input --margin'
+                    className='title-input form-input --margin'
                     placeholder='Title...'
                     name='title'
                     value={title}
                     onChange={handleTitle}
                 />
                 <textarea 
-                    className='form__desc-input --margin'
+                    className='desc-input form-input --margin'
+                    style={{height: '40vh'}}
                     placeholder='Description...'
                     name='description'
                     value={description}
                     onChange={handleDescription}
                 />
                 
-                <div className='form__asignee-picker asignee-picker --margin'>
+                <div className='asignee-picker asignee-picker --margin'>
                     <span style={{ display: 'block'}} className='--margin'>Asigned person:</span>
                     <div className='asignee-picker__custom-list custom-list'>
                         <p 
                             className='custom-list__picked-asignee'
-                            onClick={() => setIsUsersListOpened(!isUsersListOpened)}>
+                            onClick={() => {
+                                getUsersFromDatabase()
+                                setIsUsersListOpened(!isUsersListOpened)
+                            }}>
                             {asignee ? 
-                                `${asignee}`
+                                `${asignee.firstName} ${asignee.lastName}`
                             : 
                                 'Pick from list...'
                             }
                             <BiDownArrow 
                                 className='custom-list__arrow-icon' 
                                 style={isUsersListOpened ? 
-                                    {transform: 'rotate(180deg) translateY(50%)'} 
+                                    {transform: 'rotate(180deg)'} 
                                     : 
-                                    {transform: 'translateY(-50%)'}
+                                    {}
                                 }
                             />
                         </p>
                         {isUsersListOpened && 
                             <ul className='asignee-list'>
-                                {usersList.map((user:{login:string}, id:number) => 
+                                {usersList.map((user:any, id:number) => 
                                     <li
                                         className='asignee-list__item'
                                         key={id}
                                         onClick={()=>{
-                                            setAsignee(user.login)
+                                            setAsignee(user)
                                             setIsUsersListOpened(!isUsersListOpened)
                                         }}
                                         style={{cursor: 'pointer'}} 
                                     >
-                                        {user.login}
+                                        {isUsersListLoading ? <div className='loader'></div> : <span>{`${user.firstName} ${user.lastName}`}</span>}
                                     </li>
                                 )}
                             </ul>
@@ -166,14 +184,16 @@ const NewTaskForm = ( {setIsFormOpened, usersList, setLoadingNewTask, loggedUser
                 </div>
                 {/* <DatePicker /> */}
                 <input 
-                    className='form__submit-btn --margin'
+                    className='submit-btn form__btn btn --margin'
                     type='submit'
                 />
+                {isUsersListOpened && 
+                    <div 
+                        className='blur'
+                        onClick={()=>setIsUsersListOpened(false)}    
+                    />
+                }
             </form>
-            {/* <div className='blur'
-            >
-                
-            </div> */}
         </>
     )
 }
