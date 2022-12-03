@@ -15,54 +15,64 @@ import { EffectFade } from 'swiper';
 const { NewTaskBtn, NewTaskForm} = NewTask
 const { Hamburger, NavMenu } = Nav
 
-const SwiperIndicator = () => {
+
+const SwiperIndicator = ({slides} : any) => {
     const [currentSlide, setCurrentSlide] = useState<number>(0)
-    const [slides, setSlides] = useState<number[]>([])
     const swiper = useSwiper()
     swiper.on('transitionEnd', ()=>{
         setCurrentSlide(swiper.realIndex)
     })
 
-    useEffect(()=>{
-        setSlides(Array(swiper.wrapperEl.childElementCount).fill(0))
-
-    },[])
-
     return (
         <div className="slide-indicator">
-            {slides.map((slide, id) => {
+            {window.innerWidth < 640 ? 
+            <>
+                {slides.map((slide:any, id:number) => {
                 return (
                     currentSlide === id ? 
-                    <div key={id} style={{background: 'rgb(57, 255, 238)', borderRadius:'50%', height: '10px', width: '10px'}}/>
+                    <div key={id} style={{background: 'rgb(57, 255, 238)', borderRadius:'50%', height: '8px', width: '8px'}}/>
                     :
-                    <div key={id} style={{background: '#1c1c1c', borderRadius:'50%', height: '10px', width: '10px'}}/>
+                    <div key={id} style={{background: '#1c1c1c', borderRadius:'50%', height: '8px', width: '8px'}}/>
                 )
-            })}
+                })}
+            </>
+            :
+            <>
+                {slides.slice(0,-1).map((slide:any, id:number) => {
+                    return (
+                        currentSlide === id ? 
+                        <div key={id} style={{background: 'rgb(57, 255, 238)', borderRadius:'50%', height: '8px', width: '8px'}}/>
+                        :
+                        <div key={id} style={{background: '#1c1c1c', borderRadius:'50%', height: '8px', width: '8px'}}/>
+                )
+                })}
+            </>
+            }
         </div>
     )
 }
 
-const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, loggedUser, waitValue }: any) => {
-    const [isMainSiteLoading, setIsMainSiteLoading] = useState<boolean>(true)
+const MainSite = ( { usersList, defaultUser, loggedUser }: any) => {
+    const [isMainSiteLoading, setIsMainSiteLoading] = useState<boolean>(false)
     const [isNewTaskFormOpened, setIsNewTaskFormOpened] = useState<boolean>(false)
     const [loadingNewTask, setLoadingNewTask] = useState<boolean>(false)
     const [tasksList, setTasksList] = useState<[]>([])
     const [isNavMenuOpened, setIsNavMenuOpened] = useState<boolean>(false)
     const [isSingleTaskOpened, setIsSingleTaskOpened] = useState<boolean>(false)
     const [isTaskUpdated, setIsTaskUpdated] = useState<boolean>(false)
+    const [slides, setSlides] = useState<number[]>([])
     const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth)
-    const [index, setIndex] = useState<number>()
-    const [space, setSpace] = useState<number>(-55)
+
+    
+
     const handleWindowWidth = () => {
         setWindowWidth(window.innerWidth)
-        setSpace(space-1)
     }
 
-    useEffect(()=>{
+    useEffect(()=> {
         window.addEventListener('resize', handleWindowWidth)
-    },[windowWidth])
+    },[window.innerWidth])
 
-    const isMobile = windowWidth < 768
 
     const getTasksFromDatabase = async () => {
         fetch('http://127.0.0.1:8888/get-tasks')
@@ -70,10 +80,12 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
         .then((res?) => {
             console.log('getting tasks...')
             setTasksList(res)
-            setIsMainSiteLoading(false)
+            setIsMainSiteLoading(true)
             setLoadingNewTask(false)
             setIsTaskUpdated(false)
         })
+        .catch((e) => console.log(e))
+        .finally(()=> setIsMainSiteLoading(false))
     }
 
     useEffect(()=>{
@@ -81,59 +93,63 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
         setTimeout(()=>getTasksFromDatabase(), 700)
     },[loadingNewTask, isTaskUpdated])
 
-    useCallback(()=>{
-        setIsSingleTaskOpened(isSingleTaskOpened)
-    },[isSingleTaskOpened])
-
     return (
         <>
             {
                 isMainSiteLoading ? 
                 <div className="loading-screen">
-                    <p>Logging in... Please wait...</p>
+                    <p style={{color:'white'}}>Logging in... Please wait...</p>
                 </div> 
                 : 
                 <div className="main-site" style={{overflow:'hidden'}}>
-                <span style={{position: 'fixed', zIndex:'10', fontSize: '20px', left: '20px', top: '10px'}}>Logged: {loggedUser.login}</span>
-                <div className="nav-background" style={isSingleTaskOpened ? {display:'none'} : {position: 'fixed', top:'0', left:'0', height:'65px', width: '100%', background: '#red', zIndex:'1'}}></div>
-
-                    {windowWidth < 768 ?
-                    <>
-                            <NewTaskBtn
-                                isNewTaskFormOpened={isNewTaskFormOpened}
-                                setIsNewTaskFormOpened={setIsNewTaskFormOpened}
-                                isNavMenuOpened={isNavMenuOpened}
-                                isSingleTaskOpened={isSingleTaskOpened}
-                                windowWidth={windowWidth}
+                    <span style={{position: 'fixed', zIndex:'10', fontSize: '20px', left: '20px', top: '10px'}}>Logged: {loggedUser.login}</span>
+                    
+                        <NewTaskBtn
+                            isNewTaskFormOpened={isNewTaskFormOpened}
+                            setIsNewTaskFormOpened={setIsNewTaskFormOpened}
+                            isNavMenuOpened={isNavMenuOpened}
+                            isSingleTaskOpened={isSingleTaskOpened}
+                        />
+                        <Hamburger 
+                            setIsNavMenuOpened={setIsNavMenuOpened}
+                            isNavMenuOpened={isNavMenuOpened}
+                            isNewTaskFormOpened={isNewTaskFormOpened}
+                            isSingleTaskOpened={isSingleTaskOpened}
+                        />
+                        {isNewTaskFormOpened && 
+                            <NewTaskForm 
+                                setIsFormOpened={setIsNewTaskFormOpened}
+                                usersList={usersList}
+                                tasksList={tasksList}
+                                setTasksList={setTasksList}
+                                setLoadingNewTask={setLoadingNewTask}
+                                loggedUser={loggedUser}
                             />
-                            <Hamburger 
-                                setIsNavMenuOpened={setIsNavMenuOpened}
-                                isNavMenuOpened={isNavMenuOpened}
-                                isNewTaskFormOpened={isNewTaskFormOpened}
-                                isSingleTaskOpened={isSingleTaskOpened}
-                            />
-                            {isNewTaskFormOpened && 
-                                <NewTaskForm 
-                                    setIsFormOpened={setIsNewTaskFormOpened}
-                                    usersList={usersList}
-                                    tasksList={tasksList}
-                                    setTasksList={setTasksList}
-                                    setLoadingNewTask={setLoadingNewTask}
-                                    loggedUser={loggedUser}
-                                    // taskStatus={taskStatus}
-                                />}
-                            <NavMenu isNavMenuOpened={isNavMenuOpened}/>
+                        }
+                        <NavMenu isNavMenuOpened={isNavMenuOpened}/>
                         <Swiper
-                                draggable={true}
-                                initialSlide={index}
                                 style={{height:'100vh', top:'70px'}}
                                 modules={[EffectFade]}
                                 spaceBetween={-55}
+                                breakpoints={{
+                                    360: {slidesPerView: 1},
+                                    380: {spaceBetween: -60},
+                                    400: {spaceBetween: -65},
+                                    420: {spaceBetween: -75},
+                                    440: {spaceBetween: -80},
+                                    460: {spaceBetween: -85},
+                                    480: {spaceBetween: -90},
+                                    500: {spaceBetween: -95},
+                                    520: {spaceBetween: -100, slidesPerView: 1},
+                                    640: {slidesPerView: 2},
+                                    1024: {slidesPerView: 3}
+                                }}
                                 slidesPerView={1}
-                                // allowSlideNext={isSingleTaskOpened ? false : true}
-                                // allowSlidePrev={isSingleTaskOpened ? false : true}
-                                onSlideChange={() => console.log('slide change')}
-                                onSwiper={(swiper) => console.log(swiper)}>
+                                onSlideChange={() => {console.log('slide change')}}
+                                onSwiper={(swiper) => {
+                                console.log(swiper)
+                                setSlides(Array(swiper.wrapperEl.childElementCount).fill(0))
+                                }}>
                             
                             <SwiperSlide >
                                 <TodoTasks
@@ -145,7 +161,7 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                                     setLoadingNewTask={setLoadingNewTask}
                                 />
                             </SwiperSlide>
-                            <SwiperSlide >
+                            <SwiperSlide>
                                 <ActiveTasks 
                                     tasksList={tasksList}
                                     isSingleTaskOpened={isSingleTaskOpened}
@@ -155,7 +171,7 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                                     setLoadingNewTask={setLoadingNewTask}
                                 />
                             </SwiperSlide>
-                            <SwiperSlide >
+                            <SwiperSlide>
                                 <DoneTasks 
                                     tasksList={tasksList}
                                     isSingleTaskOpened={isSingleTaskOpened}
@@ -165,63 +181,9 @@ const MainSite = ( { usersList, defaultUser, setIsLoggedIn, setLoggedUser, logge
                                     setLoadingNewTask={setLoadingNewTask}
                                 />
                             </SwiperSlide>
-                            <SwiperIndicator/>
+                            {windowWidth < 1024 ? <SwiperIndicator slides={slides}/>:''}
                         </Swiper>
-                        </>
-                    :
-                    <div className="task-lists" >
-                        <NewTaskBtn
-                            isNewTaskFormOpened={isNewTaskFormOpened}
-                            setIsNewTaskFormOpened={setIsNewTaskFormOpened}
-                            isNavMenuOpened={isNavMenuOpened}
-                            isSingleTaskOpened={isSingleTaskOpened}
-                            windowWidth={windowWidth}
-                        />
-                        <Hamburger 
-                            setIsNavMenuOpened={setIsNavMenuOpened}
-                            isNavMenuOpened={isNavMenuOpened}
-                            isNewTaskFormOpened={isNewTaskFormOpened}
-                            isSingleTaskOpened={isSingleTaskOpened}
-                        />
-                        {isNewTaskFormOpened && 
-                        <NewTaskForm 
-                            setIsFormOpened={setIsNewTaskFormOpened}
-                            usersList={usersList}
-                            tasksList={tasksList}
-                            setTasksList={setTasksList}
-                            setLoadingNewTask={setLoadingNewTask}
-                            // taskStatus={taskStatus}
-                        />}
-                        <NavMenu isNavMenuOpened={isNavMenuOpened}/>
-                        <TodoTasks
-                            tasksList={tasksList}
-                            isSingleTaskOpened={isSingleTaskOpened}
-                            setIsSingleTaskOpened={setIsSingleTaskOpened}
-                            isTaskUpdated={isTaskUpdated}
-                            setIsTaskUpdated={setIsTaskUpdated}
-                            setLoadingNewTask={setLoadingNewTask}
-                            isMobile={isMobile}
-                        />
-                        <ActiveTasks 
-                            tasksList={tasksList}
-                            isSingleTaskOpened={isSingleTaskOpened}
-                            setIsSingleTaskOpened={setIsSingleTaskOpened}
-                            isTaskUpdated={isTaskUpdated}
-                            setIsTaskUpdated={setIsTaskUpdated}
-                            setLoadingNewTask={setLoadingNewTask}
-                            isMobile={isMobile}
-                        />
-                        <DoneTasks 
-                            tasksList={tasksList}
-                            isSingleTaskOpened={isSingleTaskOpened}
-                            setIsSingleTaskOpened={setIsSingleTaskOpened}
-                            isTaskUpdated={isTaskUpdated}
-                            setIsTaskUpdated={setIsTaskUpdated}
-                            setLoadingNewTask={setLoadingNewTask}
-                            isMobile={isMobile}
-                        />
-                    </div>    
-                }
+                    
                 </div>
             }       
         </>

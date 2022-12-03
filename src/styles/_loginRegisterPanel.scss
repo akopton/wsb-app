@@ -1,54 +1,192 @@
-.panel__wrapper {
-    height: 100%;
+@import './_colors';
+
+.logging-site {
+    height: 100vh;
     width: 100%;
     position: relative;
-    
 
-    .login-panel, .register-panel {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        translate: -50% -50%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-        width: 100%;
-        padding: 0 50px;
-
-        & .--input {
-            height: 42px;
-            line-height: 42px;
+    @media screen and (max-width: 767px) {
+        .login-panel {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            translate: -50% -50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
             width: 100%;
-            border: 1px solid blue;
-            font-size: 26px;
-        }
+            padding: 0 50px;
     
-        &__login-input {
-        }
-    
-        &__password-input {
-    
-        }
-    
-        &__login-button {
-        }
+            & .--input {
+                height: 42px;
+                line-height: 42px;
+                width: 100%;
+                border: 1px solid $light-blue;
+                font-size: 26px;
+            }
+        
+            &__login-input {
+                position: relative;
 
-        .form__btn {
-            height: 42px;
-            width: 80%;
-            font-size: 26px;
-            background: none;
-            border: 3px solid rgb(47, 255, 193);
-            color: rgb(47, 255, 193);
-            transition: .3s ease;
-
-            &:hover {
-                border-radius: 13px;
-                background: rgb(47, 255, 193);
-                color: black;
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 150%;
+                    height: 150%;
+                    background-color: red;
+                    display: block;
+                }
+            }
+        
+            &__password-input {
+        
+            }
+        
+            &__login-button {
+            }
+    
+            .form__btn {
+                height: 42px;
+                width: 80%;
+                font-size: 26px;
+                background: none;
+                border: 3px solid $light-blue;
+                color: $light-blue;
                 transition: .3s ease;
+    
+                &:hover {
+                    border-radius: 13px;
+                    background: $light-blue;
+                    color: black;
+                    transition: .3s ease;
+                }
+            }
+        }   
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .logging-site {
+        height: 60%;
+        width: 100%;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+
+        .login-panel__wrapper {
+            height: 450px;
+            width: 45vw;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 0 50px;
+
+            .login-panel {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 30px;
+
+                & .--input {
+                    width: 100%;
+                    height: 60px;
+                    line-height: 60px;
+                    padding: 0 10px;
+                    border: 1px solid $light-blue;
+                    font-size: 30px;
+                }
+            
+                &__login-input {
+                }
+            
+                &__password-input {
+            
+                }
+            
+                &__login-button {
+                }
+        
+                .form__btn {
+                    border: 3px solid $light-blue;
+                    color: $light-blue;
+    
+                    &:hover {
+                        background: $light-blue;
+                        color: $dark-grey;
+                    }
+                }
+            }
+
+            .logging-screen {
+                position: absolute;
+                bottom: -20px;
+                left: 50%;
+                transform: translateX(-50%);
+                height: 300px;
+                background: rgba(#ffffff, .1);
+                backdrop-filter: blur(3px);
+                width: 90%;
+                z-index: 3;
+                border-radius: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 0 20px rgba(#ffffff, .2);
+
+                .loading-circle {
+                    height: 60px;
+                    width: 60px;
+                    border: 10px solid #f3f3f3; /* Light grey */
+                    border-top: 10px solid #3498db;
+                    z-index: 10;
+                    border-radius: 50%;
+                    animation: spin 2s linear infinite;
+                }
+            }
+        }
+
+        .site-aside {
+            width: 45vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            span {
+                color: white;
+                text-align: center;
+                font-size: 40px;
+            }
+            
+            .panel-switch-btn {
+                color: white;
+                border: 1px solid white;
             }
         }
     }
+}
+
+.btn {
+    height: 60px;
+    line-height: 60px;
+    width: 200px;
+    font-size: 26px;
+    background: none;
+    cursor: pointer;
+    transition: .3s ease;
+    border-radius: 8px;
+
+    &:hover {
+        border-radius: 20px;
+        transition: .3s ease;
+    }
+}
+
+
+@keyframes spin {
+    0% {transform: rotate(0deg)}
+    100% {transform: rotate(360deg)}
 }

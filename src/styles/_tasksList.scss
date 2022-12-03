@@ -12,19 +12,31 @@
         border-radius: 10px;
         
         .list {
-            box-sizing: content-box;
             min-height: min-content;
-            gap:20px;
+            overflow: scroll;
+            gap: 10px;
             max-height: calc(100vh - 160px);
-            width: 260px;
+            width: 80vw;
             border-radius: 10px;
             background: #1c1c1c;
-            padding: 12px 18px;
-            overflow: scroll;
+            padding: 12px 10px;
+
+            @media screen and (min-width: 640px) {
+                width: 260px;
+            }
+
+            @media screen and (min-width: 640px) {
+                width: calc(100vw/2 - 60px);
+            }
+
+            @media screen and (min-width: 1024px) {
+                width: calc(100vw/3 - 40px);
+            }
         
             &-title {
                 display:block;
-                padding: 5px 18px;
+                padding: 5px 10px;
+                font-size: 20px;
             }
         }
     }
@@ -33,18 +45,21 @@
 
 @media (min-width: 768px) {
     .task-lists {
+        padding-top: 100px;
         height: 100%;
         width: 100%;
         display: flex;
-        justify-content: space-between;
-        .list-wrap {
-            width: 33%;
-            overflow-y: scroll;
+        justify-content: space-around;
 
-            .single-task {
-                &.opened {
-                    width: 500px;
-                    height: 300px;
+        .list-wrap {
+            overflow-y: scroll;
+            .list {
+                
+                .single-task {
+                    &.opened {
+                        width: 500px;
+                        height: 300px;
+                    }
                 }
             }
         }

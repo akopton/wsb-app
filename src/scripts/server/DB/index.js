@@ -132,9 +132,23 @@ async function updateIdFromDatabase(client, updatedId) {
     }
 }
 
+async function findUserInDatabase(client, loginData) {
+    const {login, password} = loginData
+    try {
+        await client.connect()
+        const result = await usersCollection.findOne({login:login, password:password})
+        return result
+    } catch (e) {
+        console.error(e)        
+    } finally {
+        await client.close()
+    }
+}
+
 
 module.exports = MongoClient
 module.exports = {
+    findUserInDatabase: findUserInDatabase,
     updateIdFromDatabase: updateIdFromDatabase,
     getIdFromDatabase: getIdFromDatabase,
     getListOfUsers: getListOfUsers, 

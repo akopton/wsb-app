@@ -1,63 +1,99 @@
-import React from "react";
+import React, { useReducer } from "react";
 import { useEffect, useState } from "react";
 
-const LoginPanel = ( { defaultUser, setLoggedUser, setIsLoggedIn, usersList }: any) => {
-    const [inputLogin, setInputLogin] = useState('')
-    const [inputPassword, setInputPassword] = useState('')
-    const [fetchedUser, setFetchedUser] = useState(defaultUser)
+const LoginPanel = ( { defaultUser, setLoggedUser, setIsLoggedIn, usersList, setUsersList }: any) => {
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    
+    const loginData = {
+        login: '',
+        password: '',
+    }
+    
+    const reducer = (state:any, action:any) => {
+        switch (action.type) {
+            case 'input':
+                return {
+                    ...state,
+                    [action.field]: action.payload
+                }
+        }
+    }
+            
+    const [state, dispatch] = useReducer(reducer, loginData)
 
-    const findUser = async (input: string) => {
-        usersList.forEach((user: any) => {
-            if (input === user.login) {
-                setFetchedUser(user)
-            } else return
+    const handleInput = (e: any) => {
+        dispatch({
+            type: 'input',
+            field: e.target.name,
+            payload: e.target.value
         })
     }
 
-    const handleLogin = async () => {
-        if (!inputLogin) return
-        if (!inputPassword) return
-        if (inputPassword !== fetchedUser.password) return
-        setIsLoggedIn(true)
+    const settings = {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(state)
     }
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        try {
-            await handleLogin()
-        } catch (e) {
-            console.error(e)
-        } finally {
-            await setLoggedUser(fetchedUser)
-        }
+    
+    const validateLogin = async () => {
+        setIsLoading(true)
+        fetch('http://127.0.0.1:8888/sign-in', settings)
+        .then((data) => data.json())
+        .then((res)=>{
+            setLoggedUser(res)
+            setIsLoading(false)
+            setIsLoggedIn(true)
+        })
+        .catch(()=>{
+            alert('niepoprawny login lub hasło')
+            setIsLoading(false)
+        })
     }
 
     return (
-            <form className="login-panel" onSubmit={handleSubmit}>
-                
-                <input
-                    className="login-panel__login-input --input"
-                    type='text'
-                    placeholder='login'
-                    onChange={(e) => {
-                                setInputLogin(e.target.value)
-                            }} 
-                />
-                <input 
-                    className="login-panel__password-input --input"
-                    type='password'
-                    placeholder='password'
-                    onChange={(e) => {
-                                setInputPassword(e.target.value)
-                            }}
-                />
-                <input 
-                    className="login-panel__login-button form__btn"
-                    type="submit"
-                    value="Sign in"
-                    onClick={()=>findUser(inputLogin)}
-                />
-            </form>
+            <div className="login-panel__wrapper">
+                <form 
+                    className="login-panel" 
+                    onSubmit={(e)=>{
+                        e.preventDefault()
+                        validateLogin()
+                    }} 
+                    autoComplete="on"
+                >
+                    <input
+                        id="input__login"
+                        className="login-panel__login-input --input"
+                        name="login"
+                        style={{padding: '2px 10px'}}
+                        type='text'
+                        placeholder='login'
+                        onChange={(e)=>handleInput(e)}
+                        // onLoad={handleLogin}
+                    />
+                    <input 
+                        className="login-panel__password-input --input"
+                        style={{padding: '2px 10px'}}
+                        name="password"
+                        type='password'
+                        placeholder='password'
+                        onChange={(e)=>handleInput(e)}
+                        // onLoad={handlePassword}
+                    />
+                    <input 
+                        className="login-panel__login-button form__btn btn"
+                        style={{fontSize: '20px', lineHeight: '100%'}}
+                        type="submit"
+                        value="Sign in"
+                    />
+                </form>
+                {isLoading && 
+                    <div className="logging-screen">
+                        <div className="loader" style={{marginTop: '-20px'}}/>
+                    </div>    
+                }
+            </div>
     )
 }
 

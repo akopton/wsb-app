@@ -27,7 +27,8 @@ const {
         deleteAllTasks, 
         updateTaskStatus, 
         getIdFromDatabase, 
-        updateIdFromDatabase
+        updateIdFromDatabase,
+        findUserInDatabase
     } = require('./DB/index.js')
 
 
@@ -87,8 +88,8 @@ app.post('/update-id', async (req, res) => {
     await updateIdFromDatabase(client, updatedId)
 })
 
-
-
-
-
-
+app.post('/sign-in', async (req, res) => {
+    const loginData = req.body
+    const result = await findUserInDatabase(client, loginData)
+    res.send(result)
+})

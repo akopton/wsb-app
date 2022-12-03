@@ -20,9 +20,10 @@
     width: 100%;
     height: 100%;
     border: 1px solid white;
-    background: $dark-grey;
+    background: $background-grey;
     z-index: 4;
     padding: 70px 15px;
+    gap: 20px;
 
     &__title-input {
         width: 100%;
@@ -30,6 +31,7 @@
         height: 35px;
         line-height: 35px;
         font-size: 24px;
+        border: 1px solid $light-blue;
     }
 
     &__desc-input {
@@ -37,6 +39,7 @@
         font-size: 20px;
         line-height: 20px;
         height: 160px;
+        border: 1px solid $light-blue;
     }
 
     &__asignee-picker {

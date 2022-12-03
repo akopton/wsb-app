@@ -5,19 +5,27 @@ import { BiDownArrow } from 'react-icons/bi'
 
 const NewTaskBtn = ( {isNavMenuOpened,isSingleTaskOpened,isNewTaskFormOpened, setIsNewTaskFormOpened, isAccountSettingsPanelOpened, windowWidth, }:any ) => {
 
-
+    // const isMobile = windowWidth < 768
 
     return (
         <div 
             className="add-task__button button--round"
-            style={isNavMenuOpened ? { position:'absolute', zIndex: '1'} : isNewTaskFormOpened ? {transform: 'rotate(45deg)', zIndex: '50', right: '15px', transition: 'ease .2s'} : windowWidth > 768 ? {zIndex:'4'} : isSingleTaskOpened ? {zIndex:'-1'} : undefined}
+            style={isNavMenuOpened ? 
+                { position:'absolute', zIndex: '1'} 
+                : isNewTaskFormOpened ? 
+                {transform: 'rotate(45deg)', zIndex: '50', right: '15px', transition: 'ease .2s'} 
+                : isSingleTaskOpened ? 
+                {zIndex:'4'} 
+                 :
+                {zIndex:'10'} 
+                }
             onClick={()=>setIsNewTaskFormOpened(!isNewTaskFormOpened)}
         >
         </div>
     )
 }
 
-const NewTaskForm = ( { taskStatus, setIsFormOpened, usersList, setLoadingNewTask, isNewTaskFormOpened, loggedUser }:any ) => {
+const NewTaskForm = ( {setIsFormOpened, usersList, setLoadingNewTask, loggedUser }:any ) => {
     const [title, setTitle] = useState<string>('')
     const [description, setDescription] = useState<string>('')
     const [asignee, setAsignee] = useState<string>('')
@@ -48,17 +56,18 @@ const NewTaskForm = ( { taskStatus, setIsFormOpened, usersList, setLoadingNewTas
     }
 
     useEffect(()=>{
+        console.log(loggedUser)
         setTimeout(() => {
             getIdForGenerator() 
         }, 250)
     },[])
 
-
+    const {login} = loggedUser
     const newTask = {
         innerId: `PROJECT-${generatedId}`,
         title: title,
         description: description,
-        asignee: asignee || loggedUser.login,
+        asignee: asignee || login,
         status: 'todo',
     }
 

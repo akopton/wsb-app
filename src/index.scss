@@ -6,22 +6,17 @@
 @import './styles/singleTask';
 @import './styles/_colors';
 @import './styles/slideIndicator';
+@import './styles/_loader';
+
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-
-    @media screen and (min-width: 768px) {
-    overflow: hidden;
-      
-    }
 }
 
 body {
-    background-color: #0f0f0f;
-    height: 100%;
-
+    background-color: $background-grey;
 }
 
 .hidden {
@@ -49,7 +44,10 @@ input, textarea {
     border: none;
     outline: none;
     resize: none;
-    padding: 5px 8px;
+    appearance: none;
+    border-radius: 8px;
+    background-color: $background-grey;
+    color: $light-blue
 }
 
 ::-webkit-scrollbar {
@@ -74,3 +72,17 @@ input, textarea {
   ::-webkit-scrollbar:horizontal {
     height: 0px;
   }
+  
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus {
+  border: 1px solid $light-blue;
+  -webkit-text-fill-color: $light-blue;
+  -webkit-box-shadow: 0 0 0px 1000px $background-grey inset;
+  transition: background-color 5000s ease-in-out 12s;
+}
+
+.swiper-slide {
+  z-index: -1;
+}

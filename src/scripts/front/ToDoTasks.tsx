@@ -2,7 +2,7 @@ import React from "react"
 import { useContext, useEffect, useState, useCallback, useMemo } from "react"
 import SingleTask from "./SingleTask"
 
-const TodoTasks = ( { tasksList, setIsTaskUpdated, setLoadingNewTask, taskMethods, setIsSingleTaskOpened, isSingleTaskOpened }:any ) => {
+const TodoTasks = ( { tasksList, setIsTaskUpdated, setIsSingleTaskOpened, isSingleTaskOpened }:any ) => {
     
     return (
         <div className="todo-tasks list-wrap">

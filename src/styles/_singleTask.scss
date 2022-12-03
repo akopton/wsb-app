@@ -4,11 +4,12 @@
     position: relative;
     padding: 10px;
     border-radius: 8px;
-    transition: height .3s ease;
+    transition: max-height .3s ease;
     color: white;
     border: 1px solid $light-blue;
-    margin-bottom: 20px;
     overflow: hidden;
+    width: 100%;
+    margin-bottom: 15px;
 
     &__id {
         font-size: 14px;
@@ -28,7 +29,6 @@
     }
 
     .task-content {
-        border: 1px solid red;
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -50,11 +50,17 @@
         }
     
         &__asignee {
-            font-size: 24px;
-        }
-    
-        &__date {
+            position: absolute;
             font-size: 20px;
+            left: 10px;
+            bottom: 25px;
+        }
+        
+        &__date {
+            position: absolute;
+            left: 10px;
+            bottom: 5px;
+            font-size: 14px;
         }
     }
 
@@ -63,6 +69,7 @@
         right: 8px;
         height: 15px;
         width: 15px;
+        z-index: 10;
         &::after {
             content: '';
             position: absolute;
@@ -140,6 +147,12 @@
 
             .action {
                 cursor: pointer;
+            }
+        }
+
+        &:hover {
+            .submit-action {
+                color: $light-blue
             }
         }
     }

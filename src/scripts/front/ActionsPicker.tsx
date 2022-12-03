@@ -2,7 +2,7 @@ import React from "react"
 import { useEffect, useState, useCallback, useMemo } from "react"
 import { BiDownArrow, BiUpArrow, BiRightArrow } from 'react-icons/bi'
 
-const ActionsPicker = ( {task, deleteTask, setTaskStatus, setIsActionsWindowOpened, isActionsWindowOpened, updateTaskStatus, taskStatus, setIsTaskOpened, isTaskOpened, setIsSingleTaskOpened}: any ) => {
+const ActionsPicker = ( {setShowTaskContent, task, deleteTask, setTaskStatus, setIsActionsWindowOpened, isActionsWindowOpened, updateTaskStatus, taskStatus, setIsTaskOpened, isTaskOpened, setIsSingleTaskOpened}: any ) => {
 
     const {status} = task
     const [isActionPicked, setIsActionPicked] = useState<boolean>(false)
@@ -35,14 +35,17 @@ const ActionsPicker = ( {task, deleteTask, setTaskStatus, setIsActionsWindowOpen
             >
                 <span style={{lineHeight: '30px'}}>{isActionPicked ? pickedAction : 'Pick an action...'}</span>
                 <div 
-                className="submit-action"
-                onClick={()=>{
-                    if (!isActionPicked) setIsActionsWindowOpened(!isActionsWindowOpened)
-                    updateTaskStatus()
-                    setIsTaskOpened(!isTaskOpened)
-                    setIsActionsWindowOpened(false)
-                }} 
-                style={{cursor: 'pointer'}}>
+                    className="submit-action"
+                    onClick={()=>{
+                        if (isActionPicked) {
+                            setIsActionsWindowOpened(!isActionsWindowOpened)
+                            updateTaskStatus()
+                            setIsTaskOpened(!isTaskOpened)
+                            setIsActionsWindowOpened(false)
+                            setShowTaskContent(false)
+                        }
+                    }} 
+                >
                 {isActionsWindowOpened ? 
                     <BiUpArrow /> 
                     : isActionPicked ? 
