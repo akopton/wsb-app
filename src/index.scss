@@ -1,5 +1,5 @@
 @import './styles/app';
-@import './styles/loginRegisterPanel';
+@import './styles/loginSite';
 @import './styles/mainSite';
 @import './styles/newTaskForm';
 @import './styles/tasksList';
@@ -7,7 +7,7 @@
 @import './styles/_colors';
 @import './styles/slideIndicator';
 @import './styles/_loader';
-
+@import './styles/registerSite';
 
 * {
     margin: 0;
@@ -47,7 +47,7 @@ input, textarea {
     appearance: none;
     border-radius: 8px;
     background-color: $background-grey;
-    color: $light-blue
+    color: $light-blue;
 }
 
 ::-webkit-scrollbar {
@@ -77,12 +77,67 @@ input, textarea {
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 
 input:-webkit-autofill:focus {
-  border: 1px solid $light-blue;
+  border: 3px solid $light-blue;
   -webkit-text-fill-color: $light-blue;
   -webkit-box-shadow: 0 0 0px 1000px $background-grey inset;
   transition: background-color 5000s ease-in-out 12s;
+
 }
 
 .swiper-slide {
   z-index: -1;
+}
+
+.btn {
+  color: white;
+  padding: 8px 35px;
+  font-size: 20px;
+  line-height: 100%;
+  background: none;
+  cursor: pointer;
+  transition: .3s ease;
+  border-radius: 8px;
+  font-weight: 500;
+
+  &:hover {
+      border-radius: 20px;
+      transition: .3s ease;
+  }
+}
+
+.form__btn {
+  border: 3px solid $light-blue;
+  color: $light-blue;
+
+  &:hover {
+      background: $light-blue;
+      color: $dark-grey;
+  }
+}
+
+.form-input {
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  padding: 0 10px;
+  font-size: 30px;
+  max-width: 350px;
+  border: 3px solid $light-blue;
+}
+
+.panel-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  padding: 0 50px;
+
+  @media screen and (min-width: 768px) {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
 }

@@ -20,10 +20,10 @@ const App = () => {
     password: '',
   }
 
-  const [isRegisterPanelOpened, openRegisterPanel] = useState(Boolean)
-  const [usersList, setUsersList] = useState<[]>([])
-  const [loggedUser, setLoggedUser] = useState(defaultUser)
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [isRegisterPanelOpened, setIsRegisterPanelOpened] = useState<boolean>(true)
+  const [usersList, setUsersList] = useState<[]>()
+  const [loggedUser, setLoggedUser] = useState<{}>(defaultUser)
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
 
 
 
@@ -50,7 +50,7 @@ const App = () => {
                 </span>
                 <button 
                   className="panel-switch-btn btn"
-                  onClick={()=>openRegisterPanel(true)} 
+                  onClick={()=>setIsRegisterPanelOpened(true)} 
                 >
                   Register here
                 </button>
@@ -67,18 +67,21 @@ const App = () => {
           }
         </>
         : 
-        <div className="panel__wrapper">
+        <div className="register-site">
           <RegisterPanel 
             usersList={usersList}
             defaultUser={loggedUser}
             // getUsersFromDatabase={getUsersFromDatabase}
             setUsersList={setUsersList}
           />
-          <button 
-            className="panel-swtich-btn"
-            onClick={()=>openRegisterPanel(false)}>
-            Already registered?
-          </button>
+          <div className="site-aside">
+            <span>Already have an accout?</span>
+            <button 
+              className="panel-switch-btn btn"
+              onClick={()=>setIsRegisterPanelOpened(false)}>
+              Sign in
+            </button>
+          </div>
         </div>
       }
     </div>

@@ -40,8 +40,8 @@ const LoginPanel = ( { defaultUser, setLoggedUser, setIsLoggedIn, usersList, set
     const validateLogin = async () => {
         setIsLoading(true)
         fetch('http://127.0.0.1:8888/sign-in', settings)
-        .then((data) => data.json())
-        .then((res)=>{
+        .then(data => data.json())
+        .then(res=>{
             setLoggedUser(res)
             setIsLoading(false)
             setIsLoggedIn(true)
@@ -55,7 +55,7 @@ const LoginPanel = ( { defaultUser, setLoggedUser, setIsLoggedIn, usersList, set
     return (
             <div className="login-panel__wrapper">
                 <form 
-                    className="login-panel" 
+                    className="login-panel panel-form" 
                     onSubmit={(e)=>{
                         e.preventDefault()
                         validateLogin()
@@ -64,7 +64,7 @@ const LoginPanel = ( { defaultUser, setLoggedUser, setIsLoggedIn, usersList, set
                 >
                     <input
                         id="input__login"
-                        className="login-panel__login-input --input"
+                        className="login-panel__login-input form-input"
                         name="login"
                         style={{padding: '2px 10px'}}
                         type='text'
@@ -73,7 +73,7 @@ const LoginPanel = ( { defaultUser, setLoggedUser, setIsLoggedIn, usersList, set
                         // onLoad={handleLogin}
                     />
                     <input 
-                        className="login-panel__password-input --input"
+                        className="login-panel__password-input form-input"
                         style={{padding: '2px 10px'}}
                         name="password"
                         type='password'
@@ -83,14 +83,14 @@ const LoginPanel = ( { defaultUser, setLoggedUser, setIsLoggedIn, usersList, set
                     />
                     <input 
                         className="login-panel__login-button form__btn btn"
-                        style={{fontSize: '20px', lineHeight: '100%'}}
+                        // style={{fontSize: '20px', lineHeight: '100%'}}
                         type="submit"
                         value="Sign in"
                     />
                 </form>
                 {isLoading && 
                     <div className="logging-screen">
-                        <div className="loader" style={{marginTop: '-20px'}}/>
+                        <div className="loader" />
                     </div>    
                 }
             </div>

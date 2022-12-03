@@ -107,7 +107,7 @@ const NewTaskForm = ( {setIsFormOpened, usersList, setLoadingNewTask, loggedUser
     return (
         <>
             <form 
-                className='new-task__form form' 
+                className='new-task__form' 
                 onSubmit={handleSubmit}
             >
                 <input

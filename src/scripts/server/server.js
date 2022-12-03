@@ -35,13 +35,7 @@ const {
 // register and login panel
 
 // getting new user from register form
-app.post('/users', async (req, res) => {
-    const NEW_USER_TO_REGISTER = req.body
-    const EXISTING_USER = await checkIfUserExists(client, NEW_USER_TO_REGISTER)
-    if (EXISTING_USER || NEW_USER_TO_REGISTER.login == '') return
-    await registerNewUser(client, NEW_USER_TO_REGISTER)
-    console.log('New user added' + NEW_USER_TO_REGISTER)
-})
+
 
 app.get('/users', async (req, res) => {
     const USERS_LIST = await getListOfUsers(client)
@@ -92,4 +86,15 @@ app.post('/sign-in', async (req, res) => {
     const loginData = req.body
     const result = await findUserInDatabase(client, loginData)
     res.send(result)
+})
+
+app.post('/users', async (req, res) => {
+})
+
+app.post('/register', async (req, res) => {
+    const NEW_USER_TO_REGISTER = req.body
+    const EXISTING_USER = await checkIfUserExists(client, NEW_USER_TO_REGISTER)
+    res.send(EXISTING_USER)
+    if (EXISTING_USER) return
+    await registerNewUser(client, NEW_USER_TO_REGISTER)
 })

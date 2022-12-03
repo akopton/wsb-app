@@ -1,15 +1,13 @@
-import React from "react"
+import React, { useReducer } from "react"
 import { useState } from "react"
 import { BiRightArrowCircle } from "react-icons/bi"
+import ActionsPicker from "./ActionsPicker"
 
 const RegisterPanel = ( { setUsersList, usersList, defaultUser }: any ) => {
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isFirstStepDone, setIsFirstStepDone] = useState<boolean>(false)
+    const [isRegistered, setIsRegistered] = useState<boolean>(false)
 
-    const [newUserFirstName, setNewUserFirstName] = useState<string>('')
-    const [newUserLastName, setNewUserLastName] = useState<string>('')
-    const [newUserEmail, setNewUserEmail] = useState<string>('')
-    const [newUserLogin, setNewUserLogin] = useState<string>('')
-    const [newUserPassword, setNewUserPassword] = useState<string>('')
-    const [isFormFilled, setIsFormFilled] = useState<boolean>()
 
     interface UserInterface {
         firstName: string,
@@ -20,111 +18,149 @@ const RegisterPanel = ( { setUsersList, usersList, defaultUser }: any ) => {
       }
 
     const newUser: UserInterface = {
-        firstName: newUserFirstName,
-        lastName: newUserLastName,
-        email: newUserEmail,
-        login: newUserLogin,
-        password: newUserPassword,
+        firstName: '',
+        lastName: '',
+        email: '',
+        login: '',
+        password: '',
+    }
+
+    const reducer = (state:{}, action:any) => {
+        switch(action.type) {
+            case 'input':
+                return {
+                    ...state,
+                    [action.field]: action.payload
+                }
+            default:
+                return state
+        }
     }
     
-    const checkIfUserExists = async () => {
-        return usersList.some((user: any) => user.login === newUserLogin || user.email === newUserEmail)
+    const handleInput = (e:any) => {
+        dispatch({
+            type: 'input',
+            field: e.target.name,
+            payload: e.target.value
+        })
+    }
+    const [state, dispatch] = useReducer(reducer, newUser)
+
+    const settings = {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify(state)
     }
 
     const registerNewUser = async () => {
-        console.log(`Registering new user: ${newUser.login}`)
-        const settings = {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(newUser)
-        }
-        try {
-            const fetchResponse = await fetch('http://127.0.0.1:8888/users', settings)
-            const data = await fetchResponse.json()
-            return data
-        } catch (error) {
-            return error
-        }
+        console.log(state)
+        setIsLoading(true)
+        fetch('http://127.0.0.1:8888/register', settings)
+        .then(data => data.json())
+        .then(res => {
+            setIsLoading(false)
+            if (res) {
+                alert('Użytkownik o podanym mailu/loginie już istnieje')
+                return
+            } else {
+                alert('pomyślnie zarejestrowano')
+                return
+            }
+        })
     }
     
-    const handleRegister = async (e: React.FormEvent) => {
-        e.preventDefault()
-        if (!newUserEmail) return
-        if (!newUserLogin) return
-        if (!newUserPassword) return
-        checkIfUserExists()
-            .then(async (result) => {
-                if (!result) await registerNewUser()
-                else {
-                    alert('Podany użytkownik już istnieje')
-                    return
-                }
-            })
-        setUsersList([...usersList, newUser])
-    }
- 
-    const handleFormFill = () => {
-        if (!newUserEmail || !newUserLogin || !newUserPassword) {
-            setIsFormFilled(false)
-            return
-        }
-        setIsFormFilled(true)
+    const handleSubmit = () => {
+        registerNewUser()
     }
 
     return (
-        <form className="register-panel" onSubmit={(e) => handleRegister(e)}>
-            <input
-                className="register-panel__mail-input --input"
-                type='text'
-                placeholder="email"
-                onChange={(e) => {
-                    handleFormFill()
-                    setNewUserEmail(e.target.value)
-                }}
-                autoComplete="off"
-            />
-            <input
-                className="register-panel__login-input --input"
-                type='text'
-                placeholder="login"
-                onChange={(e) => {
-                    handleFormFill()
-                    setNewUserLogin(e.target.value)
-                }}
-            />
-            <input
-                className="login-panel__password-input --input"
-                type='password'
-                placeholder="password"
-                onChange={(e) => {
-                    setNewUserPassword(e.target.value)
-                    handleFormFill()
-                }}
-                autoComplete="new-password"
-            />
-            <button
-                className="register-panel__register-button form__btn"
-                style={{position:'relative'}}
-                type='submit'
-                onClick={(e) => {
-                    handleRegister(e)
-                }}
+        <div className="register-panel__wrapper">
+            {!isFirstStepDone ?
+            <form
+                className="register-panel first-step panel-form"
             >
-                Register 
-                {/* {isFormFilled ?  */}
-                    <BiRightArrowCircle style={{
-                        position:'absolute',
-                        top:'50%',
-                        right:'5px',
-                        transform: 'translateY(-50%) scale(1.2)'
-                    }}/> 
-                    {/* : 
-                    undefined
-                } */}
-            </button>
-        </form>
+            <input
+                    className="register-panel__mail-input form-input"
+                    name="firstName"
+                    key="firstName"
+                    type='text'
+                    placeholder="First name"
+                    onChange={handleInput}
+                    autoComplete="off"
+                />
+                <input
+                    className="register-panel__login-input form-input"
+                    name="lastName"
+                    key="lastName"
+                    type='text'
+                    onChange={handleInput}
+                    placeholder="Last name"
+                    autoComplete="off"
+                />
+                <button
+                    className="register-panel__next-step-button form__btn btn"
+                    type='submit'
+                    onClick={(e) => {
+                        e.preventDefault()
+                        setIsFirstStepDone(true)
+                    }}
+                >
+                    <BiRightArrowCircle />
+                </button>
+                
+                
+            </form>
+            :
+            <form 
+                className="register-panel second-step panel-form"
+                style={{position:'relative'}}
+            >
+                <input
+                    className="register-panel__mail-input form-input"
+                    name="email"
+                    key="email"
+                    type='text'
+                    onChange={handleInput}
+                    placeholder="email"
+                    autoComplete="off"
+                />
+                <input
+                    className="register-panel__login-input form-input"
+                    name="login"
+                    key="login"
+                    type='text'
+                    onChange={handleInput}
+                    placeholder="login"
+                    autoComplete="off"
+                />
+                <input
+                    className="register-panel__password-input form-input"
+                    name="password"
+                    key="password"
+                    type='password'
+                    onChange={handleInput}
+                    placeholder="password"
+                    autoComplete="new-password"
+                />
+                <input
+                    className="register-panel__register-button form__btn btn"
+                    type='submit'
+                    onClick={e => {
+                        e.preventDefault()
+                        handleSubmit()
+                    }}
+                    value="Register"
+                />
+                {isLoading && 
+                    <div className="logging-screen" style={{height:'114%'}}>
+                        <div className="loader" />
+                    </div>
+                }
+            </form>
+            }
+        </div>
     )
 }
 

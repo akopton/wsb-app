@@ -2,159 +2,61 @@
   height: 100vh;
 }
 
-.logging-site {
-  height: 100vh;
-  width: 100%;
-  position: relative;
-}
 @media screen and (max-width: 767px) {
-  .logging-site .login-panel {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
+  .logging-site {
+    height: 100vh;
+    width: 100%;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
-    width: 100%;
-    padding: 0 50px;
+    justify-content: center;
+    gap: 50px;
   }
-  .logging-site .login-panel .--input {
-    height: 42px;
-    line-height: 42px;
-    width: 100%;
-    border: 1px solid rgb(57, 255, 238);
-    font-size: 26px;
-  }
-  .logging-site .login-panel__login-input {
+  .logging-site .login-panel__wrapper {
     position: relative;
   }
-  .logging-site .login-panel__login-input::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 150%;
-    height: 150%;
-    background-color: red;
-    display: block;
-  }
-  .logging-site .login-panel .form__btn {
-    height: 42px;
-    width: 80%;
-    font-size: 26px;
+  .logging-site .login-panel__wrapper .login-panel .form__btn {
     background: none;
     border: 3px solid rgb(57, 255, 238);
     color: rgb(57, 255, 238);
     transition: 0.3s ease;
   }
-  .logging-site .login-panel .form__btn:hover {
+  .logging-site .login-panel__wrapper .login-panel .form__btn:hover {
     border-radius: 13px;
     background: rgb(57, 255, 238);
     color: black;
     transition: 0.3s ease;
   }
+  .logging-site .site-aside {
+    padding: 0 5px;
+    gap: 20px;
+  }
+  .logging-site .site-aside span {
+    font-size: 26px;
+  }
 }
-
 @media screen and (min-width: 768px) {
   .logging-site {
     height: 60%;
-    width: 100%;
     display: flex;
     align-items: flex-end;
     justify-content: center;
   }
   .logging-site .login-panel__wrapper {
-    height: 450px;
     width: 45vw;
     position: relative;
     display: flex;
     align-items: flex-end;
-    padding: 0 50px;
-  }
-  .logging-site .login-panel__wrapper .login-panel {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-  }
-  .logging-site .login-panel__wrapper .login-panel .--input {
-    width: 100%;
-    height: 60px;
-    line-height: 60px;
-    padding: 0 10px;
-    border: 1px solid rgb(57, 255, 238);
-    font-size: 30px;
-  }
-  .logging-site .login-panel__wrapper .login-panel .form__btn {
-    border: 3px solid rgb(57, 255, 238);
-    color: rgb(57, 255, 238);
-  }
-  .logging-site .login-panel__wrapper .login-panel .form__btn:hover {
-    background: rgb(57, 255, 238);
-    color: #2c2c2c;
-  }
-  .logging-site .login-panel__wrapper .logging-screen {
-    position: absolute;
-    bottom: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    height: 300px;
-    background: rgba(255, 255, 255, 0.1);
-    -webkit-backdrop-filter: blur(3px);
-            backdrop-filter: blur(3px);
-    width: 90%;
-    z-index: 3;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-  }
-  .logging-site .login-panel__wrapper .logging-screen .loading-circle {
-    height: 60px;
-    width: 60px;
-    border: 10px solid #f3f3f3; /* Light grey */
-    border-top: 10px solid #3498db;
-    z-index: 10;
-    border-radius: 50%;
-    -webkit-animation: spin 2s linear infinite;
-            animation: spin 2s linear infinite;
   }
   .logging-site .site-aside {
     width: 45vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     gap: 30px;
   }
   .logging-site .site-aside span {
-    color: white;
-    text-align: center;
     font-size: 40px;
   }
-  .logging-site .site-aside .panel-switch-btn {
-    color: white;
-    border: 1px solid white;
-  }
 }
-.btn {
-  height: 60px;
-  line-height: 60px;
-  width: 200px;
-  font-size: 26px;
-  background: none;
-  cursor: pointer;
-  transition: 0.3s ease;
-  border-radius: 8px;
-}
-.btn:hover {
-  border-radius: 20px;
-  transition: 0.3s ease;
-}
-
 @-webkit-keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -163,7 +65,6 @@
     transform: rotate(360deg);
   }
 }
-
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -172,6 +73,48 @@
     transform: rotate(360deg);
   }
 }
+.site-aside {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.site-aside span {
+  color: white;
+  text-align: center;
+}
+.site-aside .panel-switch-btn {
+  color: white;
+  border: 3px solid white;
+}
+
+.logging-screen {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 300px;
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+  width: 90%;
+  z-index: 3;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+.logging-screen .loading-circle {
+  height: 60px;
+  width: 60px;
+  border: 10px solid #f3f3f3; /* Light grey */
+  border-top: 10px solid #3498db;
+  z-index: 10;
+  border-radius: 50%;
+  -webkit-animation: spin 2s linear infinite;
+          animation: spin 2s linear infinite;
+}
+
 .main-site {
   position: absolute;
   top: 0;
@@ -286,7 +229,7 @@
   z-index: 1;
 }
 
-.form {
+.new-task__form {
   position: fixed;
   top: 0;
   left: 0;
@@ -295,13 +238,12 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  border: 1px solid white;
   background: #0f0f0f;
   z-index: 4;
   padding: 70px 15px;
   gap: 20px;
 }
-.form__title-input {
+.new-task__form__title-input {
   width: 100%;
   margin-bottom: 5px;
   height: 35px;
@@ -309,29 +251,29 @@
   font-size: 24px;
   border: 1px solid rgb(57, 255, 238);
 }
-.form__desc-input {
+.new-task__form__desc-input {
   width: 100%;
   font-size: 20px;
   line-height: 20px;
   height: 160px;
   border: 1px solid rgb(57, 255, 238);
 }
-.form__asignee-picker {
+.new-task__form__asignee-picker {
   align-self: flex-start;
   padding: 0;
   width: 70%;
   font-size: 24px;
 }
-.form__asignee-picker .custom-list {
+.new-task__form__asignee-picker .custom-list {
   border: 1px solid black;
 }
-.form__asignee-picker .custom-list__picked-asignee {
+.new-task__form__asignee-picker .custom-list__picked-asignee {
   width: 100%;
   cursor: pointer;
   position: relative;
   border-bottom: 1px solid red;
 }
-.form__asignee-picker .custom-list__arrow-icon {
+.new-task__form__asignee-picker .custom-list__arrow-icon {
   position: absolute;
   top: 50%;
   right: 0;
@@ -339,18 +281,18 @@
   width: 10px;
   margin-left: 5px;
 }
-.form__asignee-picker .asignee-list {
+.new-task__form__asignee-picker .asignee-list {
   max-height: 100px;
   overflow-y: scroll;
   transition: ease 1s;
 }
-.form__asignee-picker .asignee-list__item {
+.new-task__form__asignee-picker .asignee-list__item {
   line-height: 25px;
 }
-.form__asignee-picker .asignee-list__item:hover {
+.new-task__form__asignee-picker .asignee-list__item:hover {
   border-bottom: 1px solid blue;
 }
-.form__submit-btn {
+.new-task__form__submit-btn {
   position: absolute;
   bottom: 0;
   right: 0;
@@ -631,6 +573,28 @@
     box-shadow: 0 2.5em 0 0;
   }
 }
+.register-site {
+  height: 100%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 100px;
+}
+.register-site .register-panel__next-step-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 35px;
+  padding: 5px 45px;
+  max-height: 42px;
+}
+.register-site .site-aside {
+  font-size: 30px;
+  gap: 10px;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -700,7 +664,7 @@ input, textarea {
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
-  border: 1px solid rgb(57, 255, 238);
+  border: 3px solid rgb(57, 255, 238);
   -webkit-text-fill-color: rgb(57, 255, 238);
   -webkit-box-shadow: 0 0 0px 1000px #0f0f0f inset;
   -webkit-transition: background-color 5000s ease-in-out 12s;
@@ -709,4 +673,57 @@ input:-webkit-autofill:focus {
 
 .swiper-slide {
   z-index: -1;
+}
+
+.btn {
+  color: white;
+  padding: 8px 35px;
+  font-size: 20px;
+  line-height: 100%;
+  background: none;
+  cursor: pointer;
+  transition: 0.3s ease;
+  border-radius: 8px;
+  font-weight: 500;
+}
+.btn:hover {
+  border-radius: 20px;
+  transition: 0.3s ease;
+}
+
+.form__btn {
+  border: 3px solid rgb(57, 255, 238);
+  color: rgb(57, 255, 238);
+}
+.form__btn:hover {
+  background: rgb(57, 255, 238);
+  color: #2c2c2c;
+}
+
+.form-input {
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  padding: 0 10px;
+  font-size: 30px;
+  max-width: 350px;
+  border: 3px solid rgb(57, 255, 238);
+}
+
+.panel-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  width: 100%;
+  padding: 0 50px;
+}
+@media screen and (min-width: 768px) {
+  .panel-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
 }/*# sourceMappingURL=index.css.map */

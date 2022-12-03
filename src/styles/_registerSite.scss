@@ -1,0 +1,48 @@
+.register-site {
+    height: 100%;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 100px;
+
+    .register-panel {
+        &__mail-input {}
+        &__login-input {}
+        &__password-input {}
+        &__next-step-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            padding: 5px 45px;
+            max-height: 42px;
+        }
+    }
+
+    .site-aside {
+        font-size: 30px;
+        gap: 10px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (min-width: 768px) {
+    
+}
