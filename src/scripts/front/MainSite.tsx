@@ -102,7 +102,7 @@ const MainSite = ( { usersList, loggedUser, TUser }: any) => {
                 </div> 
                 : 
                 <div className="main-site" style={{overflow:'hidden'}}>
-                    <span style={{position: 'fixed', zIndex:'10', fontSize: '20px', left: '20px', top: '10px'}}>Logged: {loggedUser.login}</span>
+                    <span style={{position: 'fixed', zIndex:'10', fontSize: '20px', left: '10px', bottom: '10px'}}>Logged: {loggedUser.login}</span>
                     
                         <NewTaskBtn
                             isNewTaskFormOpened={isNewTaskFormOpened}
@@ -145,14 +145,16 @@ const MainSite = ( { usersList, loggedUser, TUser }: any) => {
                                     640: {slidesPerView: 2},
                                     1024: {slidesPerView: 3}
                                 }}
+                                // allowSlideNext={isSingleTaskOpened ? false: true}
+                                // allowSlidePrev={isSingleTaskOpened ? false: true}
                                 slidesPerView={1}
                                 onSlideChange={() => {console.log('slide change')}}
                                 onSwiper={(swiper) => {
-                                console.log(swiper)
-                                setSlides(Array(swiper.wrapperEl.childElementCount).fill(0))
+                                    console.log(swiper)
+                                    setSlides(Array(swiper.wrapperEl.childElementCount).fill(0))
                                 }}>
                             
-                            <SwiperSlide >
+                            <SwiperSlide>
                                 <TodoTasks
                                     tasksList={tasksList}
                                     isSingleTaskOpened={isSingleTaskOpened}
@@ -182,7 +184,14 @@ const MainSite = ( { usersList, loggedUser, TUser }: any) => {
                                     setLoadingNewTask={setLoadingNewTask}
                                 />
                             </SwiperSlide>
-                            {windowWidth < 1024 ? <SwiperIndicator slides={slides}/>:''}
+                            {windowWidth < 1024 ? 
+                                <SwiperIndicator 
+                                    slides={slides} 
+                                    isSingleTaskOpened={isSingleTaskOpened}
+                                /> 
+                                : 
+                                ''
+                            }
                         </Swiper>
                     
                 </div>

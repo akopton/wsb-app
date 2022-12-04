@@ -352,7 +352,7 @@
   position: relative;
   padding: 10px;
   border-radius: 8px;
-  transition: max-height 0.3s ease;
+  transition: height 0.3s ease;
   color: white;
   border: 1px solid rgb(57, 255, 238);
   overflow: hidden;
@@ -445,6 +445,7 @@
   justify-content: space-between;
   height: 25px;
   width: 160px;
+  z-index: 50;
 }
 .single-task__actions-picker .picked-action {
   display: block;
@@ -502,7 +503,7 @@
   width: 50px;
   height: 30px;
   border-radius: 10px;
-  z-index: 10;
+  z-index: 2;
 }
 
 .loader, .loader:before, .loader:after {
@@ -657,8 +658,13 @@ input:-webkit-autofill:focus {
   transition: background-color 5000s ease-in-out 12s;
 }
 
+.swiper {
+  position: static !important;
+  padding-top: 70px !important;
+}
+
 .swiper-slide {
-  z-index: -1;
+  z-index: 10;
 }
 
 .btn {

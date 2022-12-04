@@ -122,14 +122,14 @@ const SingleTask = ({task, id, isTaskUpdated, setIsTaskUpdated, setIsSingleTaskO
             className='single-task'
             style={isTaskOpened ? 
                 {
-                height: '230px', 
-                zIndex:'6', 
-                // background:'#2c2c2c', 
-                color:'white', 
-                transition: '.3s ease',
+                    height: '200px',
+                    width: '100%',
+                    background:'#1f1f1f', 
+                    color:'white', 
+                    transition: 'height .2s ease',
                 } 
                 : 
-                {cursor:'pointer', transition: '.3s ease ', height:'70px'}}
+                {cursor:'pointer', transition: 'height .3s ease ', height:'70px'}}
             key={id}
             onClick={()=>{
                 if (!isTaskOpened) {
@@ -160,11 +160,17 @@ const SingleTask = ({task, id, isTaskUpdated, setIsTaskUpdated, setIsSingleTaskO
                 /> 
             }
             {isTaskOpened ? 
-                <div className="single-task__title" style={{wordWrap: 'break-word', whiteSpace:'break-spaces', lineHeight:'70px'}}>
+                <div 
+                    className="single-task__title" 
+                    style={{wordWrap: 'break-word', whiteSpace:'break-spaces', lineHeight:'70px'}}
+                >
                     {task.title}
                 </div> 
                 :
-                <div className="single-task__title" style={{textOverflow: 'ellipsis', lineHeight:'70px'}}>
+                <div 
+                    className="single-task__title" 
+                    style={{textOverflow: 'ellipsis', lineHeight:'70px'}}
+                >
                     {task.title}
                 </div>
             }
@@ -172,7 +178,7 @@ const SingleTask = ({task, id, isTaskUpdated, setIsTaskUpdated, setIsSingleTaskO
                 <div className="task-content">
                     <TaskDescription task={task} taskDescription={taskDescription} isTaskOpened={isTaskOpened} isEditable={isEditable} setIsEditable={setIsEditable}/>
                     <span className="task-content__date">26.11.2022r.</span>
-                    <span className="task-content__asignee" style={isTaskOpened ? {display: 'block', color:'white'} : {display: 'none'}}>{task.asignee}</span>
+                    <span className="task-content__asignee" style={isTaskOpened ? {display: 'block', color:'white'} : {display: 'none'}}>{task.asignee.login}</span>
                     <ActionsPicker
                         setTaskStatus={setTaskStatus}
                         setIsActionsWindowOpened={setIsActionsWindowOpened}

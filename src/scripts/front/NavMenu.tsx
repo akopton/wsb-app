@@ -8,7 +8,12 @@ const Hamburger = ({isNewTaskFormOpened, isNavMenuOpened, setIsNavMenuOpened, is
             onClick={(e)=>{
                 e.preventDefault()
                 setIsNavMenuOpened(!isNavMenuOpened)}}
-            style={isNewTaskFormOpened ? {width: '0px', transition: '.1s ease'} : isSingleTaskOpened ? {zIndex:'5'} : undefined}
+            style={isNewTaskFormOpened ? 
+                    {width: '0px', transition: '.1s ease'} 
+                    : isSingleTaskOpened ? 
+                    {zIndex:'5'} 
+                    : undefined
+                }
             >
             <div className="hamburger__piece --top" style={isNavMenuOpened ? {top: '50%', rotate: '45deg', translate: '0 -50%',  transition: 'ease .2', backgroundColor: 'black'} : undefined}/>
             <div className="hamburger__piece --middle-left" style={isNavMenuOpened ? {height: '0px', width: '0', transition: 'ease .2s'} : undefined}/>

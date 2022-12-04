@@ -83,8 +83,12 @@ input:-webkit-autofill:focus {
   transition: background-color 5000s ease-in-out 12s;
 }
 
+.swiper {
+  position: static !important;
+  padding-top: 70px !important ;
+}
 .swiper-slide {
-  z-index: -1;
+  z-index: 10;
 }
 
 .btn {
