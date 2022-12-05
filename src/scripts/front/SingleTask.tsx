@@ -1,201 +1,177 @@
 import React from "react"
-import { useEffect, useState, useCallback, useMemo } from "react"
+import { useEffect, useState, useCallback, useMemo, useReducer } from "react"
 import ActionsPicker from "./ActionsPicker"
+import TaskDescription from "./TaskDescription"
+import TaskTitle from "./TaskTitle"
 
+const SingleTask = ({task, id, setTasksList, setIsSingleTaskOpened}:any) => {
 
-const TaskDescription = ({taskDescription, isTaskOpened, setIsEditable, isEditable}:any) => {
-    const [newDesc, setNewDesc] = useState<string>(taskDescription)
-    const [descLength, setDescLength] = useState<number>(0)
- 
-    const handleSubmit = (e: any) => {
-        setIsEditable(false)
+    const [isTaskOpened, setIsTaskOpened] = useState<boolean>(false)
+    const [isEditable, setIsEditable] = useState<boolean>(false)
+    const [isActionsWindowOpened, setIsActionsWindowOpened] = useState<boolean>()
+
+    const initialTaskState = {
+        data: {
+            ...task
+        },
+        isOpened: false
     }
 
-    const getCroppedDescription = () => {
-        const dots = '. . .'
-        const newNewDesc = newDesc.split(' ')
-        if (newNewDesc.length > 35) {
-            return newNewDesc.slice(0, 34).concat(dots).join(' ')
+    const taskUpdateReducer = (state:any, action:any) => {
+        switch (action.type) {
+            case 'update':
+                const {data} = state
+                return {
+                    ...state,
+                    data: {
+                        ...data,
+                        [action.field]: action.payload
+                    }
+                }
+            case 'toggleOpen':
+                return {
+                    ...state,
+                    [action.field]: action.payload
+                }
+            default:
+                return state
         }
     }
 
-    const croppedDescription =  getCroppedDescription()
+    const [updatedTask, dispatch] = useReducer(taskUpdateReducer, initialTaskState)
 
-    return (
-        <div>
-            {isEditable ?
-                <div 
-                    className="task-content__desc"
-                    style={{ height:'110px'}}
-                >
-                    <textarea 
-                        className="task-content__desc"
-                        value={newDesc} 
-                        onChange={(e)=>{
-                            setNewDesc(e.target.value)
-                            setDescLength(newDesc.split(" ").length)
-                        }}
-                        rows={5}
-                        autoFocus={isEditable ? true : false}
-                        onFocus={(e) => e.currentTarget.setSelectionRange(e.currentTarget.value.length, e.currentTarget.value.length)}
-                        >
-                    </textarea>
-                    <div 
-                        style={{color: 'black', position:'absolute', top:'5px',right:'5px', zIndex:'10',cursor:'pointer', border: '1px solid red'}} 
-                        onClick={(e)=>{handleSubmit(e)}}
-                    >
-                        <span>Gotowe</span>
-                    </div>
-                </div>
-                :
-                <div 
-                    className="task-content__desc"
-                    onClick={()=>{
-                        if (isTaskOpened) setIsEditable(true)
-                    }}
-                    style={{height:'110px'}}
-                >
-                    {descLength < 35 ? newDesc : croppedDescription}
-                </div>
-            }
-        </div>
-    )
-}
-
-
-
-
-const SingleTask = ({task, id, isTaskUpdated, setIsTaskUpdated, setIsSingleTaskOpened}:any) => {
-
-    const {_id, title, description, status} = task
-    const [isTaskOpened, setIsTaskOpened] = useState<boolean>(false)
-    const [taskId, setTaskId] = useState<any>(_id)
-    const [taskTitle, setTaskTitle] = useState<string>(title)
-    const [taskDescription, setTaskDescription] = useState<string>(description)
-    const [taskStatus, setTaskStatus] = useState<string>(status)
-    const [isEditable, setIsEditable] = useState<boolean>(false)
-    const [showTaskContent, setShowTaskContent] = useState<boolean>(false)
-
-
-    useEffect(()=>{
-        setIsSingleTaskOpened(isTaskOpened)
-    },[isTaskOpened])
-
-
-    const updatedTask = {
-        id: _id || taskId,
-        title: title || taskTitle,
-        description: description || taskDescription,
-        status: taskStatus
+    const handleUpdate = (e:any) => {
+        dispatch({
+            type:'update', 
+            field: e.target.id,
+            payload: e.target.value ? e.target.value : e.target.getAttribute('data-type')
+        })
     }
-    const [isActionsWindowOpened, setIsActionsWindowOpened] = useState<boolean>()
+
+    const handleToggleOpen = (value:boolean) => {
+        dispatch({
+            type:'toggleOpen',
+            field: 'isOpened',
+            payload: value
+        })
+    }
+
+    const handleSubmit = () => {
+        setIsEditable(false)
+        if (updatedTask.data.description == initialTaskState.data.description) return
+        updateTaskStatus()
+    }
     
     const settings = {
         method: 'POST',
         headers: {
             'Content-type': 'application/json'
         },
-        body: JSON.stringify(updatedTask)
-    }
-
-    const deleteTask = () => {
-        fetch('http://127.0.0.1:8888/delete-task', settings)
-        .then((data)=>{
-            setIsTaskUpdated(true)
-            return data
-        })
+        body: JSON.stringify(updatedTask.data)
     }
 
     const updateTaskStatus = async () => {
-        setIsTaskUpdated(!isTaskUpdated)
        fetch('http://127.0.0.1:8888/update-task', settings)
-        .then((data)=>{
-            setIsTaskUpdated(true)
-            setIsActionsWindowOpened(false)
-            return data
-        })
+        .then(data => data.json())
+        .then(res => setTasksList(res))
     }
 
     return (
-        <>
         <li 
             className='single-task'
-            style={isTaskOpened ? 
-                {
-                    height: '200px',
-                    width: '100%',
-                    background:'#1f1f1f', 
-                    color:'white', 
-                    transition: 'height .2s ease',
-                } 
+            style={updatedTask.isOpened ? 
+                    {
+                        height: '240px',
+                        minHeight:'240px',
+                        width: '100%',
+                        background:'#1f1f1f', 
+                        color:'white', 
+                        transition: 'all .3s ease',
+                    } 
                 : 
-                {cursor:'pointer', transition: 'height .3s ease ', height:'70px'}}
+                    {
+                        cursor:'pointer', 
+                        transition: 'all .3s ease', 
+                        minHeight:'70px',
+                        height: '70px'
+                    }
+                }
             key={id}
             onClick={()=>{
-                if (!isTaskOpened) {
-                    setIsSingleTaskOpened(true)
-                    setIsTaskOpened(true)
-                    setTaskStatus(status)
-                    console.log(updatedTask)
-                    setTimeout(() => {
-                        setShowTaskContent(true)
-                    }, 50);
+                if (!updatedTask.isOpened) {
+                    handleToggleOpen(true)
                 }
-                }}>
-            <span className="single-task__id">{task.innerId}</span>
-            {isTaskOpened && 
-                <div className="single-task__close-btn" 
-                    
-                    onClick={()=>{
-                        setIsTaskOpened(false)
-                        setIsActionsWindowOpened(false)
-                        setIsSingleTaskOpened(false)
-                        setShowTaskContent(false)
-                    }}
-                    style={ isEditable ? 
-                        {display:'none'}
-                        :
-                        {position: 'absolute', zIndex: '10', display:'block', cursor:'pointer', color: 'white'} 
-                    }
-                /> 
+                }}
+        >
+            <div className="single-task__top-wrap">
+                <span className="single-task__id">{updatedTask.data.innerId}</span>
+                {updatedTask.isOpened && 
+                    <>
+                        {isEditable ? 
+
+                            <div 
+                                className="single-task__submit-change-btn"
+                                onClick={handleSubmit}
+                            >
+                                <span>Gotowe</span>
+                            </div>
+                            :
+                            <div 
+                                className="single-task__close-btn" 
+                                onClick={()=>{
+                                    setIsTaskOpened(false)
+                                    handleToggleOpen(false)
+                                    setIsActionsWindowOpened(false)
+                                }}
+                            />
+                        }
+                    </>
+                }
+            </div>
+            <TaskTitle 
+                updatedTask={updatedTask} 
+                initialTaskState={initialTaskState}
+                isEditable={isEditable}
+                setIsEditable={setIsEditable}
+            />
+            {updatedTask.isOpened && 
+                <TaskDescription 
+                    handleSubmit={handleSubmit}
+                    task={task} 
+                    isTaskOpened={updatedTask.isOpened} 
+                    isEditable={isEditable} 
+                    setIsEditable={setIsEditable}
+                    updatedTask={updatedTask} 
+                    handleUpdate={handleUpdate}
+                    initialTaskState={initialTaskState}
+                    handleToggleOpen={handleToggleOpen}
+                    updateTaskStatus={updateTaskStatus}
+                />
             }
-            {isTaskOpened ? 
-                <div 
-                    className="single-task__title" 
-                    style={{wordWrap: 'break-word', whiteSpace:'break-spaces', lineHeight:'70px'}}
-                >
-                    {task.title}
-                </div> 
-                :
-                <div 
-                    className="single-task__title" 
-                    style={{textOverflow: 'ellipsis', lineHeight:'70px'}}
-                >
-                    {task.title}
-                </div>
-            }
-            {showTaskContent && 
-                <div className="task-content">
-                    <TaskDescription task={task} taskDescription={taskDescription} isTaskOpened={isTaskOpened} isEditable={isEditable} setIsEditable={setIsEditable}/>
-                    <span className="task-content__date">26.11.2022r.</span>
-                    <span className="task-content__asignee" style={isTaskOpened ? {display: 'block', color:'white'} : {display: 'none'}}>{task.asignee.login}</span>
+            {updatedTask.isOpened &&
+                <div className="single-task__bottom-wrap">
+                    <div className="left-side">
+                        <span className="task-content__asignee">
+                            {updatedTask.data.asignee.login}
+                        </span>
+                        <span className="task-content__date">
+                            {task.date.slice(0,10)}
+                        </span>
+                    </div>
                     <ActionsPicker
-                        setTaskStatus={setTaskStatus}
+                        updateTaskStatus={updateTaskStatus}
                         setIsActionsWindowOpened={setIsActionsWindowOpened}
                         isActionsWindowOpened={isActionsWindowOpened}
-                        updateTaskStatus={updateTaskStatus}
-                        taskStatus={taskStatus}
-                        deleteTask={deleteTask}
                         setIsTaskOpened={setIsTaskOpened}
                         isTaskOpened={isTaskOpened}
-                        setIsSingleTaskOpened={setIsSingleTaskOpened}
                         task={task}
-                        setShowTaskContent={setShowTaskContent}
+                        handleToggleOpen={handleToggleOpen}
+                        updatedTask={updatedTask}
+                        handleUpdate={handleUpdate}
                     />
                 </div>
             }
-            </li>
-        </> 
+        </li>
     )
 }
 

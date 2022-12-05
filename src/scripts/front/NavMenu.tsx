@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 
 const Hamburger = ({isNewTaskFormOpened, isNavMenuOpened, setIsNavMenuOpened, isSingleTaskOpened}:any) => {
     return (
-            <div 
+        <div 
             className="hamburger"
             onClick={(e)=>{
                 e.preventDefault()
@@ -14,7 +14,7 @@ const Hamburger = ({isNewTaskFormOpened, isNavMenuOpened, setIsNavMenuOpened, is
                     {zIndex:'5'} 
                     : undefined
                 }
-            >
+        >
             <div className="hamburger__piece --top" style={isNavMenuOpened ? {top: '50%', rotate: '45deg', translate: '0 -50%',  transition: 'ease .2', backgroundColor: 'black'} : undefined}/>
             <div className="hamburger__piece --middle-left" style={isNavMenuOpened ? {height: '0px', width: '0', transition: 'ease .2s'} : undefined}/>
             <div className="hamburger__piece --middle-right" style={isNavMenuOpened ? {height: '0px', width: '0', transition: 'ease .2s'} : undefined}/>

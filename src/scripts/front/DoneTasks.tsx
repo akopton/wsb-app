@@ -3,12 +3,12 @@ import { useEffect, useState, useCallback, useMemo } from "react"
 import SingleTask from "./SingleTask"
 
 
-const DoneTasks = ({ tasksList, taskStatus, setTaskStatus, setIsTaskUpdated, setLoadingNewTask, setIsSingleTaskOpened }:any) => {
+const DoneTasks = ({ tasksList, setTasksList }:any) => {
 
     return (
         <div className="done-tasks list-wrap">
             <div className="wrapper">
-                <span className="list-title">Done-Tasks</span>
+                <h3 className="list-title">Done-Tasks</h3>
                 <ul className="list">
                 {
                     tasksList.map((task:any, id: any) => {
@@ -17,11 +17,7 @@ const DoneTasks = ({ tasksList, taskStatus, setTaskStatus, setIsTaskUpdated, set
                             task={task} 
                             key={id} 
                             tasksList={tasksList}
-                            setTaskStatus={setTaskStatus}
-                            taskStatus={taskStatus}
-                            setIsTaskUpdated={setIsTaskUpdated}
-                            setLoadingNewTask={setLoadingNewTask}
-                            setIsSingleTaskOpened={setIsSingleTaskOpened}
+                            setTasksList={setTasksList}
                         />
                     })
                 }

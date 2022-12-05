@@ -1,24 +1,32 @@
 import { isDocument } from '@testing-library/user-event/dist/utils';
 import React from 'react';
-import { useReducer, useMemo, useEffect, useState, useCallback } from 'react';
+import { useReducer, useMemo, useEffect, useState, useCallback, forwardRef } from 'react';
 import { BiDownArrow } from 'react-icons/bi'
 import { TUser } from './interfaces';
+import { BiCalendar } from 'react-icons/bi';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
-const NewTaskBtn = ( {isNavMenuOpened,isSingleTaskOpened,isNewTaskFormOpened, setIsNewTaskFormOpened, isAccountSettingsPanelOpened, windowWidth, }:any ) => {
+const DateCustomInput = forwardRef(({ value, onClick, isCalendarOpen }:any, ref:any) => (
+    <div className="date-custom-input" onClick={onClick} ref={ref}>
+      {value}
+      <BiCalendar className='calendar-icon' style={isCalendarOpen ? {color: 'rgb(57, 255, 238)'} : {}}/>
+    </div>
+  ));
 
-    // const isMobile = windowWidth < 768
+const NewTaskBtn = ( {isNavMenuOpened,isSingleTaskOpened,isNewTaskFormOpened, setIsNewTaskFormOpened}:any ) => {
 
     return (
         <div 
             className="add-task__button button--round"
             style={isNavMenuOpened ? 
-                { position:'absolute', zIndex: '1'} 
-                : isNewTaskFormOpened ? 
-                {transform: 'rotate(45deg)', zIndex: '50', right: '15px', transition: 'ease .2s'} 
-                : isSingleTaskOpened ? 
-                {zIndex:'4'} 
-                 :
-                {zIndex:'10'} 
+                    {position:'absolute', zIndex: '1'} 
+                    : isNewTaskFormOpened ? 
+                    {transform: 'rotate(45deg)', zIndex: '50', right: '15px', transition: 'ease .2s'}
+                    : isSingleTaskOpened ? 
+                    {zIndex:'4'}
+                    :
+                    {zIndex:'10'}
                 }
             onClick={()=>setIsNewTaskFormOpened(!isNewTaskFormOpened)}
         >
@@ -26,18 +34,17 @@ const NewTaskBtn = ( {isNavMenuOpened,isSingleTaskOpened,isNewTaskFormOpened, se
     )
 }
 
-const NewTaskForm = ( {setIsFormOpened, setLoadingNewTask, loggedUser }:any ) => {
+const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasksList}:any ) => {
     const [usersList, setUsersList] = useState<[]>([])
     const [asignee, setAsignee] = useState<any>()
     const [isUsersListOpened, setIsUsersListOpened] = useState<boolean>(false)
     const [updatedId, setUpdatedId] = useState<number>()
     const [addingNewTask, setAddingNewTask] = useState<boolean>(false)
 
-
     const getIdForGenerator = async () => {
         fetch('http://127.0.0.1:8888/get-id')
-        .then((data) => data.json())
-        .then((res) => {
+        .then(data => data.json())
+        .then(res => {
             const {id} = res
             setUpdatedId(id+1)
             dispatch({
@@ -45,18 +52,19 @@ const NewTaskForm = ( {setIsFormOpened, setLoadingNewTask, loggedUser }:any ) =>
                 field: 'innerId',
                 payload: `PROJECT-${id}`
             })
+            console.log(`wygenerowano id ${id}`)
         })
     }
 
-    const newTaskState = {
+    const initialState = {
         innerId: '',
         title: '',
         description: '',
         asignee: loggedUser,
+        date: new Date(),
         status: 'todo',
     }
 
-    const {login} = loggedUser
     const newTaskReducer = (state:any, action:any) => {
         switch (action.type) {
             case 'input':
@@ -79,7 +87,7 @@ const NewTaskForm = ( {setIsFormOpened, setLoadingNewTask, loggedUser }:any ) =>
         }
     }
 
-    const [state, dispatch] = useReducer(newTaskReducer, newTaskState)
+    const [newTaskState, dispatch] = useReducer(newTaskReducer, initialState)
     
     const handleInput = (e:any) => {
         dispatch({
@@ -89,11 +97,11 @@ const NewTaskForm = ( {setIsFormOpened, setLoadingNewTask, loggedUser }:any ) =>
         })
     }
 
-    const handleClick = (user:any, e:any) => {
+    const handleClick = (value:any, id:any) => {
         dispatch({
             type: 'pick',
-            field: e.target.id,
-            payload: user
+            field: id,
+            payload: value
         })
     }
 
@@ -104,11 +112,11 @@ const NewTaskForm = ( {setIsFormOpened, setLoadingNewTask, loggedUser }:any ) =>
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify(state)
+            body: JSON.stringify(newTaskState)
         }
         fetch('http://127.0.0.1:8888/tasks', settings)
-        .then((data) => data)
-        .then(()=>setAddingNewTask(false))
+        .then(data => data.json())
+        .then(res => setTasksList(res))
     }
 
     const updateIdForGenerator = async () => {
@@ -130,22 +138,19 @@ const NewTaskForm = ( {setIsFormOpened, setLoadingNewTask, loggedUser }:any ) =>
     }
 
     useEffect(()=>{
-        setTimeout(() => {
-            getIdForGenerator()
-        }, 250)
+        getIdForGenerator()
     },[])
     
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        if(!state.title) return
-        if(!state.description) return
+        if(!newTaskState.title) return
+        if(!newTaskState.description) return
         await addTaskToDatabase()
         await updateIdForGenerator()
         setIsFormOpened(false)
-        setLoadingNewTask(true)
     }
-
+        const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false)
     return (
         <>
         {!addingNewTask ?
@@ -153,71 +158,96 @@ const NewTaskForm = ( {setIsFormOpened, setLoadingNewTask, loggedUser }:any ) =>
                 className='new-task-form' 
                 onSubmit={handleSubmit}
             >
-                <input
-                    className='title-input form-input --margin'
-                    placeholder='Title...'
-                    name='title'
-                    value={state.title}
-                    onChange={handleInput}
-                />
-                <textarea 
-                    className='desc-input form-input --margin'
-                    style={{height: '40vh'}}
-                    placeholder='Description...'
-                    name='description'
-                    value={state.description}
-                    onChange={handleInput}
-                />
-                
-                <div className='asignee-picker asignee-picker --margin'>
-                    <span style={{ display: 'block'}} className='--margin'>Asigned person:</span>
-                    <div className='asignee-picker__custom-list custom-list'>
-                        <p 
-                            className='custom-list__picked-asignee'
-                            onClick={() => {
-                                setIsUsersListOpened(!isUsersListOpened)
-                                getUsersFromDatabase()
-                            }}
-                            onChange={()=>console.log('zmiana')}
-                        >
-                            {asignee ? 
-                                // `${asignee.firstName} ${asignee.lastName}`
-                                `${state.asignee.firstName} ${state.asignee.lastName}`
-                                : 
-                                'Pick from list...'
-                            }
-                            <BiDownArrow 
-                                className='custom-list__arrow-icon' 
-                                style={isUsersListOpened ? 
-                                    {transform: 'rotate(180deg)'} 
-                                    : 
-                                    {}
-                                }
+                <div className='data-wrapper'>
+                    <div className='inputs-wrapper'>
+                        <input
+                            className='title-input form-input'
+                            placeholder='Title...'
+                            name='title'
+                            value={newTaskState.title}
+                            onChange={handleInput}
+                        />
+                        <textarea 
+                            className='desc-input form-input'
+                            placeholder='Description...'
+                            name='description'
+                            value={newTaskState.description}
+                            onChange={handleInput}
+                        />
+                    </div>
+                    
+                    <div className='pickers-wrapper'>
+                        <div className='asignee-picker' style={isCalendarOpen ? {zIndex:'-2'} : {zIndex:'50'}}>
+                            <span className='picker-title'>Asigned person:</span>
+                            <div 
+                                className='asignee-picker__custom-list custom-list'
+                            >
+                                <div 
+                                    className='custom-list__picked-asignee'
+                                    
+                                    onClick={() => {
+                                        setIsUsersListOpened(!isUsersListOpened)
+                                        if (!usersList.length) getUsersFromDatabase()
+                                    }}
+                                >
+                                    <span style={{width:'205px', overflow:'scroll'}}>
+                                    {asignee ? 
+                                        `${newTaskState.asignee.firstName} ${newTaskState.asignee.lastName}`
+                                        : 
+                                        'Pick from list...'
+                                    }
+                                    </span>
+                                    <BiDownArrow 
+                                        className='custom-list__arrow-icon' 
+                                        style={isUsersListOpened ? 
+                                            {transform: 'rotate(180deg)', color: 'rgb(57, 255, 238)'} 
+                                            : 
+                                            {}
+                                        }
+                                    />
+                                </div>
+                                <ul 
+                                    className='asignee-list' 
+                                    style={isUsersListOpened ? 
+                                        {maxHeight:'200px', transition:'all .3s ease', padding:'10px'} 
+                                        : 
+                                        {maxHeight: '0', padding: '0 10px', transition:'all .3s ease'}}
+                                >
+                                    {usersList.map((user:any, id:number) => 
+                                        <li
+                                            className='asignee-list__item'
+                                            id="asignee"
+                                            key={id}
+                                            onClick={(e)=>{
+                                                handleClick(user, e.currentTarget.id)
+                                                const {login} = user
+                                                setAsignee(login)
+                                                setIsUsersListOpened(!isUsersListOpened)
+                                            }}
+                                            style={{cursor: 'pointer'}}
+                                        >
+                                            {user.firstName + ' ' + user.lastName}
+                                        </li>
+                                    )}
+                                </ul>
+                            </div>
+                        </div>
+                        <div className='date-picker-wrapper'>
+                            <span className='picker-title' style={{fontSize: '24px'}}>Pick ending date:</span>
+                            <DatePicker 
+                                dateFormat='dd MMMM yyyy'
+                                selected={newTaskState.date}
+                                onCalendarOpen={() => setIsCalendarOpen(true)}
+                                onCalendarClose={() => setIsCalendarOpen(false)}
+                                onChange={(date:Date, e:any) => {
+                                    e.preventDefault()
+                                    handleClick(date, 'date')
+                                }} 
+                                customInput={<DateCustomInput isCalendarOpen={isCalendarOpen}/>}
                             />
-                        </p>
-                        {isUsersListOpened && 
-                            <ul className='asignee-list'>
-                                {usersList.map((user:any, id:number) => 
-                                    <li
-                                        className='asignee-list__item'
-                                        id="asignee"
-                                        key={id}
-                                        onClick={(e)=>{
-                                            handleClick(user, e)
-                                            const {login} = user
-                                            setAsignee(login)
-                                            setIsUsersListOpened(!isUsersListOpened)
-                                        }}
-                                        style={{cursor: 'pointer'}} 
-                                    >
-                                        {user.firstName + ' ' + user.lastName}
-                                    </li>
-                                )}
-                            </ul>
-                        }
+                        </div>
                     </div>
                 </div>
-                {/* <DatePicker /> */}
                 <input 
                     className='submit-btn form__btn btn --margin'
                     type='submit'

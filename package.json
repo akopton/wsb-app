@@ -19,6 +19,7 @@
     "jsdom-quokka-plugin": "^1.0.16",
     "nodemon": "^2.0.20",
     "react": "^18.2.0",
+    "react-datepicker": "^4.8.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.2.0",
@@ -54,6 +55,7 @@
   },
   "devDependencies": {
     "@types/react": "^16.0.28",
+    "@types/react-datepicker": "^4.8.0",
     "ts-loader": "^3.2.0",
     "typescript": "^2.6.2",
     "webpack": "^3.10.0"

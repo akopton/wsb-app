@@ -50,11 +50,11 @@ async function registerNewUser(client, newUser) {
     try {
         await client.connect()
         const result = await usersCollection.insertOne(newUser)
-        console.log('New user registered')
         return result
     } catch (e) {
         console.error(e)
     } finally {
+        console.log('New user registered')
         await client.close()
     }
 }
@@ -74,30 +74,32 @@ async function getListOfTasks(client) {
 async function addNewTaskToDatabase(client, newTask) {
     try {
         await client.connect()
-        const result = await tasksCollection.insertOne(newTask)
-        console.log('task added')
+        await tasksCollection.insertOne(newTask)
+        const result = await tasksCollection.find({}).toArray()
         return result
     } catch (e) {
         console.error(e)
     } finally {
+        console.log('new task added')
         await client.close()
     }
 }
 
 
 async function updateTaskStatus(client, UPDATED_TASK) {
-    const {status} = UPDATED_TASK
-    const {title} = UPDATED_TASK
-    const {id} = UPDATED_TASK
+    const {_id, title, description, status} = UPDATED_TASK
+
     try {
         await client.connect()
         if (status == 'delete') {
-            const result = await tasksCollection.deleteOne({"_id": ObjectId(id)})
-            console.log(`Deleting task: ${title}`)
+            await tasksCollection.deleteOne({"_id": ObjectId(_id)})
+            console.log(`Deleting task: ${_id}`)
+            const result = await tasksCollection.find({}).toArray()
             return result
         }
-        const result = await tasksCollection.updateOne({"_id": ObjectId(id)}, {$set:{status:status}})
-        console.log(`Updating task ${id}`)
+        await tasksCollection.updateOne({"_id": ObjectId(_id)}, {$set:{title: title, description:description, status:status}})
+        console.log(`Updating task ${_id}`)
+        const result = await tasksCollection.find({}).toArray()
         return result
     } catch (e) {
         console.error(e)
@@ -120,7 +122,6 @@ async function getIdFromDatabase(client) {
 
 async function updateIdFromDatabase(client, updatedId) {
     const id = updatedId.updatedId
-    console.log()
     try {
         await client.connect()
         const result = await generatedId.updateOne({}, {$set:{id:id}})
@@ -155,7 +156,6 @@ module.exports = {
     checkIfUserExists: checkIfUserExists,
     deleteAllTasks:deleteAllTasks,
     addNewTaskToDatabase:addNewTaskToDatabase,
-    // asignNewTaskToUser:asignNewTaskToUser,
     registerNewUser:registerNewUser,
     getListOfTasks:getListOfTasks,
     updateTaskStatus:updateTaskStatus

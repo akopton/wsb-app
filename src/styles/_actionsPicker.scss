@@ -1,0 +1,57 @@
+.actions-picker {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: space-between;
+    width: 160px;
+    z-index: 50;
+    border: 1px solid white;
+    background-color: #1c1c1c;
+    border-radius: 4px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    .picked-action {
+        display: block;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 5px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 18px;
+        
+        .submit-action {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            &:hover {
+                color: $light-blue;
+            }
+        }
+    }
+    
+    .actions-window {
+        padding: 5px 5px;
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: space-around;
+        font-size: 18px;
+        width: 100%;
+        overflow-y: scroll;
+        z-index: 50;
+        
+        .action {
+            cursor: pointer;
+        }
+    }
+
+    &:hover {
+        .submit-action {
+            color: $light-blue
+        }
+    }
+}

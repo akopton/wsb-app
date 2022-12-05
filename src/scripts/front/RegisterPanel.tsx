@@ -51,7 +51,6 @@ const RegisterPanel = ( {defaultUser}:any ) => {
             },
             body: JSON.stringify(state)
         }
-        console.log(state)
         setIsLoading(true)
         fetch('http://127.0.0.1:8888/register', settings)
         .then(data => data.json())

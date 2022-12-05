@@ -8,11 +8,14 @@
 @import './styles/slideIndicator';
 @import './styles/_loader';
 @import './styles/registerSite';
+@import './styles/actionsPicker';
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap');
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
 }
 
 body {
@@ -52,6 +55,7 @@ input, textarea {
 
 ::-webkit-scrollbar {
     width: 0px;
+    background: $light-blue;
   }
   
   /* Track */
@@ -61,12 +65,12 @@ input, textarea {
   
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #888;
+    background: $light-blue;
   }
   
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: $dark-grey;
+    background: $light-blue;
   }
 
   ::-webkit-scrollbar:horizontal {
@@ -124,7 +128,6 @@ input:-webkit-autofill:focus {
   line-height: 60px;
   padding: 0 10px;
   font-size: 30px;
-  max-width: 350px;
   border: 3px solid $light-blue;
 }
 

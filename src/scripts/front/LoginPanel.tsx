@@ -87,12 +87,13 @@ const LoginPanel = ( { setLoggedUser, setIsLoggedIn }: any) => {
                         type="submit"
                         value="Sign in"
                     />
+                    {isLoading && 
+                        <div className="logging-screen">
+                            <div className="loader" />
+                        </div>
+                    }
                 </form>
-                {isLoading && 
-                    <div className="logging-screen">
-                        <div className="loader" />
-                    </div>    
-                }
+                
             </div>
     )
 }

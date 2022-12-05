@@ -1,7 +1,7 @@
 @import './_colors';
 
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 899px) {
     .logging-site {
         height: 100vh;
         width: 100%;
@@ -48,7 +48,7 @@
 }
 
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 900px) {
     .logging-site {
         height: 60%;
         display: flex;
@@ -60,10 +60,10 @@
             position: relative;
             display: flex;
             align-items: flex-end;
+            justify-content: center;
 
             .login-panel {
-                
-            
+                max-width: 450px;
                 &__login-input {}
             
                 &__password-input {}
@@ -83,11 +83,6 @@
 }
 
 
-
-@keyframes spin {
-    0% {transform: rotate(0deg)}
-    100% {transform: rotate(360deg)}
-}
 
 .site-aside {
     display: flex;
@@ -112,21 +107,11 @@
     height: 300px;
     background: rgba(#ffffff, .1);
     backdrop-filter: blur(3px);
-    width: 90%;
+    width: 90%; 
     z-index: 3;
     border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 0 20px rgba(#ffffff, .2);
-
-    .loading-circle {
-        height: 60px;
-        width: 60px;
-        border: 10px solid #f3f3f3; /* Light grey */
-        border-top: 10px solid #3498db;
-        z-index: 10;
-        border-radius: 50%;
-        animation: spin 2s linear infinite;
-    }
 }

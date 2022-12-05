@@ -4,12 +4,12 @@ import SingleTask from "./SingleTask"
 
 
 
-const ActiveTasks = ({ tasksList, taskStatus, setTaskStatus, setIsTaskUpdated, setLoadingNewTask, setIsSingleTaskOpened }:any) => {
+const ActiveTasks = ({ tasksList, setTasksList }:any) => {
 
     return (
         <div className="active-tasks list-wrap">
             <div className="wrapper">
-                <span className="list-title">Active-Tasks</span>
+                <h3 className="list-title">Active-Tasks</h3>
                 <ul className="list">
                 {
                     tasksList.map((task:any, id: any) => {
@@ -17,9 +17,8 @@ const ActiveTasks = ({ tasksList, taskStatus, setTaskStatus, setIsTaskUpdated, s
                         return <SingleTask 
                             task={task} 
                             key={id} 
-                            setIsTaskUpdated={setIsTaskUpdated}
-                            // isSingleTaskOpened={isSingleTaskOpened}
-                            setIsSingleTaskOpened={setIsSingleTaskOpened}
+                            setTasksList={setTasksList}
+                            tasksList={tasksList}
                         />
                     })
                 }

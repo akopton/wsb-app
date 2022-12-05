@@ -2,7 +2,7 @@ import React from "react"
 import { useEffect, useState, useCallback, useMemo } from "react"
 import { BiDownArrow, BiUpArrow, BiRightArrow } from 'react-icons/bi'
 
-const ActionsPicker = ( {setShowTaskContent, task, deleteTask, setTaskStatus, setIsActionsWindowOpened, isActionsWindowOpened, updateTaskStatus, taskStatus, setIsTaskOpened, isTaskOpened, setIsSingleTaskOpened}: any ) => {
+const ActionsPicker = ( {handleUpdate, handleToggleOpen, updatedTask, setIsActionsWindowOpened, isActionsWindowOpened, updateTaskStatus, setShowTaskContent, task, setIsTaskOpened, isTaskOpened}: any ) => {
 
     const {status} = task
     const [isActionPicked, setIsActionPicked] = useState<boolean>(false)
@@ -27,50 +27,63 @@ const ActionsPicker = ( {setShowTaskContent, task, deleteTask, setTaskStatus, se
     ]
 
     return (
-        <div className="single-task__actions-picker">
+        <div className="actions-picker">
             <div 
                 className="picked-action"
                 onClick={()=>setIsActionsWindowOpened(!isActionsWindowOpened)}
-                style={{display:'flex', alignItems:'center', justifyContent:'space-between', gap: '8px', borderTop:'none'}}
+                style={isActionsWindowOpened ? 
+                    {borderTop: 'none'}
+                    :
+                    {borderTop: 'none'}
+                }
             >
-                <span style={{lineHeight: '30px'}}>{isActionPicked ? pickedAction : 'Pick an action...'}</span>
+                <span 
+                    style={{lineHeight: '30px'}}
+                >
+                    {isActionPicked ? pickedAction : 'Pick an action...'}
+                </span>
                 <div 
                     className="submit-action"
                     onClick={()=>{
-                        if (isActionPicked) {
+                        if (pickedAction) {
                             setIsActionsWindowOpened(!isActionsWindowOpened)
                             updateTaskStatus()
                             setIsTaskOpened(!isTaskOpened)
                             setIsActionsWindowOpened(false)
-                            setShowTaskContent(false)
+                            handleToggleOpen(!updatedTask.isOpened)
                         }
                     }} 
                 >
-                {isActionsWindowOpened ? 
-                    <BiUpArrow /> 
-                    : isActionPicked ? 
-                    <BiRightArrow style={{color: 'rgb(57, 255, 238)'}}/> 
-                    : 
-                    <BiDownArrow />
-                }
+                    <BiDownArrow 
+                        style={isActionsWindowOpened ? 
+                            {transform:'rotate(180deg)', transition:'.3s ease'}
+                            : pickedAction ? 
+                            {transform:'rotate(270deg)', transition:'.3s ease', color: 'rgb(57, 255, 238)'}
+                            :
+                            {transition:'.3s ease', color:'white'}
+                        }
+                    />
                 </div>
             </div>
-                
-                    <ul className="actions-window" style={isActionsWindowOpened ? {height: '80px', transition: 'all .3s ease'} : {height: '0', padding: '0 5px', transition: 'all .3s ease', borderBottom:'none'}}>
-                        {actions.map((action, id) => {
-                            if (action.type == status) return
-                            return <li className="action" key={id} onClick={() => {
-                                                    // console.log(e.currentTarget)
-                                                    setTaskStatus(action.type)
-                                                    setPickedAction(action.desc)
-                                                    setIsActionPicked(true)
-                                                    setIsActionsWindowOpened(false)
-                                                }}>
-                                        {action.desc}
-                                    </li>
-                        })}
-                    </ul>
-            
+            <ul
+                className="actions-window" 
+                style={isActionsWindowOpened ? 
+                    {height: '90px', transition: 'height .3s ease'} 
+                    : 
+                    {height: '0', padding: '0 5px', transition: 'height .3s ease'}}
+            >
+                {actions.map((action, id) => {
+                    if (action.type == status) return
+                    return <li className="action" id='status' data-type={action.type} key={id} onClick={(e) => {
+                                            handleUpdate(e)
+                                            setPickedAction(action.desc)
+                                            setIsActionPicked(true)
+                                            setIsActionsWindowOpened(false)
+                                        }}>
+                                {action.desc}
+                            </li>
+                })}
+            </ul>
         </div>
     )
 }

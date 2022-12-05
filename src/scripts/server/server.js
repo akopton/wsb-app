@@ -45,10 +45,9 @@ app.get('/users', async (req, res) => {
 
 app.post('/tasks', async (req, res) => {
     console.log('adding new task')
-    res.send(req.body)
     const NEW_TASK = req.body
-    // await asignNewTaskToUser(client, NEW_TASK)
-    await addNewTaskToDatabase(client, NEW_TASK)
+    const NEW_TASKS_LIST = await addNewTaskToDatabase(client, NEW_TASK)
+    res.send(NEW_TASKS_LIST)
 })
 
 app.post('/delete-all', (req, res) => {
@@ -56,9 +55,9 @@ app.post('/delete-all', (req, res) => {
 })
 
 app.post('/update-task', async (req, res) => {
-    res.send(req.body)
     const UPDATED_TASK = req.body
-    await updateTaskStatus(client, UPDATED_TASK)
+    const UPDATED_TASKS_LIST = await updateTaskStatus(client, UPDATED_TASK)
+    res.send(UPDATED_TASKS_LIST)
 })
 
 
