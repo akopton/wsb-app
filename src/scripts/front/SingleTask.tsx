@@ -4,7 +4,7 @@ import ActionsPicker from "./ActionsPicker"
 import TaskDescription from "./TaskDescription"
 import TaskTitle from "./TaskTitle"
 
-const SingleTask = ({task, id, setTasksList, setIsSingleTaskOpened}:any) => {
+const SingleTask = ({task, id, setTasks, lists}:any) => {
 
     const [isTaskOpened, setIsTaskOpened] = useState<boolean>(false)
     const [isEditable, setIsEditable] = useState<boolean>(false)
@@ -73,7 +73,7 @@ const SingleTask = ({task, id, setTasksList, setIsSingleTaskOpened}:any) => {
     const updateTaskStatus = async () => {
        fetch('http://127.0.0.1:8888/update-task', settings)
         .then(data => data.json())
-        .then(res => setTasksList(res))
+        .then(res => setTasks(res))
     }
 
     return (
@@ -159,6 +159,7 @@ const SingleTask = ({task, id, setTasksList, setIsSingleTaskOpened}:any) => {
                         </span>
                     </div>
                     <ActionsPicker
+                        lists={lists}
                         updateTaskStatus={updateTaskStatus}
                         setIsActionsWindowOpened={setIsActionsWindowOpened}
                         isActionsWindowOpened={isActionsWindowOpened}

@@ -1,36 +1,38 @@
 import React from "react"
-import { useEffect, useState, useCallback, useMemo } from "react"
+import { useEffect, useState, useCallback, useMemo, useRef } from "react"
 import { BiDownArrow, BiUpArrow, BiRightArrow } from 'react-icons/bi'
 
-const ActionsPicker = ( {handleUpdate, handleToggleOpen, updatedTask, setIsActionsWindowOpened, isActionsWindowOpened, updateTaskStatus, setShowTaskContent, task, setIsTaskOpened, isTaskOpened}: any ) => {
+const ActionsPicker = ( {lists, handleUpdate, handleToggleOpen, updatedTask, setIsActionsWindowOpened, isActionsWindowOpened, updateTaskStatus, setShowTaskContent, task, setIsTaskOpened, isTaskOpened}: any ) => {
 
-    const {status} = task
+    const {status, isOpened} = task
     const [isActionPicked, setIsActionPicked] = useState<boolean>(false)
     const [pickedAction, setPickedAction] = useState<string>()
-    const actions = [
+    const [actions, setActions] = useState([
         {
             type: 'delete',
             desc: 'Delete task',
-        },
-        {
-            type: 'todo',
-            desc: 'Set as todo',
-        },
-        {
-            type: 'active',
-            desc: 'Set as active',
-        },
-        {
-            type: 'done',
-            desc: 'Set as done',
         }
-    ]
+    ])
+    const handleActions = () => {
+        for (const list of lists) {
+            if (actions.filter(e => e.type === list.type).length > 0) return
+            actions.push({type:list.type, desc:`Set as ${list.type}`})
+        }
+        setActions(actions)
+    }
+
+    useEffect(()=>{
+        handleActions()
+    },[])
 
     return (
         <div className="actions-picker">
             <div 
                 className="picked-action"
-                onClick={()=>setIsActionsWindowOpened(!isActionsWindowOpened)}
+                onClick={()=>{
+                        setIsActionsWindowOpened(!isActionsWindowOpened)
+                    }
+                }
                 style={isActionsWindowOpened ? 
                     {borderTop: 'none'}
                     :
@@ -45,11 +47,10 @@ const ActionsPicker = ( {handleUpdate, handleToggleOpen, updatedTask, setIsActio
                 <div 
                     className="submit-action"
                     onClick={()=>{
+                        if (isActionsWindowOpened) return
                         if (pickedAction) {
-                            setIsActionsWindowOpened(!isActionsWindowOpened)
                             updateTaskStatus()
                             setIsTaskOpened(!isTaskOpened)
-                            setIsActionsWindowOpened(false)
                             handleToggleOpen(!updatedTask.isOpened)
                         }
                     }} 
@@ -68,12 +69,11 @@ const ActionsPicker = ( {handleUpdate, handleToggleOpen, updatedTask, setIsActio
             <ul
                 className="actions-window" 
                 style={isActionsWindowOpened ? 
-                    {height: '90px', transition: 'height .3s ease'} 
+                    {height: '100px', transition: 'height .3s ease'} 
                     : 
                     {height: '0', padding: '0 5px', transition: 'height .3s ease'}}
             >
-                {actions.map((action, id) => {
-                    if (action.type == status) return
+                {actions.filter(e => e.type !== status).map((action:any, id:any) => {
                     return <li className="action" id='status' data-type={action.type} key={id} onClick={(e) => {
                                             handleUpdate(e)
                                             setPickedAction(action.desc)

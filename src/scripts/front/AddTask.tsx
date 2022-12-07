@@ -34,7 +34,7 @@ const NewTaskBtn = ( {isNavMenuOpened,isSingleTaskOpened,isNewTaskFormOpened, se
     )
 }
 
-const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasksList}:any ) => {
+const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
     const [usersList, setUsersList] = useState<[]>([])
     const [asignee, setAsignee] = useState<any>()
     const [isUsersListOpened, setIsUsersListOpened] = useState<boolean>(false)
@@ -116,7 +116,7 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasksList}:any ) => {
         }
         fetch('http://127.0.0.1:8888/tasks', settings)
         .then(data => data.json())
-        .then(res => setTasksList(res))
+        .then(res => setTasks(res))
     }
 
     const updateIdForGenerator = async () => {

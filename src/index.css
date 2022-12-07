@@ -197,6 +197,11 @@
   align-items: center;
 }
 
+@media screen and (min-width: 1420px) {
+  .main-site {
+    width: 80%;
+  }
+}
 .new-task-form {
   position: fixed;
   top: 0;
@@ -208,9 +213,14 @@
   height: 100%;
   background: #0f0f0f;
   z-index: 4;
-  overflow: hidden;
+  overflow: scroll;
   gap: 10px;
   padding: 0 10px;
+}
+@media screen and (min-width: 430px) {
+  .new-task-form {
+    padding-top: 70px;
+  }
 }
 .new-task-form .data-wrapper {
   display: flex;
@@ -444,28 +454,17 @@
     width: calc(33.3333333333vw - 40px);
   }
 }
+@media screen and (min-width: 1420px) {
+  .list-wrap .wrapper .list {
+    width: calc(33.3333333333vw - 180px);
+  }
+}
 .list-wrap .wrapper .list-title {
   display: block;
   padding: 5px 10px;
   font-size: 20px;
 }
 
-@media (min-width: 768px) {
-  .task-lists {
-    padding-top: 100px;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-  }
-  .task-lists .list-wrap {
-    overflow-y: scroll;
-  }
-  .task-lists .list-wrap .list .single-task.opened {
-    width: 500px;
-    height: 300px;
-  }
-}
 .single-task {
   position: relative;
   padding: 10px;
@@ -517,6 +516,9 @@
   color: rgb(57, 255, 238);
   font-size: 14px;
   cursor: pointer;
+}
+.single-task__top-wrap .single-task__submit-change-btn:hover {
+  color: white;
 }
 .single-task__title {
   font-size: 22px;
@@ -693,15 +695,15 @@
 .actions-picker .actions-window {
   padding: 5px 5px;
   display: flex;
-  flex-direction: column-reverse;
-  justify-content: space-around;
+  flex-direction: column;
   font-size: 18px;
   width: 100%;
-  overflow-y: scroll;
+  overflow: scroll;
   z-index: 50;
 }
 .actions-picker .actions-window .action {
   cursor: pointer;
+  line-height: 26px;
 }
 .actions-picker:hover .submit-action {
   color: rgb(57, 255, 238);
