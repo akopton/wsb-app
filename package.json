@@ -27,7 +27,8 @@
     "react-scripts": "5.0.1",
     "request": "^2.88.2",
     "swiper": "^8.4.4",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "mongodb": "^4.9.1"
   },
   "scripts": {
     "start": "react-scripts start",

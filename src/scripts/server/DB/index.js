@@ -85,18 +85,32 @@ async function addNewTaskToDatabase(client, newTask) {
     }
 }
 
+async function deleteTask(client, TASK_TO_DELETE) {
+    const {_id} = TASK_TO_DELETE
+
+    try {
+        await tasksCollection.deleteOne({"_id": ObjectId(_id)})
+        console.log(`Deleting task: ${_id}`)
+        const result = await tasksCollection.find({}).toArray()
+        return result
+    } catch (e) {
+        console.error(e)
+    } finally {
+        await client.close()
+    }
+}
 
 async function updateTaskStatus(client, UPDATED_TASK) {
     const {_id, title, description, status} = UPDATED_TASK
 
     try {
         await client.connect()
-        if (status == 'delete') {
-            await tasksCollection.deleteOne({"_id": ObjectId(_id)})
-            console.log(`Deleting task: ${_id}`)
-            const result = await tasksCollection.find({}).toArray()
-            return result
-        }
+        // if (status == 'delete') {
+        //     await tasksCollection.deleteOne({"_id": ObjectId(_id)})
+        //     console.log(`Deleting task: ${_id}`)
+        //     const result = await tasksCollection.find({}).toArray()
+        //     return result
+        // }
         await tasksCollection.updateOne({"_id": ObjectId(_id)}, {$set:{title: title, description:description, status:status}})
         console.log(`Updating task ${_id}`)
         const result = await tasksCollection.find({}).toArray()
@@ -154,9 +168,10 @@ module.exports = {
     getIdFromDatabase: getIdFromDatabase,
     getListOfUsers: getListOfUsers, 
     checkIfUserExists: checkIfUserExists,
-    deleteAllTasks:deleteAllTasks,
-    addNewTaskToDatabase:addNewTaskToDatabase,
-    registerNewUser:registerNewUser,
-    getListOfTasks:getListOfTasks,
-    updateTaskStatus:updateTaskStatus
+    deleteAllTasks: deleteAllTasks,
+    addNewTaskToDatabase: addNewTaskToDatabase,
+    registerNewUser: registerNewUser,
+    getListOfTasks: getListOfTasks,
+    updateTaskStatus: updateTaskStatus,
+    deleteTask: deleteTask
 }

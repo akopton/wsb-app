@@ -12,6 +12,11 @@
     flex-direction: column;
     justify-content: space-between;
 
+
+    &.expired {
+        border: 1px solid red;
+    }
+
     &__top-wrap {
         display: flex;
         align-items: center;

@@ -60,12 +60,16 @@ app.post('/update-task', async (req, res) => {
     res.send(UPDATED_TASKS_LIST)
 })
 
+app.post('/delete-task', async (req, res) => {
+    const TASK_TO_DELETE = req.body
+    const UPDATED_TASKS_LIST = await updateTaskStatus(client, TASK_TO_DELETE)
+    res.send(UPDATED_TASKS_LIST)
+})
 
 app.get('/get-tasks', async (req, res) => {
         const TASKS_LIST = await getListOfTasks(client)
         res.send(TASKS_LIST)
 })
-
 
 
 app.get('/get-id', async (req, res) => {
@@ -92,3 +96,4 @@ app.post('/register', async (req, res) => {
     if (EXISTING_USER) return
     await registerNewUser(client, NEW_USER_TO_REGISTER)
 })
+

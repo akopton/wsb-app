@@ -1,4 +1,3 @@
-import React, { useCallback } from "react"
 import {Swiper, SwiperSlide, useSwiper} from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 import { useEffect, useState } from "react"
@@ -10,7 +9,6 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/effect-fade';
 import SingleTask from "./SingleTask";
 import { EffectFade } from 'swiper';
-import { listeners } from "process";
 import TasksList from "./TasksList";
 const { NewTaskBtn, NewTaskForm} = NewTask
 const { Hamburger, NavMenu } = Nav
@@ -38,14 +36,6 @@ const MainSite = ( { usersList, loggedUser, TUser }: any) => {
             type: 'done',
             title: 'Done Tasks'
         }, 
-        {
-            type: 'lol',
-            title: 'Lol tasks'
-        }, 
-        {
-            type: 'siema',
-            title: 'Siema tasks'
-        }
     ])
 
     const handleWindowWidth = () => {
@@ -53,7 +43,6 @@ const MainSite = ( { usersList, loggedUser, TUser }: any) => {
     }
 
     useEffect(()=> {
-        console.log(lists)
         window.addEventListener('resize', handleWindowWidth)
     },[window.innerWidth])
 
@@ -148,7 +137,6 @@ const MainSite = ( { usersList, loggedUser, TUser }: any) => {
                             ''
                     }
                 </Swiper>
-            
         </div>
     )
 }

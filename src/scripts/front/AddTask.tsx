@@ -61,7 +61,7 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
         title: '',
         description: '',
         asignee: loggedUser,
-        date: new Date(),
+        date: new Date().getTime(),
         status: 'todo',
     }
 
@@ -241,7 +241,8 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
                                 onCalendarClose={() => setIsCalendarOpen(false)}
                                 onChange={(date:Date, e:any) => {
                                     e.preventDefault()
-                                    handleClick(date, 'date')
+                                    const newDate = date.getTime()
+                                    handleClick(newDate, 'date')
                                 }} 
                                 customInput={<DateCustomInput isCalendarOpen={isCalendarOpen}/>}
                             />

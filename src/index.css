@@ -477,6 +477,9 @@
   flex-direction: column;
   justify-content: space-between;
 }
+.single-task.expired {
+  border: 1px solid red;
+}
 .single-task__top-wrap {
   display: flex;
   align-items: center;

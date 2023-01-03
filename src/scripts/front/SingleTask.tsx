@@ -9,6 +9,36 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
     const [isTaskOpened, setIsTaskOpened] = useState<boolean>(false)
     const [isEditable, setIsEditable] = useState<boolean>(false)
     const [isActionsWindowOpened, setIsActionsWindowOpened] = useState<boolean>()
+    const [isExpired, setIsExpired] = useState<boolean>(false)
+    const [convertedDate, setConvertedDate] = useState<string>()
+
+
+
+
+    const handleActualDate = () => {
+        const todaysDate = new Date().getTime()
+        console.log(todaysDate)
+        console.log(task.date)
+        console.log(todaysDate > task.date);
+        
+        if (todaysDate > task.date) setIsExpired(true)
+        else setIsExpired(false)
+
+    }
+
+
+    useEffect(()=>{
+        const convertedDate = new Date(task.date)
+        // console.log(convertedDate);
+        const convertedDateDay = convertedDate.getDate()
+        const convertedDateMonth = convertedDate.getMonth()+1
+        const convertedDateYear = convertedDate.getFullYear()
+        const newConvertedDay = `${convertedDateDay}-${convertedDateMonth}-${convertedDateYear}`
+        setConvertedDate(newConvertedDay)
+        handleActualDate()
+        // console.log(task)
+    },[])
+
 
     const initialTaskState = {
         data: {
@@ -61,6 +91,12 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
         if (updatedTask.data.description == initialTaskState.data.description) return
         updateTaskStatus()
     }
+
+    const handleDelete = () => {
+        fetch('http://127.0.0.1:8888/delete-task', settings)
+        .then(data => data.json())
+        .then(res => setTasks(res))
+    }
     
     const settings = {
         method: 'POST',
@@ -78,7 +114,7 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
 
     return (
         <li 
-            className='single-task'
+            className={isExpired ? 'single-task expired' : 'single-task'}
             style={updatedTask.isOpened ? 
                     {
                         height: '240px',
@@ -155,7 +191,8 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
                             {updatedTask.data.asignee.login}
                         </span>
                         <span className="task-content__date">
-                            {task.date.slice(0,10)}
+                            {/* {task.date.slice(0,10)} */}
+                            {convertedDate}
                         </span>
                     </div>
                     <ActionsPicker
@@ -169,6 +206,7 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
                         handleToggleOpen={handleToggleOpen}
                         updatedTask={updatedTask}
                         handleUpdate={handleUpdate}
+                        handleDelete={handleDelete}
                     />
                 </div>
             }
