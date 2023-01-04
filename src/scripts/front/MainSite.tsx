@@ -61,6 +61,18 @@ const MainSite = ( { usersList, loggedUser, TUser }: any) => {
         getTasksFromDatabase()
     },[])
 
+
+
+    const handleNewTasksList = () => {
+        setLists([...lists, {
+            type:'lol',
+            title: 'Lol Tasks'
+        }])
+        setSlides([...slides, 0])
+    }
+
+
+
     return (
         <div className="main-site">
             <span style={{position: 'fixed', zIndex:'10', fontSize: '20px', left: '10px', bottom: '10px'}}>Logged: {loggedUser.login}</span>
@@ -129,6 +141,13 @@ const MainSite = ( { usersList, loggedUser, TUser }: any) => {
                             )
                         })
                     }
+                    <SwiperSlide>
+                        <div className="todo-tasks list-wrap">
+                            <div className="wrapper">
+                                <div onClick={handleNewTasksList} style={{position: 'absolute', top: '35%', left: '50%', transform: 'translate(-50%,-50%)', fontSize: '100px'}}>+</div>
+                            </div>
+                        </div>
+                    </SwiperSlide>
                     {windowWidth < 1024 ? 
                             <SlideIndicator 
                                 slides={slides} 

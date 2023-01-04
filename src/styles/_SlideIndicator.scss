@@ -1,16 +1,30 @@
+@import './_colors';
+
 .slide-indicator {
     position: fixed;
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    background: rgba(#ffffff, .1);
-    backdrop-filter: blur(5px); 
-    width: 50px;
+    gap: 10px;
+    // background: rgba(#ffffff, .1);
+    // backdrop-filter: blur(5px); 
+    width: 80%;
     height: 30px;
     border-radius: 10px;
     z-index: 2;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    &__dot {
+        // top: 50%;
+        // transform: translateY(-50%);
+        height: 4px;
+        width: 100%;
+
+        &.transformed {
+        }
+    }
 }

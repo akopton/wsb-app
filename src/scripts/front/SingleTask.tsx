@@ -13,30 +13,40 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
     const [convertedDate, setConvertedDate] = useState<string>()
 
 
+    const handleConvertedDate = () => {
+        const dateToConvert = new Date(task.date)
+        const convertedDate = {
+            convertedDateDay: () => {
+                if (dateToConvert.getDate() < 10) return (`0${dateToConvert.getDate()}`)
+                else return dateToConvert.getDate()
+            },
+            convertedDateMonth: () => {
+                if (dateToConvert.getMonth()+1 < 10) return (`0${dateToConvert.getMonth()+1}`)
+                else return dateToConvert.getMonth()+1
+            },
+            convertedDateYear: dateToConvert.getFullYear(),
+        }
+
+        const newConvertedDay = 
+        `${convertedDate.convertedDateDay()}.${convertedDate.convertedDateMonth()}.${convertedDate.convertedDateYear}`
+
+        setConvertedDate(newConvertedDay)
+    }
 
 
-    const handleActualDate = () => {
+    const handleExpiredTask = () => {
+        
+
         const todaysDate = new Date().getTime()
-        console.log(todaysDate)
-        console.log(task.date)
-        console.log(todaysDate > task.date);
         
         if (todaysDate > task.date) setIsExpired(true)
         else setIsExpired(false)
-
     }
 
 
     useEffect(()=>{
-        const convertedDate = new Date(task.date)
-        // console.log(convertedDate);
-        const convertedDateDay = convertedDate.getDate()
-        const convertedDateMonth = convertedDate.getMonth()+1
-        const convertedDateYear = convertedDate.getFullYear()
-        const newConvertedDay = `${convertedDateDay}-${convertedDateMonth}-${convertedDateYear}`
-        setConvertedDate(newConvertedDay)
-        handleActualDate()
-        // console.log(task)
+        handleConvertedDate()
+        handleExpiredTask()
     },[])
 
 

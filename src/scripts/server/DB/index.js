@@ -105,12 +105,6 @@ async function updateTaskStatus(client, UPDATED_TASK) {
 
     try {
         await client.connect()
-        // if (status == 'delete') {
-        //     await tasksCollection.deleteOne({"_id": ObjectId(_id)})
-        //     console.log(`Deleting task: ${_id}`)
-        //     const result = await tasksCollection.find({}).toArray()
-        //     return result
-        // }
         await tasksCollection.updateOne({"_id": ObjectId(_id)}, {$set:{title: title, description:description, status:status}})
         console.log(`Updating task ${_id}`)
         const result = await tasksCollection.find({}).toArray()
