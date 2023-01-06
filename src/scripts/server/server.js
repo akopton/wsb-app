@@ -28,7 +28,8 @@ const {
         updateTaskStatus, 
         getIdFromDatabase, 
         updateIdFromDatabase,
-        findUserInDatabase
+        findUserInDatabase,
+        deleteTask
     } = require('./DB/index.js')
 
 
@@ -62,7 +63,7 @@ app.post('/update-task', async (req, res) => {
 
 app.post('/delete-task', async (req, res) => {
     const TASK_TO_DELETE = req.body
-    const UPDATED_TASKS_LIST = await updateTaskStatus(client, TASK_TO_DELETE)
+    const UPDATED_TASKS_LIST = await deleteTask(client, TASK_TO_DELETE)
     res.send(UPDATED_TASKS_LIST)
 })
 

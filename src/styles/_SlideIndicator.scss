@@ -19,12 +19,7 @@
     justify-content: space-around;
 
     &__dot {
-        // top: 50%;
-        // transform: translateY(-50%);
         height: 4px;
         width: 100%;
-
-        &.transformed {
-        }
     }
 }

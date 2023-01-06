@@ -95,12 +95,58 @@
 }
 
 .main-site {
+  position: relative;
+  color: white;
+}
+.main-site .popup-blur {
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
   bottom: 0;
-  color: white;
+  right: 0;
+  background: rgba(255, 255, 255, 0.3);
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+  z-index: 1000;
+}
+.main-site .popup-blur .popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 800px;
+  width: 700px;
+  z-index: 1000;
+  border: 1px solid red;
+}
+.main-site .popup-blur .popup__close-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  height: 30px;
+  width: 30px;
+}
+.main-site .popup-blur .popup__close-btn::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 2px;
+  width: 100%;
+  background-color: red;
+  transform: rotate(-45deg);
+}
+.main-site .popup-blur .popup__close-btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 2px;
+  width: 100%;
+  background-color: red;
+  transform: rotate(45deg);
 }
 .main-site .add-task__button {
   position: fixed;
@@ -191,15 +237,38 @@
   }
 }
 .main-site .nav-menu__items {
+  padding-top: 120px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 50px;
+}
+.main-site .nav-menu__items .item {
+  font-size: 36px;
+  position: relative;
+}
+.main-site .nav-menu__items .item:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background-color: rgb(57, 255, 238);
+  transition: 0.15s ease;
+}
+.main-site .nav-menu__items .item:hover {
+  cursor: pointer;
+}
+.main-site .nav-menu__items .item:hover:after {
+  transition: 0.15s ease;
+  width: 100%;
 }
 
 @media screen and (min-width: 1420px) {
   .main-site {
-    width: 80%;
+    padding-right: 20%;
   }
 }
 .new-task-form {
@@ -464,6 +533,15 @@
   padding: 5px 10px;
   font-size: 20px;
 }
+.list-wrap .wrapper .add-new-list-btn {
+  border: 2px solid white;
+  transition: 0.3s ease;
+}
+.list-wrap .wrapper .add-new-list-btn:hover {
+  border: 2px solid rgb(57, 255, 238);
+  color: rgb(57, 255, 238);
+  transition: 0.3s ease;
+}
 
 .single-task {
   position: relative;
@@ -586,6 +664,7 @@
   height: 4px;
   width: 100%;
 }
+
 .loader, .loader:before, .loader:after {
   border-radius: 50%;
   width: 2.5em;

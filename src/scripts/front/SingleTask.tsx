@@ -12,7 +12,6 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
     const [isExpired, setIsExpired] = useState<boolean>(false)
     const [convertedDate, setConvertedDate] = useState<string>()
 
-
     const handleConvertedDate = () => {
         const dateToConvert = new Date(task.date)
         const convertedDate = {
@@ -32,23 +31,6 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
 
         setConvertedDate(newConvertedDay)
     }
-
-
-    const handleExpiredTask = () => {
-        
-
-        const todaysDate = new Date().getTime()
-        
-        if (todaysDate > task.date) setIsExpired(true)
-        else setIsExpired(false)
-    }
-
-
-    useEffect(()=>{
-        handleConvertedDate()
-        handleExpiredTask()
-    },[])
-
 
     const initialTaskState = {
         data: {
@@ -122,6 +104,21 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
         .then(res => setTasks(res))
     }
 
+    const handleExpiredTask = () => {
+        const todaysDate = new Date().getTime()
+        
+        if (todaysDate > task.date) {
+            setIsExpired(true)
+            
+        }
+        else setIsExpired(false)
+    }
+
+    useEffect(()=>{
+        handleConvertedDate()
+        handleExpiredTask()
+    },[isExpired])
+
     return (
         <li 
             className={isExpired ? 'single-task expired' : 'single-task'}
@@ -159,7 +156,7 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
                                 className="single-task__submit-change-btn"
                                 onClick={handleSubmit}
                             >
-                                <span>Gotowe</span>
+                                <span>Gotowe jest</span>
                             </div>
                             :
                             <div 
@@ -201,11 +198,11 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
                             {updatedTask.data.asignee.login}
                         </span>
                         <span className="task-content__date">
-                            {/* {task.date.slice(0,10)} */}
                             {convertedDate}
                         </span>
                     </div>
                     <ActionsPicker
+                        isExpired={isExpired}
                         lists={lists}
                         updateTaskStatus={updateTaskStatus}
                         setIsActionsWindowOpened={setIsActionsWindowOpened}

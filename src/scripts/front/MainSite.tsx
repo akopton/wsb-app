@@ -10,19 +10,22 @@ import 'swiper/css/effect-fade';
 import SingleTask from "./SingleTask";
 import { EffectFade } from 'swiper';
 import TasksList from "./TasksList";
+import { TTask } from './interfaces';
 const { NewTaskBtn, NewTaskForm} = NewTask
 const { Hamburger, NavMenu } = Nav
 
 
 
 
-const MainSite = ( { usersList, loggedUser, TUser }: any) => {
+const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser, defaultUser }: any) => {
+    const [isPopupOpened, setIsPopupOpened] = useState<boolean>(true)
     const [loadingTasks, setLoadingTasks] = useState<boolean>(true)
     const [isNewTaskFormOpened, setIsNewTaskFormOpened] = useState<boolean>(false)
-    const [tasks, setTasks] = useState<[]>([])
+    const [tasks, setTasks] = useState<TTask[]>([])
+    const [tasksByDate, setTasksByDate] = useState<TTask[]>([])
     const [isNavMenuOpened, setIsNavMenuOpened] = useState<boolean>(false)
     const [slides, setSlides] = useState<number[]>([])
-    const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth)
+    const [areTasksFiltered, setAreTasksFiltered] = useState<boolean>(false)
     const [lists, setLists] = useState<{}[]>([
         {
             type: 'todo',
@@ -35,34 +38,18 @@ const MainSite = ( { usersList, loggedUser, TUser }: any) => {
         {
             type: 'done',
             title: 'Done Tasks'
-        }, 
+        },
+        {
+            type: 'expired',
+            title: 'Expired Tasks'
+        }
     ])
 
-    const handleWindowWidth = () => {
-        setWindowWidth(window.innerWidth)
-    }
-
-    useEffect(()=> {
-        window.addEventListener('resize', handleWindowWidth)
-    },[window.innerWidth])
-
-
+    
     const getTasksFromDatabase = async () => {
-        fetch('http://127.0.0.1:8888/get-tasks')
-        .then(data => data.json())
-        .then(res => {
-            console.log('getting tasks...')
-            setTasks(res)
-            setLoadingTasks(false)
-        })
+        return fetch('http://127.0.0.1:8888/get-tasks')
     }
-
-    useEffect(()=>{
-        getTasksFromDatabase()
-    },[])
-
-
-
+    
     const handleNewTasksList = () => {
         setLists([...lists, {
             type:'lol',
@@ -70,11 +57,60 @@ const MainSite = ( { usersList, loggedUser, TUser }: any) => {
         }])
         setSlides([...slides, 0])
     }
+    
+    useEffect(()=>{
+        getTasksFromDatabase()
+        .then((data) => data.json())
+        .then((res) => {
+            console.log('getting tasks...')
+            setTasks(res)
+            setLoadingTasks(false)
+        })
+    },[])
 
+    const handleTasksByDate = () => {
+        const todaysDate = new Date().getTime()
+        const tasksByDate = tasks.filter(task => {
+            const diffInTime = task.date - todaysDate
+            const diffInDays = diffInTime / (1000 * 3600 * 24)
+            return diffInDays <= 7 ? task : null
+        })
+        
+        setTasksByDate(tasksByDate)
+    }
+    
+    useEffect(()=>{
+        handleTasksByDate()
+    },[tasks])
 
-
+    const today = new Date()
     return (
         <div className="main-site">
+            {
+                isPopupOpened &&
+                <div className="popup-blur">
+                <div className="popup">
+                    <div className='popup__close-btn' onClick={()=>setIsPopupOpened(false)}></div>
+                    <div>
+                        <ul>
+                            {
+                                tasks &&
+                                tasksByDate.filter((task:any) => task.asignee._id === loggedUser._id).map((task:any) => {
+                                    return (
+                                        <li style={{display: 'flex', flexDirection:'column'}}>
+                                            <span>{task.title}</span>
+                                            <span>task: {new Date(task.date).getDate()}</span>
+                                            <span>today: {today.getDate()}</span>
+                                            <span>{task.asignee.login}</span>
+                                        </li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            }
             <span style={{position: 'fixed', zIndex:'10', fontSize: '20px', left: '10px', bottom: '10px'}}>Logged: {loggedUser.login}</span>
                 <NewTaskBtn
                     isNewTaskFormOpened={isNewTaskFormOpened}
@@ -95,7 +131,13 @@ const MainSite = ( { usersList, loggedUser, TUser }: any) => {
                         loggedUser={loggedUser}
                     />
                 }
-                <NavMenu isNavMenuOpened={isNavMenuOpened}/>
+                <NavMenu 
+                    isNavMenuOpened={isNavMenuOpened}
+                    setIsLoggedIn={setIsLoggedIn}
+                    setLoggedUser={setLoggedUser}
+                    defaultUser={defaultUser}
+                    setAreTasksFiltered={setAreTasksFiltered}
+                />
                 <Swiper
                     style={{height:'100vh', top:'70px', display:'flex'}}
                     modules={[EffectFade]}
@@ -135,6 +177,8 @@ const MainSite = ( { usersList, loggedUser, TUser }: any) => {
                                             lists={lists}
                                             tasks={tasks}
                                             setTasks={setTasks}
+                                            areTasksFiltered={areTasksFiltered}
+                                            loggedUser={loggedUser}
                                         />
                                     }
                                 </SwiperSlide>
@@ -144,17 +188,32 @@ const MainSite = ( { usersList, loggedUser, TUser }: any) => {
                     <SwiperSlide>
                         <div className="todo-tasks list-wrap">
                             <div className="wrapper">
-                                <div onClick={handleNewTasksList} style={{position: 'absolute', top: '35%', left: '50%', transform: 'translate(-50%,-50%)', fontSize: '100px'}}>+</div>
+                                <div 
+                                    className='add-new-list-btn'
+                                    onClick={handleNewTasksList} 
+                                    style={{
+                                        position: 'absolute', 
+                                        top: '35%', 
+                                        left: '50%', 
+                                        transform: 'translate(-50%,-50%)', 
+                                        fontSize: '100px', 
+                                        cursor:'pointer', 
+                                        height: '100px', 
+                                        width:'100px', 
+                                        borderRadius:'50%', 
+                                        display:'flex',
+                                        alignItems:'center',
+                                        justifyContent:'center'
+                                    }}
+                                >
+                                    <span>+</span>
+                                </div>
                             </div>
                         </div>
                     </SwiperSlide>
-                    {windowWidth < 1024 ? 
-                            <SlideIndicator 
-                                slides={slides} 
-                            /> 
-                        : 
-                            ''
-                    }
+                    <SlideIndicator 
+                        slides={slides} 
+                    /> 
                 </Swiper>
         </div>
     )

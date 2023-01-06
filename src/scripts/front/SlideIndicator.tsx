@@ -3,42 +3,55 @@ import { useEffect, useState } from "react"
 
 const SlideIndicator = ({slides} : any) => {
     const [currentSlide, setCurrentSlide] = useState<number>(0)
-    const [dotClassName, setDotClassName] = useState<string>('slide-indicator__dot')
+    const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth)
     const swiper = useSwiper()
     
     swiper.on('transitionEnd', ()=>{
         setCurrentSlide(swiper.realIndex)
     })
 
-    // const moveIndicator = (id: number) => {
-    //     if (currentSlide > 2) {
-    //         return `${(id*14)-5}px`
-    //     }
+    const handleWindowWidth = () => {
+        setWindowWidth(window.innerWidth)
+    }
 
-    //     return `${id*14+10}px`
-    // }
+    useEffect(()=> {
+        window.addEventListener('resize', handleWindowWidth)
+    },[window.innerWidth])
+
 
     return (
         <div className="slide-indicator">
-            {window.innerWidth < 640 ? 
+            {windowWidth < 640 ? 
                 <>
                     {slides.map((slide:any, id:number) => {
                     return (
                         currentSlide === id ? 
-                        <div className={dotClassName} key={id} style={{background: 'rgb(57, 255, 238)',  transition: '.3s ease'}}/>
+                        <div className='slide-indicator__dot' key={id} style={{background: 'rgb(57, 255, 238)',  transition: '.3s ease'}}/>
                         :
-                        <div className={dotClassName} key={id} style={{background: '#1c1c1c',  transition: '.3s ease'}}/>
+                        <div className='slide-indicator__dot' key={id} style={{background: '#1c1c1c',  transition: '.3s ease'}}/>
+                    )
+                    })}
+                </>
+                :
+                windowWidth < 1024 ? 
+                <>
+                    {slides.slice(0,-1).map((slide:any, id:number) => {
+                        return (
+                            currentSlide === id ? 
+                            <div className='slide-indicator__dot' key={id} style={{background: 'rgb(57, 255, 238)',  transition: '.3s ease'}}/>
+                            :
+                            <div className='slide-indicator__dot' key={id} style={{background: '#1c1c1c', transition: '.3s ease'}}/>
                     )
                     })}
                 </>
                 :
                 <>
-                    {slides.slice(0,-1).map((slide:any, id:number) => {
+                    {slides.slice(0,-2).map((slide:any, id:number) => {
                         return (
                             currentSlide === id ? 
-                            <div className={dotClassName} key={id} style={{background: 'rgb(57, 255, 238)',  transition: '.3s ease'}}/>
+                            <div className='slide-indicator__dot' key={id} style={{background: 'rgb(57, 255, 238)',  transition: '.3s ease'}}/>
                             :
-                            <div className={dotClassName} key={id} style={{background: '#1c1c1c', transition: '.3s ease'}}/>
+                            <div className='slide-indicator__dot' key={id} style={{background: '#1c1c1c', transition: '.3s ease'}}/>
                     )
                     })}
                 </>

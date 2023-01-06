@@ -46,6 +46,17 @@
                 font-size: 20px;
             }
         }
+
+        .add-new-list-btn {
+            border: 2px solid white;
+            transition: .3s ease;
+
+            &:hover {
+                border: 2px solid $light-blue;
+                color: $light-blue;
+                transition: .3s ease;
+            }
+        }
     }
 }
 

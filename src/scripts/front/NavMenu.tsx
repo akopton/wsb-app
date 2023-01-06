@@ -23,22 +23,41 @@ const Hamburger = ({isNewTaskFormOpened, isNavMenuOpened, setIsNavMenuOpened, is
     )
 }
 
-const NavMenu = ({isNavMenuOpened}:any) => {
+const NavMenu = ({isNavMenuOpened, setLoggedUser, setIsLoggedIn, defaultUser, setAreTasksFiltered}:any) => {
+
+    const handleLogout = () => {
+        setLoggedUser(defaultUser)
+        setIsLoggedIn(false)
+    }
+
+    const handleUserTasks = () => {
+        setAreTasksFiltered(true)
+    }
+
+    const handleAllTasks = () => {
+        setAreTasksFiltered(false)
+    }
 
     return (
         <div className="nav-menu" style={isNavMenuOpened ? {height: '100%', transition: 'ease .5s', zIndex:'4'} : undefined}>
             {isNavMenuOpened && 
             <ul className="nav-menu__items">
-                <li className="item">
-                    Log out
+                <li 
+                    className="item"
+                    onClick={handleUserTasks}
+                >
+                    Your tasks
                 </li>
-                <li className="item">
-                    Log out
+                <li 
+                    className="item"
+                    onClick={handleAllTasks}
+                >
+                    All tasks
                 </li>
-                <li className="item">
-                    Log out
-                </li>
-                <li className="item">
+                <li 
+                    className="item"
+                    onClick={handleLogout}
+                >
                     Log out
                 </li>
             </ul>

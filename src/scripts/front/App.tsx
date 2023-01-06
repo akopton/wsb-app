@@ -53,6 +53,7 @@ const App = () => {
               loggedUser={loggedUser}
               setIsLoggedIn={setIsLoggedIn}
               setLoggedUser={setLoggedUser}
+              defaultUser={defaultUser}
               TUser
             />
           }

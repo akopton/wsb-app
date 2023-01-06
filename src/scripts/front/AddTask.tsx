@@ -20,7 +20,7 @@ const NewTaskBtn = ( {isNavMenuOpened,isSingleTaskOpened,isNewTaskFormOpened, se
         <div 
             className="add-task__button button--round"
             style={isNavMenuOpened ? 
-                    {position:'absolute', zIndex: '1'} 
+                    {zIndex: '1'} 
                     : isNewTaskFormOpened ? 
                     {transform: 'rotate(45deg)', zIndex: '50', right: '15px', transition: 'ease .2s'}
                     : isSingleTaskOpened ? 

@@ -2,11 +2,11 @@ import React from "react"
 import { useEffect, useState, useCallback, useMemo, useRef } from "react"
 import { BiDownArrow, BiUpArrow, BiRightArrow } from 'react-icons/bi'
 
-const ActionsPicker = ( {lists, handleUpdate, handleDelete, handleToggleOpen, updatedTask, setIsActionsWindowOpened, isActionsWindowOpened, updateTaskStatus, setShowTaskContent, task, setIsTaskOpened, isTaskOpened}: any ) => {
+const ActionsPicker = ( {lists, handleUpdate, handleDelete, handleToggleOpen, updatedTask, setIsActionsWindowOpened, isActionsWindowOpened, updateTaskStatus, setShowTaskContent, task, setIsTaskOpened, isTaskOpened, isExpired}: any ) => {
 
     const {status, isOpened} = task
     const [isActionPicked, setIsActionPicked] = useState<boolean>(false)
-    const [pickedAction, setPickedAction] = useState<string>()
+    const [pickedAction, setPickedAction] = useState<{type: string, desc: string} | any>()
     const [actions, setActions] = useState([
         {
             type: 'delete',
@@ -42,16 +42,20 @@ const ActionsPicker = ( {lists, handleUpdate, handleDelete, handleToggleOpen, up
                 <span 
                     style={{lineHeight: '30px'}}
                 >
-                    {isActionPicked ? pickedAction : 'Pick an action...'}
+                    {isActionPicked ? pickedAction.desc : 'Pick an action...'}
                 </span>
                 <div 
                     className="submit-action"
                     onClick={()=>{
                         if (isActionsWindowOpened) return
-                        if (pickedAction) {
+                        if (pickedAction && pickedAction.type !== 'delete') {
                             updateTaskStatus()
                             setIsTaskOpened(!isTaskOpened)
                             handleToggleOpen(!updatedTask.isOpened)
+                        }
+                        if (pickedAction && pickedAction.type === 'delete') {
+                            handleDelete()
+                            setIsActionsWindowOpened(false)
                         }
                     }} 
                 >
@@ -73,17 +77,34 @@ const ActionsPicker = ( {lists, handleUpdate, handleDelete, handleToggleOpen, up
                     : 
                     {height: '0', padding: '0 5px', transition: 'height .3s ease'}}
             >
-                {actions.filter(e => e.type !== status).map((action:any, id:any) => {
-                    return <li className="action" id='status' data-type={action.type} key={id} onClick={(e) => {
-                                            if (action.type === 'delete') handleDelete()
-                                            handleUpdate(e)
-                                            setPickedAction(action.desc)
-                                            setIsActionPicked(true)
-                                            setIsActionsWindowOpened(false)
-                                        }}>
-                                {action.desc}
-                            </li>
-                })}
+                {isExpired ?
+                    actions.filter(e => e.type === 'delete').map((action:any, id:any) => {
+                        return <li className="action" id='status' data-type={action.type} key={id} onClick={(e) => {
+                                                // if (action.type === 'delete') handleDelete()
+                                                handleUpdate(e)
+                                                setPickedAction(action)
+                                                setIsActionPicked(true)
+                                                setIsActionsWindowOpened(false)
+                                            }}>
+                                    {action.desc}
+                                </li>
+                    })
+                    :
+                    actions.filter(e => e.type !== status && e.type !== 'expired').map((action:any, id:any) => {
+                        return <li className="action" id='status' data-type={action.type} key={id} onClick={(e) => {
+                                                // if (action.type === 'delete') {
+                                                //     handleDelete()
+                                                //     return
+                                                // }
+                                                handleUpdate(e)
+                                                setPickedAction(action)
+                                                setIsActionPicked(true)
+                                                setIsActionsWindowOpened(false)
+                                            }}>
+                                    {action.desc}
+                                </li>
+                    })
+                }
             </ul>
         </div>
     )
