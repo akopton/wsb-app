@@ -54,12 +54,17 @@ const ActionsPicker = ( {lists, handleUpdate, handleDelete, handleToggleOpen, up
                             handleToggleOpen(!updatedTask.isOpened)
                         }
                         if (pickedAction && pickedAction.type === 'delete') {
-                            handleDelete()
-                            setIsActionsWindowOpened(false)
+                            setPickedAction({})
+                            setIsTaskOpened(!isTaskOpened)
+                            handleToggleOpen(!updatedTask.isOpened)
+                            setTimeout(()=>{
+                                handleDelete()
+                            },500)
                         }
                     }} 
                 >
                     <BiDownArrow 
+                        className="submit-action__btn"
                         style={isActionsWindowOpened ? 
                             {transform:'rotate(180deg)', transition:'.3s ease'}
                             : pickedAction ? 
