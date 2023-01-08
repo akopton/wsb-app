@@ -7,18 +7,6 @@ const tasksCollection = client.db('wsb_app_database').collection('tasksList')
 const generatedId = client.db('wsb_app_database').collection('taskIdGenerator')
 const ObjectId = require('mongodb').ObjectId
 
-// async function deleteAllTasks(client) {
-//     try {
-//         client.connect()
-//         const result = await tasksCollection.deleteMany({})
-//         return result
-//     } catch (e) {
-//         console.error(e)
-//     } finally {
-//         await client.close()
-//      }
-// }
-
 async function checkIfUserExists(client, newUser) {
     try {
         await client.connect()
@@ -86,6 +74,7 @@ async function addNewTaskToDatabase(client, newTask) {
 }
 
 async function deleteTask(client, TASK_TO_DELETE) {
+    console.log(TASK_TO_DELETE)
     const {_id} = TASK_TO_DELETE
 
     try {

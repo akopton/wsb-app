@@ -12,7 +12,7 @@ export type TTask = {
   innerId: string,
   title: string,
   description: string,
-  asignee: {},
+  asignee: TUser,
   date: number,
   status: string
 }

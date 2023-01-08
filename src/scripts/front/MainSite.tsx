@@ -76,14 +76,15 @@ const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser,
 
     return (
         <div className="main-site">
-            {
+            {/* {
                 isPopupOpened &&
                 <Popup 
                     tasks={tasks}
                     loggedUser={loggedUser}
                     setIsPopupOpened={setIsPopupOpened}
+                    isPopupOpened={isPopupOpened}
                 />
-            }
+            } */}
             <span style={{position: 'fixed', zIndex:'10', fontSize: '20px', left: '10px', bottom: '10px'}}>Logged: {loggedUser.login}</span>
                 <MainNav 
                     isNewTaskFormOpened={isNewTaskFormOpened}

@@ -3,35 +3,16 @@ import { useEffect, useState, useCallback, useMemo, useReducer } from "react"
 import ActionsPicker from "./ActionsPicker"
 import TaskDescription from "./TaskDescription"
 import TaskTitle from "./TaskTitle"
+import useConvertedDate from "./useConvertedDate"
 
-const SingleTask = ({task, id, setTasks, lists}:any) => {
+const SingleTask = ({task, id, setTasks, lists, isPopupOpened}:any) => {
 
     const [isTaskOpened, setIsTaskOpened] = useState<boolean>(false)
     const [isEditable, setIsEditable] = useState<boolean>(false)
     const [isActionsWindowOpened, setIsActionsWindowOpened] = useState<boolean>()
     const [isExpired, setIsExpired] = useState<boolean>(false)
-    const [convertedDate, setConvertedDate] = useState<string>()
-
-    const handleConvertedDate = () => {
-        const dateToConvert = new Date(task.date)
-        const convertedDate = {
-            convertedDateDay: () => {
-                if (dateToConvert.getDate() < 10) return (`0${dateToConvert.getDate()}`)
-                else return dateToConvert.getDate()
-            },
-            convertedDateMonth: () => {
-                if (dateToConvert.getMonth()+1 < 10) return (`0${dateToConvert.getMonth()+1}`)
-                else return dateToConvert.getMonth()+1
-            },
-            convertedDateYear: dateToConvert.getFullYear(),
-        }
-
-        const newConvertedDay = 
-        `${convertedDate.convertedDateDay()}.${convertedDate.convertedDateMonth()}.${convertedDate.convertedDateYear}`
-
-        setConvertedDate(newConvertedDay)
-    }
-
+    
+    const convertedDate = useConvertedDate(task.date)
     const initialTaskState = {
         data: {
             ...task
@@ -87,7 +68,10 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
     const handleDelete = () => {
         fetch('http://127.0.0.1:8888/delete-task', settings)
         .then(data => data.json())
-        .then(res => setTasks(res))
+        .then(res => {
+            console.log(res)
+            setTasks(res)
+        })
     }
     
     const settings = {
@@ -101,7 +85,10 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
     const updateTaskStatus = async () => {
        fetch('http://127.0.0.1:8888/update-task', settings)
         .then(data => data.json())
-        .then(res => setTasks(res))
+        .then(res => {
+            console.log(res)
+            setTasks(res)
+        })
     }
 
     const handleExpiredTask = () => {
@@ -115,7 +102,7 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
     }
 
     useEffect(()=>{
-        handleConvertedDate()
+        // handleConvertedDate(task.date)
         handleExpiredTask()
     },[isExpired])
 
@@ -141,13 +128,15 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
                 }
             key={id}
             onClick={()=>{
+                if (isPopupOpened) return
                 if (!updatedTask.isOpened) {
                     handleToggleOpen(true)
                 }
                 }}
         >
             <div className="single-task__top-wrap">
-                <span className="single-task__id">{updatedTask.data.innerId}</span>
+                {/* <span className="single-task__id">{updatedTask.data.innerId}</span> */}
+                <span className="single-task__id">{task.innerId}</span>
                 {updatedTask.isOpened && 
                     <>
                         {isEditable ? 
@@ -172,11 +161,8 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
                 }
             </div>
             <TaskTitle 
-                updatedTask={updatedTask} 
-                initialTaskState={initialTaskState}
-                isEditable={isEditable}
-                setIsEditable={setIsEditable}
                 task={task}
+                updatedTask={updatedTask} 
             />
             {updatedTask.isOpened &&
             // <span>{initialTaskState.data.description}</span> 
@@ -197,7 +183,8 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
                 <div className="single-task__bottom-wrap">
                     <div className="left-side">
                         <span className="task-content__asignee">
-                            {updatedTask.data.asignee.login}
+                            {/* {updatedTask.data.asignee.login} */}
+                            {task.asignee.login}
                         </span>
                         <span className="task-content__date">
                             {convertedDate}

@@ -1,7 +1,7 @@
 import React from "react"
 import { useEffect, useState, useCallback, useMemo, useReducer } from "react"
 
-const TaskDescription = ({updatedTask, setIsEditable, isEditable, handleUpdate, handleSubmit}:any) => {
+const TaskDescription = ({updatedTask, setIsEditable, isEditable, handleUpdate, handleSubmit, task}:any) => {
 
     return (
         <div className="single-task__middle-wrap">
@@ -27,7 +27,8 @@ const TaskDescription = ({updatedTask, setIsEditable, isEditable, handleUpdate, 
                     className="single-task__desc"
                     onClick={()=>setIsEditable(true)}
                 >
-                    {updatedTask.data.description}
+                    {task.description}
+                    {/* {updatedTask.data.description} */}
                 </div>
             }
         </div>

@@ -1,8 +1,8 @@
 import React from "react"
 import { useEffect, useState, useCallback, useMemo, useReducer } from "react"
 
-const TaskTitle = ({updatedTask}:any) => {
-    const {data: {title}} = updatedTask
+const TaskTitle = ({updatedTask, task}:any) => {
+    // const {data: {title}} = updatedTask
     return (
         <div 
             className="single-task__title" 
@@ -19,14 +19,9 @@ const TaskTitle = ({updatedTask}:any) => {
                         
                     }
                 }    
-                onClick={e=>console.log(title)}
         >
-            {/* {isEditable ? 
-                <input onClick={()=>setIsEditable(false)} onChange={(e)=>console.log(e.target.value)} value={initialTaskState.data.title}/>
-                :
-                <span onClick={()=>setIsEditable(true)}>{updatedTask.data.title}</span>
-            } */}
-            {title}
+            {task.title}
+            {/* {updatedTask.title ? updatedTask.title : updatedTask.data.title} */}
         </div>
     )
 }

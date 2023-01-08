@@ -1,3 +1,5 @@
+@import './_colors';
+
 .popup__wrapper {
     position: absolute;
     top: 0;
@@ -9,19 +11,33 @@
     z-index: 1000;
 
     .popup {
-        position: absolute;
+        position: relative;
         top: 50%;
         left: 50%;
         transform: translate(-50%,-50%);
-        height: 800px;
-        width: 700px;
+        width: 500px;
+        overflow: hidden;
         z-index: 1000;
-        border: 1px solid red;
+        border: 3px solid $light-blue;
+        border-radius: 15px;
+        background-color: $dark-grey;
+        padding: 60px 10px 60px 10px;
+        height: 500px;
+        &__title {
+            display: block;
+            position: absolute;
+            top: 10px;
+            left: 12px;
+            margin-bottom: 15px;
+            font-size: 25px;
+            height: 30px;
+            line-height: 30px;
+        }
 
         &__close-btn {
             position: absolute;
-            top: 5px;
-            right: 5px;
+            top: 10px;
+            right: 10px;
             height: 30px;
             width: 30px;
             cursor: pointer;
@@ -48,6 +64,36 @@
                 width: 100%;
                 background-color: red;
                 transform: rotate(45deg);
+            }
+        }
+        
+
+        .popup__tasks-list {
+            display: grid;
+            overflow-y: scroll;
+            grid-template-columns: 48% 48%;
+            grid-template-rows: repeat(4, 1fr);
+            gap: 2%;
+            height: 100%;
+
+            &::-webkit-scrollbar {
+                width: 3px;
+                background: $light-blue;
+            }
+              
+              /* Track */
+            &::-webkit-scrollbar-track {
+                background: $dark-grey;
+            }
+            
+            /* Handle */
+            &::-webkit-scrollbar-thumb {
+                background: $light-blue;
+            }
+            
+            /* Handle on hover */
+            &::-webkit-scrollbar-thumb:hover {
+                background: $light-blue;
             }
         }
     }
