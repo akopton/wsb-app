@@ -7,17 +7,17 @@ const tasksCollection = client.db('wsb_app_database').collection('tasksList')
 const generatedId = client.db('wsb_app_database').collection('taskIdGenerator')
 const ObjectId = require('mongodb').ObjectId
 
-async function deleteAllTasks(client) {
-    try {
-        client.connect()
-        const result = await tasksCollection.deleteMany({})
-        return result
-    } catch (e) {
-        console.error(e)
-    } finally {
-        await client.close()
-     }
-}
+// async function deleteAllTasks(client) {
+//     try {
+//         client.connect()
+//         const result = await tasksCollection.deleteMany({})
+//         return result
+//     } catch (e) {
+//         console.error(e)
+//     } finally {
+//         await client.close()
+//      }
+// }
 
 async function checkIfUserExists(client, newUser) {
     try {
@@ -54,7 +54,7 @@ async function registerNewUser(client, newUser) {
     } catch (e) {
         console.error(e)
     } finally {
-        console.log('New user registered')
+        console.log(`New user registered: ${newUser.login}`)
         await client.close()
     }
 }
@@ -90,12 +90,12 @@ async function deleteTask(client, TASK_TO_DELETE) {
 
     try {
         await tasksCollection.deleteOne({"_id": ObjectId(_id)})
-        console.log(`Deleting task: ${_id}`)
         const result = await tasksCollection.find({}).toArray()
         return result
     } catch (e) {
         console.error(e)
     } finally {
+        console.log(`Task deleted: ${_id}`)
         await client.close()
     }
 }
@@ -106,12 +106,12 @@ async function updateTaskStatus(client, UPDATED_TASK) {
     try {
         await client.connect()
         await tasksCollection.updateOne({"_id": ObjectId(_id)}, {$set:{title: title, description:description, status:status}})
-        console.log(`Updating task ${_id}`)
         const result = await tasksCollection.find({}).toArray()
         return result
     } catch (e) {
         console.error(e)
     } finally {
+        console.log(`Task updated: ${_id}`)
         await client.close()
     }
 }
@@ -162,7 +162,6 @@ module.exports = {
     getIdFromDatabase: getIdFromDatabase,
     getListOfUsers: getListOfUsers, 
     checkIfUserExists: checkIfUserExists,
-    deleteAllTasks: deleteAllTasks,
     addNewTaskToDatabase: addNewTaskToDatabase,
     registerNewUser: registerNewUser,
     getListOfTasks: getListOfTasks,

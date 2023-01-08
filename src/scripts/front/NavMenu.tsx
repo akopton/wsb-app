@@ -23,7 +23,7 @@ const Hamburger = ({isNewTaskFormOpened, isNavMenuOpened, setIsNavMenuOpened, is
     )
 }
 
-const NavMenu = ({isNavMenuOpened, setLoggedUser, setIsLoggedIn, defaultUser, setAreTasksFiltered}:any) => {
+const NavMenu = ({isNavMenuOpened, setLoggedUser, setIsLoggedIn, defaultUser, setShowUserTasks}:any) => {
 
     const handleLogout = () => {
         setLoggedUser(defaultUser)
@@ -31,15 +31,15 @@ const NavMenu = ({isNavMenuOpened, setLoggedUser, setIsLoggedIn, defaultUser, se
     }
 
     const handleUserTasks = () => {
-        setAreTasksFiltered(true)
+        setShowUserTasks(true)
     }
 
     const handleAllTasks = () => {
-        setAreTasksFiltered(false)
+        setShowUserTasks(false)
     }
 
     return (
-        <div className="nav-menu" style={isNavMenuOpened ? {height: '100%', transition: 'ease .5s', zIndex:'4'} : undefined}>
+        <div className="nav-menu" style={isNavMenuOpened ? {height: '100%', transition: 'ease .5s'} : undefined}>
             {isNavMenuOpened && 
             <ul className="nav-menu__items">
                 <li 

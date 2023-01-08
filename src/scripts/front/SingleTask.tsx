@@ -176,8 +176,10 @@ const SingleTask = ({task, id, setTasks, lists}:any) => {
                 initialTaskState={initialTaskState}
                 isEditable={isEditable}
                 setIsEditable={setIsEditable}
+                task={task}
             />
-            {updatedTask.isOpened && 
+            {updatedTask.isOpened &&
+            // <span>{initialTaskState.data.description}</span> 
                 <TaskDescription 
                     handleSubmit={handleSubmit}
                     task={task} 

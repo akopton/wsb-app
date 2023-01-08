@@ -1,7 +1,7 @@
 import React from "react"
 import { useEffect, useState, useCallback, useMemo, useReducer } from "react"
 
-const TaskTitle = ({updatedTask, initialTaskState, isEditable, setIsEditable}:any) => {
+const TaskTitle = ({updatedTask}:any) => {
     const {data: {title}} = updatedTask
     return (
         <div 

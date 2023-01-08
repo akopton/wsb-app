@@ -20,11 +20,9 @@ const client = new MongoClient(uri)
 const {
         getListOfTasks, 
         registerNewUser, 
-        asignNewTaskToUser, 
         addNewTaskToDatabase, 
         getListOfUsers, 
         checkIfUserExists, 
-        deleteAllTasks, 
         updateTaskStatus, 
         getIdFromDatabase, 
         updateIdFromDatabase,
@@ -51,9 +49,9 @@ app.post('/tasks', async (req, res) => {
     res.send(NEW_TASKS_LIST)
 })
 
-app.post('/delete-all', (req, res) => {
-    deleteAllTasks(client)
-})
+// app.post('/delete-all', (req, res) => {
+//     deleteAllTasks(client)
+// })
 
 app.post('/update-task', async (req, res) => {
     const UPDATED_TASK = req.body

@@ -1,18 +1,15 @@
 import {Swiper, SwiperSlide, useSwiper} from 'swiper/react';
-import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 import { useEffect, useState } from "react"
-import Nav from "./NavMenu"
-import NewTask from "./AddTask"
 import SlideIndicator from "./SlideIndicator";
 import 'swiper/css';
 import 'swiper/css/scrollbar';
 import 'swiper/css/effect-fade';
-import SingleTask from "./SingleTask";
 import { EffectFade } from 'swiper';
 import TasksList from "./TasksList";
 import { TTask } from './interfaces';
-const { NewTaskBtn, NewTaskForm} = NewTask
-const { Hamburger, NavMenu } = Nav
+import Popup from './Popup';
+import MainNav from './MainNav';
+
 
 
 
@@ -22,10 +19,13 @@ const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser,
     const [loadingTasks, setLoadingTasks] = useState<boolean>(true)
     const [isNewTaskFormOpened, setIsNewTaskFormOpened] = useState<boolean>(false)
     const [tasks, setTasks] = useState<TTask[]>([])
-    const [tasksByDate, setTasksByDate] = useState<TTask[]>([])
     const [isNavMenuOpened, setIsNavMenuOpened] = useState<boolean>(false)
     const [slides, setSlides] = useState<number[]>([])
-    const [areTasksFiltered, setAreTasksFiltered] = useState<boolean>(false)
+    const [showUserTasks, setShowUserTasks] = useState<boolean>(false)
+
+    const [searchValue, setSearchValue] = useState<string>('')
+    const [filteredTasks, setFilteredTasks] = useState<TTask[]>([])
+
     const [lists, setLists] = useState<{}[]>([
         {
             type: 'todo',
@@ -68,75 +68,41 @@ const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser,
         })
     },[])
 
-    const handleTasksByDate = () => {
-        const todaysDate = new Date().getTime()
-        const tasksByDate = tasks.filter(task => {
-            const diffInTime = task.date - todaysDate
-            const diffInDays = diffInTime / (1000 * 3600 * 24)
-            return diffInDays <= 7 ? task : null
-        })
-        
-        setTasksByDate(tasksByDate)
-    }
-    
-    useEffect(()=>{
-        handleTasksByDate()
-    },[tasks])
 
-    const today = new Date()
+    // const handleSearch = (searchValue:string) => {
+    //     const results = tasks.filter((task:TTask) => task.innerId.toLowerCase().includes(searchValue))
+    //     setSearchResults(results)
+    // }
+
     return (
         <div className="main-site">
             {
                 isPopupOpened &&
-                <div className="popup-blur">
-                <div className="popup">
-                    <div className='popup__close-btn' onClick={()=>setIsPopupOpened(false)}></div>
-                    <div>
-                        <ul>
-                            {
-                                tasks &&
-                                tasksByDate.filter((task:any) => task.asignee._id === loggedUser._id).map((task:any) => {
-                                    return (
-                                        <li style={{display: 'flex', flexDirection:'column'}}>
-                                            <span>{task.title}</span>
-                                            <span>task: {new Date(task.date).getDate()}</span>
-                                            <span>today: {today.getDate()}</span>
-                                            <span>{task.asignee.login}</span>
-                                        </li>
-                                    )
-                                })
-                            }
-                        </ul>
-                    </div>
-                </div>
-            </div>
+                <Popup 
+                    tasks={tasks}
+                    loggedUser={loggedUser}
+                    setIsPopupOpened={setIsPopupOpened}
+                />
             }
             <span style={{position: 'fixed', zIndex:'10', fontSize: '20px', left: '10px', bottom: '10px'}}>Logged: {loggedUser.login}</span>
-                <NewTaskBtn
+                <MainNav 
                     isNewTaskFormOpened={isNewTaskFormOpened}
                     setIsNewTaskFormOpened={setIsNewTaskFormOpened}
                     isNavMenuOpened={isNavMenuOpened}
-                />
-                <Hamburger 
                     setIsNavMenuOpened={setIsNavMenuOpened}
-                    isNavMenuOpened={isNavMenuOpened}
-                    isNewTaskFormOpened={isNewTaskFormOpened}
-                />
-                {isNewTaskFormOpened && 
-                    <NewTaskForm 
-                        setIsFormOpened={setIsNewTaskFormOpened}
-                        usersList={usersList}
-                        tasks={tasks}
-                        setTasks={setTasks}
-                        loggedUser={loggedUser}
-                    />
-                }
-                <NavMenu 
-                    isNavMenuOpened={isNavMenuOpened}
-                    setIsLoggedIn={setIsLoggedIn}
+                    usersList={usersList}
+                    tasks={tasks}
+                    setTasks={setTasks}
+                    loggedUser={loggedUser}
                     setLoggedUser={setLoggedUser}
                     defaultUser={defaultUser}
-                    setAreTasksFiltered={setAreTasksFiltered}
+                    setIsLoggedIn={setIsLoggedIn}
+                    setShowUserTasks={setShowUserTasks}
+                    // handleSearch={handleSearch}
+                    setSearchValue={setSearchValue}
+                    searchValue={searchValue}
+                    setFilteredTasks={setFilteredTasks}
+                    filteredTasks={filteredTasks}
                 />
                 <Swiper
                     style={{height:'100vh', top:'70px', display:'flex'}}
@@ -177,8 +143,11 @@ const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser,
                                             lists={lists}
                                             tasks={tasks}
                                             setTasks={setTasks}
-                                            areTasksFiltered={areTasksFiltered}
+                                            showUserTasks={showUserTasks}
                                             loggedUser={loggedUser}
+                                            // searchResults={searchResults}
+                                            searchValue={searchValue}
+                                            filteredTasks={filteredTasks}
                                         />
                                     }
                                 </SwiperSlide>

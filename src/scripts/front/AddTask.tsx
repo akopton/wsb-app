@@ -20,15 +20,15 @@ const NewTaskBtn = ( {isNavMenuOpened,isSingleTaskOpened,isNewTaskFormOpened, se
         <div 
             className="add-task__button button--round"
             style={isNavMenuOpened ? 
-                    {zIndex: '1'} 
+                    {} 
                     : isNewTaskFormOpened ? 
-                    {transform: 'rotate(45deg)', zIndex: '50', right: '15px', transition: 'ease .2s'}
+                    {transform: 'rotate(45deg)', zIndex: '50', transition: 'ease .2s'}
                     : isSingleTaskOpened ? 
                     {zIndex:'4'}
                     :
                     {zIndex:'10'}
                 }
-            onClick={()=>setIsNewTaskFormOpened(!isNewTaskFormOpened)}
+                onClick={()=>setIsNewTaskFormOpened(!isNewTaskFormOpened)}
         >
         </div>
     )
@@ -40,7 +40,8 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
     const [isUsersListOpened, setIsUsersListOpened] = useState<boolean>(false)
     const [updatedId, setUpdatedId] = useState<number>()
     const [addingNewTask, setAddingNewTask] = useState<boolean>(false)
-
+    const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false)
+    
     const getIdForGenerator = async () => {
         fetch('http://127.0.0.1:8888/get-id')
         .then(data => data.json())
@@ -137,8 +138,13 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
         .then(res => setUsersList(res))
     }
 
-    useEffect(()=>{
-        getIdForGenerator()
+    const getDataForNewTask = async () => {
+        await getIdForGenerator()
+        await getUsersFromDatabase()
+    }
+
+    useEffect(() => {
+        getDataForNewTask()
     },[])
     
 
@@ -150,7 +156,6 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
         await updateIdForGenerator()
         setIsFormOpened(false)
     }
-        const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false)
     return (
         <>
         {!addingNewTask ?
@@ -187,7 +192,6 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
                                     
                                     onClick={() => {
                                         setIsUsersListOpened(!isUsersListOpened)
-                                        if (!usersList.length) getUsersFromDatabase()
                                     }}
                                 >
                                     <span style={{width:'205px', overflow:'scroll'}}>

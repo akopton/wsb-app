@@ -2,7 +2,9 @@ import React from "react"
 import { useEffect, useState, useCallback, useMemo, useRef } from "react"
 import { BiDownArrow, BiUpArrow, BiRightArrow } from 'react-icons/bi'
 
-const ActionsPicker = ( {lists, handleUpdate, handleDelete, handleToggleOpen, updatedTask, setIsActionsWindowOpened, isActionsWindowOpened, updateTaskStatus, setShowTaskContent, task, setIsTaskOpened, isTaskOpened, isExpired}: any ) => {
+const ActionsPicker = ( 
+    {lists, handleUpdate, handleDelete, handleToggleOpen, updatedTask, setIsActionsWindowOpened, isActionsWindowOpened, updateTaskStatus, task, setIsTaskOpened, isTaskOpened, isExpired}: any 
+    ) => {
 
     const {status, isOpened} = task
     const [isActionPicked, setIsActionPicked] = useState<boolean>(false)
