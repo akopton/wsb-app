@@ -1,7 +1,7 @@
 @import './_colors';
 
 .popup__wrapper {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     bottom: 0;
@@ -9,63 +9,68 @@
     background: rgba(#ffffff, 0.3);
     backdrop-filter: blur(4px);
     z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
 
     .popup {
         position: relative;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
         width: 500px;
         overflow: hidden;
         z-index: 1000;
         border: 3px solid $light-blue;
         border-radius: 15px;
         background-color: $dark-grey;
-        padding: 60px 10px 60px 10px;
+        padding: 10px 10px 15px 15px;
         height: 500px;
-        &__title {
-            display: block;
-            position: absolute;
-            top: 10px;
-            left: 12px;
-            margin-bottom: 15px;
-            font-size: 25px;
-            height: 30px;
-            line-height: 30px;
-        }
 
-        &__close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            height: 30px;
-            width: 30px;
-            cursor: pointer;
+        &__top-wrap {
+            display: flex;
+            justify-content: space-between;
+            gap: 5px;
+            width: 100%;
 
-            &::before {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 0;
-                transform: translateY(-50%);
-                height: 2px;
-                width: 100%;
-                background-color: red;
-                transform: rotate(-45deg);
+            .title {
+                display: block;
+                left: 12px;
+                margin-bottom: 15px;
+                font-size: 25px;
+                line-height: 30px;
             }
-
-            &::after {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 0;
-                transform: translateY(-50%);
-                height: 2px;
-                width: 100%;
-                background-color: red;
-                transform: rotate(45deg);
+    
+            .close-btn {
+                position: relative;
+                height: 30px;
+                width: 30px;
+                cursor: pointer;
+    
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 50%;
+                    left: 3px;
+                    transform: translateY(-50%);
+                    height: 2px;
+                    width: 100%;
+                    background-color: $light-blue;
+                    transform: rotate(-45deg);
+                }
+    
+                &::after {
+                    content: '';
+                    position: absolute;
+                    top: 50%;
+                    left: 3px;
+                    transform: translateY(-50%);
+                    height: 2px;
+                    width: 100%;
+                    background-color: $light-blue;
+                    transform: rotate(45deg);
+                }
             }
         }
+        
         
 
         .popup__tasks-list {
@@ -74,7 +79,7 @@
             grid-template-columns: 48% 48%;
             grid-template-rows: repeat(4, 1fr);
             gap: 2%;
-            height: 100%;
+            height: 82%;
 
             &::-webkit-scrollbar {
                 width: 3px;
@@ -94,6 +99,11 @@
             /* Handle on hover */
             &::-webkit-scrollbar-thumb:hover {
                 background: $light-blue;
+            }
+            
+            .single-task {
+                gap: 0px;
+                justify-content: space-between;
             }
         }
     }

@@ -1,17 +1,12 @@
 import React from "react"
 import { useEffect, useState, useCallback, useMemo, useReducer } from "react"
 
-const TaskTitle = ({updatedTask, task}:any) => {
+const TaskTitle = ({title}:any) => {
     // const {data: {title}} = updatedTask
     return (
         <div 
             className="single-task__title" 
-            style={updatedTask.isOpened ?
-                    {
-                        overflowX:'scroll', 
-                        display:'flex'
-                    }
-                : 
+            style={
                     {
                         overflow:'hidden',
                         whiteSpace:'nowrap',
@@ -20,7 +15,7 @@ const TaskTitle = ({updatedTask, task}:any) => {
                     }
                 }    
         >
-            {updatedTask.title ? updatedTask.title : updatedTask.data.title}
+            {title}
             {/* {updatedTask.title ? updatedTask.title : updatedTask.data.title} */}
         </div>
     )

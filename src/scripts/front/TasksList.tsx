@@ -3,7 +3,31 @@ import { TTask } from "./interfaces"
 import SingleTask from "./SingleTask"
 
 
-const TasksList = ({list, tasks, setTasks, lists, showUserTasks, loggedUser, searchValue}:any) => {
+const TasksList = ({list, tasks, showUserTasks, loggedUser, searchValue, setTaskToOpen, setIsTaskOpened}:any) => {
+
+    const removePolishLetters = (str:string) => {
+        return str.toLowerCase().replace(/ą/g, 'a')
+          .replace(/ć/g, 'c')
+          .replace(/ę/g, 'e')
+          .replace(/ł/g, 'l')
+          .replace(/ń/g, 'n')
+          .replace(/ó/g, 'o')
+          .replace(/ś/g, 's')
+          .replace(/ź/g, 'z')
+          .replace(/ż/g, 'z')
+      }
+
+    const searchByInputValue = (task:TTask, searchValue:string) => {
+        let {title, innerId, asignee:{firstName, lastName}} = task
+        let fullName = `${firstName} ${lastName}`
+        fullName = removePolishLetters(fullName)
+        title = removePolishLetters(title)
+        searchValue = removePolishLetters(searchValue)
+        innerId = removePolishLetters(innerId)
+        return title.includes(searchValue) ? title.includes(searchValue) 
+                : innerId.includes(searchValue) ? innerId.includes(searchValue)
+                : fullName.includes(searchValue)
+    }
 
     return (
         <div className="todo-tasks list-wrap">
@@ -12,15 +36,14 @@ const TasksList = ({list, tasks, setTasks, lists, showUserTasks, loggedUser, sea
                 <ul className="list">
                     {
                         searchValue ? 
-                        tasks.filter((task:any) => task.innerId.toLowerCase() === searchValue).map((task:any, id:number) => {
+                        tasks.filter((task:any) => searchByInputValue(task, searchValue)).map((task:any, id:number) => {
                             if (task.status === list.type) {
                                 return <SingleTask 
-                                            lists={lists}
+                                            setTaskToOpen={setTaskToOpen}
+                                            setIsTaskOpened={setIsTaskOpened}
                                             task={task} 
-                                            key={id} 
-                                            setTasks={setTasks}
-                                            showUserTasks={showUserTasks}
-                                            loggedUser={loggedUser}
+                                            key={id}
+                                            searchValue={searchValue}
                                         />
                             }
                         })
@@ -29,12 +52,11 @@ const TasksList = ({list, tasks, setTasks, lists, showUserTasks, loggedUser, sea
                         tasks.filter((task:any) => task.asignee._id === loggedUser._id).map((task:any, id:number) => {
                             if (task.status === list.type) {
                                 return <SingleTask 
-                                            lists={lists}
+                                            setTaskToOpen={setTaskToOpen}
+                                            setIsTaskOpened={setIsTaskOpened}
                                             task={task} 
-                                            key={id} 
-                                            setTasks={setTasks}
-                                            showUserTasks={showUserTasks}
-                                            loggedUser={loggedUser}
+                                            key={id}
+                                            searchValue={searchValue}
                                         />
                             }
                         })
@@ -42,10 +64,11 @@ const TasksList = ({list, tasks, setTasks, lists, showUserTasks, loggedUser, sea
                         tasks.map((task:any, id:number) => {
                             if (task.status === list.type) {
                                 return <SingleTask 
-                                            lists={lists}
+                                            setTaskToOpen={setTaskToOpen}
+                                            setIsTaskOpened={setIsTaskOpened}
                                             task={task} 
-                                            key={id} 
-                                            setTasks={setTasks}
+                                            key={id}
+                                            searchValue={searchValue} 
                                         />
                             }
                         })

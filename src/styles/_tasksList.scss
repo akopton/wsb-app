@@ -6,10 +6,27 @@
     align-items: center;
     
     .wrapper {
-        padding-top: 10px;
         background: #1c1c1c;
         border-radius: 10px;
-        padding-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        max-height: calc(100vh - 190px);
+
+        @media screen and (max-width: 640px) {
+            width: 80%;
+        }
+
+        @media screen and (min-width: 640px) {
+            width: calc(100vw/2 - 60px);
+        }
+
+        @media screen and (min-width: 1024px) {
+            width: calc(100vw/3 - 40px);
+        }
+
+        @media screen and (min-width: 1420px) {
+            width: calc(100vw/3 - 160px)
+        }
 
         .list {
             min-height: min-content;
@@ -17,33 +34,13 @@
             flex-direction: column;
             gap: 20px;
             overflow: scroll;
-            max-height: calc(100vh - 190px);
-            width: 80vw;
-            border-radius: 10px;
-            background: #1c1c1c;
-            padding: 12px 10px;
-            
+            padding: 15px 20px;
 
-            @media screen and (min-width: 640px) {
-                width: 260px;
-            }
 
-            @media screen and (min-width: 640px) {
-                width: calc(100vw/2 - 60px);
-            }
-
-            @media screen and (min-width: 1024px) {
-                width: calc(100vw/3 - 40px);
-            }
-
-            @media screen and (min-width: 1420px) {
-                width: calc(100vw/3 - 180px)
-            }
-        
             &-title {
                 display:block;
-                padding: 5px 10px;
                 font-size: 20px;
+                padding: 15px 20px;
             }
         }
 

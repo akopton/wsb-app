@@ -18,13 +18,13 @@ const {MongoClient} = require('mongodb')
 const client = new MongoClient(uri)
 
 const {
-        getListOfTasks, 
-        registerNewUser, 
-        addNewTaskToDatabase, 
-        getListOfUsers, 
-        checkIfUserExists, 
-        updateTaskStatus, 
-        getIdFromDatabase, 
+        getListOfTasks,
+        registerNewUser,
+        addNewTaskToDatabase,
+        getListOfUsers,
+        checkIfUserExists,
+        updateTaskStatus,
+        getIdFromDatabase,
         updateIdFromDatabase,
         findUserInDatabase,
         deleteTask

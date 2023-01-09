@@ -32,22 +32,24 @@ const Popup = ({tasks, setIsPopupOpened, loggedUser, isPopupOpened}: {tasks:TTas
     return (
         <div className="popup__wrapper">
                     <div className="popup">
-                        <div className='popup__close-btn' onClick={()=>setIsPopupOpened(false)}></div>
-                        <span className="popup__title">Your tasks that will expire soon</span>
-                            <div className="popup__tasks-list">
-                                {
-                                    tasks &&
-                                    tasksByDate.filter((task:TTask) => task.asignee._id === loggedUser._id && task.status !== 'delete').map((task:any, id:number) => {
-                                        return (
-                                            <div key={id} className="task single-task" style={{height: '90px'}}>
-                                                <span>{task.innerId}</span>
-                                                <TaskTitle updatedTask={task}/>
-                                                <span>Days left: {handleDaysLeft(task.date)}</span>
-                                            </div>
-                                        )
-                                    })
-                                }
-                                </div>
+                        <div className="popup__top-wrap">
+                            <span className="title">Your tasks that will expire soon.</span>
+                            <div className='close-btn' onClick={()=>setIsPopupOpened(false)}></div>
+                        </div>
+                        <div className="popup__tasks-list">
+                            {
+                                tasks &&
+                                tasksByDate.filter((task:TTask) => task.asignee._id === loggedUser._id && task.status !== 'delete').map((task:any, id:number) => {
+                                    return (
+                                        <div key={id} className="task single-task" style={{height: '90px'}}>
+                                            <span>{task.innerId}</span>
+                                            <span className="single-task__title">{task.title}</span>
+                                            <span>Days left: {handleDaysLeft(task.date)}</span>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
                     </div>
                 </div>
     )

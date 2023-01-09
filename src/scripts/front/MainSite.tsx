@@ -9,6 +9,8 @@ import TasksList from "./TasksList";
 import { TTask } from './interfaces';
 import Popup from './Popup';
 import MainNav from './MainNav';
+import SingleTask from './SingleTask';
+import OpenedTask from './openedTask';
 
 
 
@@ -22,6 +24,9 @@ const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser,
     const [isNavMenuOpened, setIsNavMenuOpened] = useState<boolean>(false)
     const [slides, setSlides] = useState<number[]>([])
     const [showUserTasks, setShowUserTasks] = useState<boolean>(false)
+
+    const [taskToOpen, setTaskToOpen] = useState<TTask | undefined>(undefined)
+    const [isTaskOpened, setIsTaskOpened] = useState<boolean>(false)
 
     const [searchValue, setSearchValue] = useState<string>('')
     const [filteredTasks, setFilteredTasks] = useState<TTask[]>([])
@@ -68,6 +73,10 @@ const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser,
         getTasksFromDatabase()
     },[])
 
+    useEffect(()=>{
+        console.log(taskToOpen)
+    },[taskToOpen])
+
 
     return (
         <div className="main-site">
@@ -101,7 +110,7 @@ const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser,
                     filteredTasks={filteredTasks}
                 />
                 <Swiper
-                    style={{height:'100vh', top:'70px', display:'flex'}}
+                    style={{height:'100vh', display:'flex'}}
                     modules={[EffectFade]}
                     spaceBetween={-55}
                     breakpoints={{
@@ -135,6 +144,8 @@ const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser,
                                         />
                                     :
                                         <TasksList
+                                            setIsTaskOpened={setIsTaskOpened}
+                                            setTaskToOpen={setTaskToOpen}
                                             list={list}
                                             lists={lists}
                                             tasks={tasks}
@@ -144,6 +155,7 @@ const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser,
                                             // searchResults={searchResults}
                                             searchValue={searchValue}
                                             filteredTasks={filteredTasks}
+                                            
                                         />
                                     }
                                 </SwiperSlide>
@@ -180,6 +192,16 @@ const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser,
                         slides={slides} 
                     /> 
                 </Swiper>
+                {
+                    isTaskOpened &&
+                    <OpenedTask 
+                            setIsTaskOpened={setIsTaskOpened}
+                            setTaskToOpen={setTaskToOpen}
+                            lists={lists}
+                            task={taskToOpen} 
+                            setTasks={setTasks}
+                    />
+                }
         </div>
     )
 }

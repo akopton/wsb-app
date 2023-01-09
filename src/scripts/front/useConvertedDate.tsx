@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-const useConvertedDate = (date:number) => {
+const useConvertedDate = (date:number, searchValue?:string) => {
     const [convertedDate, setConvertedDate] = useState<string>()
 
     const handleConvertedDate = (date:number) => {
@@ -25,7 +25,7 @@ const useConvertedDate = (date:number) => {
 
     useEffect(()=>{
         handleConvertedDate(date)
-    },[convertedDate])
+    },[convertedDate, searchValue])
 
 
     return convertedDate

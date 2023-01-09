@@ -1,18 +1,14 @@
 .main-nav {
     position: fixed;
-    top: 6px;
-    right: 10px;
     display: flex;
-    justify-content: end;
     gap: 10px;
+    width: 100%;
     z-index: 100;
 
     .add-task__button {
-        // position: fixed;
         position: relative;
-        // right: 75px;
-        // top: 7px;
-        font-size: 50px;
+        width: 45px;
+        height: 45px;
         transition: ease .2s;
         user-select: none;
         z-index: 0;
@@ -38,9 +34,6 @@
     }
 
     .hamburger {
-        // position: fixed;
-        // top: 7px;
-        // right: 20px;
         position: relative;
         z-index: 4;
         height: 45px;

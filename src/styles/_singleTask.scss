@@ -1,73 +1,18 @@
 @import './_colors';
 
 .single-task {
-    position: relative;
     padding: 10px;
     border-radius: 8px;
     color: white;
     border: 1px solid $light-blue;
-    overflow: hidden;
-    width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 10px;
+    cursor: pointer;
 
 
     &.expired {
         border: 1px solid red;
-    }
-
-    &__top-wrap {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        
-        .single-task__id {
-            font-size: 14px;
-        }
-    
-        .single-task__close-btn {
-            position: relative;
-            height: 16px;
-            width: 16px;
-            cursor: pointer;
-
-            &::after, &::before {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                translate: -50% -50%;
-                width: 100%;
-                height: 2px;
-                background-color: $light-blue;
-                transition: .3s ease;
-            }
-            &::after {
-                rotate: -45deg;
-            }
-
-            &::before {
-                rotate: 45deg;
-            }
-    
-            &:hover {
-                &::after, &::before {
-                    background-color: white;
-                    transition: .3s ease;
-                }
-            }
-        }
-
-        .single-task__submit-change-btn {
-            color: $light-blue;
-            font-size: 14px;
-            cursor: pointer;
-
-            &:hover {
-                color: white;
-            }
-        }
     }
 
     &__title {
@@ -77,48 +22,13 @@
         color: white;
         overflow: hidden;
         white-space: nowrap;
+        text-overflow: ellipsis;
     }
-
-    &__middle-wrap {
-        overflow: scroll;
-        height: 78px;
-        color: white;
-        
-        .single-task__desc {
-            width: 100%;
-            height: 100%;
-            font-size: 17px;
-            color: white;
-            background: none;
-            border-radius: 0;
-            cursor: pointer;
-            
-            &:focus {
-                cursor: auto;
-            }
-        }
-    }
-    
     
     &__bottom-wrap {
         display: flex;
         align-items: flex-end;
         justify-content: space-between;
         position: relative;
-        
-        .left-side {
-            display: flex;
-            flex-direction: column;
-
-            &__asignee {
-                font-size: 20px;
-            }
-            
-            &__date {
-                position: absolute;
-                bottom: 5px;
-                font-size: 14px;
-            }
-        }
     }
 }
