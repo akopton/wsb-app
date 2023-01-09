@@ -74,7 +74,6 @@ async function addNewTaskToDatabase(client, newTask) {
 }
 
 async function deleteTask(client, TASK_TO_DELETE) {
-    console.log(TASK_TO_DELETE)
     const {_id} = TASK_TO_DELETE
 
     try {

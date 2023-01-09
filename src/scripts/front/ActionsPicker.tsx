@@ -3,10 +3,10 @@ import { useEffect, useState, useCallback, useMemo, useRef } from "react"
 import { BiDownArrow, BiUpArrow, BiRightArrow } from 'react-icons/bi'
 
 const ActionsPicker = ( 
-    {lists, handleUpdate, handleDelete, handleToggleOpen, updatedTask, setIsActionsWindowOpened, isActionsWindowOpened, updateTaskStatus, task, setIsTaskOpened, isTaskOpened, isExpired}: any 
+    {lists, handleSubmit, handleUpdate, handleDelete, handleToggleOpen, updatedTask, setIsActionsWindowOpened, isActionsWindowOpened, updateTask, task, setIsTaskOpened, isExpired}: any 
     ) => {
 
-    const {status, isOpened} = task
+    const {status} = task
     const [isActionPicked, setIsActionPicked] = useState<boolean>(false)
     const [pickedAction, setPickedAction] = useState<{type: string, desc: string} | any>()
     const [actions, setActions] = useState([
@@ -25,44 +25,48 @@ const ActionsPicker = (
  
     useEffect(()=>{
         handleActions()
-    },[])
+    },[updatedTask.data])
 
     return (
         <div className="actions-picker">
-            <div 
-                className="picked-action"
-                onClick={()=>{
-                        setIsActionsWindowOpened(!isActionsWindowOpened)
+            <div className="picked-action__wrapper">
+                <div 
+                    className="picked-action"
+                    onClick={()=>{
+                            setIsActionsWindowOpened(!isActionsWindowOpened)
+                        }
                     }
-                }
-                style={isActionsWindowOpened ? 
-                    {borderTop: 'none'}
-                    :
-                    {borderTop: 'none'}
-                }
-            >
-                <span 
-                    style={{lineHeight: '30px'}}
+                    style={isActionsWindowOpened ? 
+                        {borderTop: 'none'}
+                        :
+                        {borderTop: 'none'}
+                    }
                 >
-                    {isActionPicked ? pickedAction.desc : 'Pick an action...'}
-                </span>
+                    <span 
+                        style={{lineHeight: '30px'}}
+                    >
+                        {isActionPicked ? pickedAction.desc : 'Pick an action...'}
+                    </span>
+                    
+                </div>
                 <div 
                     className="submit-action"
                     onClick={()=>{
                         if (isActionsWindowOpened) return
-                        if (pickedAction && pickedAction.type !== 'delete') {
-                            updateTaskStatus()
-                            setIsTaskOpened(!isTaskOpened)
-                            handleToggleOpen(!updatedTask.isOpened)
-                        }
-                        if (pickedAction && pickedAction.type === 'delete') {
-                            setPickedAction({})
-                            setIsTaskOpened(!isTaskOpened)
-                            handleToggleOpen(!updatedTask.isOpened)
-                            setTimeout(()=>{
-                                handleDelete()
-                            },500)
-                        }
+                        // if (pickedAction && pickedAction.type !== 'delete') {
+                        //     updateTask()
+                        // }
+                        // if (pickedAction && pickedAction.type === 'delete') {
+                        //     setTimeout(()=>{
+                        //         handleDelete()
+                        //     },500)
+                        // }
+                        updateTask()
+                        setPickedAction({})
+                        handleToggleOpen(false)
+                        setIsActionPicked(false)
+                        handleToggleOpen(false)
+                        setIsActionsWindowOpened(false)
                     }} 
                 >
                     <BiDownArrow 
@@ -84,25 +88,10 @@ const ActionsPicker = (
                     : 
                     {height: '0', padding: '0 5px', transition: 'height .3s ease'}}
             >
-                {isExpired ?
-                    actions.filter(e => e.type === 'delete').map((action:any, id:any) => {
-                        return <li className="action" id='status' data-type={action.type} key={id} onClick={(e) => {
-                                                // if (action.type === 'delete') handleDelete()
-                                                handleUpdate(e)
-                                                setPickedAction(action)
-                                                setIsActionPicked(true)
-                                                setIsActionsWindowOpened(false)
-                                            }}>
-                                    {action.desc}
-                                </li>
-                    })
-                    :
+                {
                     actions.filter(e => e.type !== status && e.type !== 'expired').map((action:any, id:any) => {
                         return <li className="action" id='status' data-type={action.type} key={id} onClick={(e) => {
-                                                // if (action.type === 'delete') {
-                                                //     handleDelete()
-                                                //     return
-                                                // }
+                                                console.log(e)
                                                 handleUpdate(e)
                                                 setPickedAction(action)
                                                 setIsActionPicked(true)

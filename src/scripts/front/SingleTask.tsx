@@ -7,9 +7,8 @@ import useConvertedDate from "./useConvertedDate"
 
 const SingleTask = ({task, id, setTasks, lists, isPopupOpened}:any) => {
 
-    const [isTaskOpened, setIsTaskOpened] = useState<boolean>(false)
     const [isEditable, setIsEditable] = useState<boolean>(false)
-    const [isActionsWindowOpened, setIsActionsWindowOpened] = useState<boolean>()
+    const [isActionsWindowOpened, setIsActionsWindowOpened] = useState<boolean>(false)
     const [isExpired, setIsExpired] = useState<boolean>(false)
     
     const convertedDate = useConvertedDate(task.date)
@@ -19,7 +18,7 @@ const SingleTask = ({task, id, setTasks, lists, isPopupOpened}:any) => {
         },
         isOpened: false
     }
-
+    
     const taskUpdateReducer = (state:any, action:any) => {
         switch (action.type) {
             case 'update':
@@ -31,16 +30,16 @@ const SingleTask = ({task, id, setTasks, lists, isPopupOpened}:any) => {
                         [action.field]: action.payload
                     }
                 }
-            case 'toggleOpen':
-                return {
-                    ...state,
-                    [action.field]: action.payload
+                case 'toggleOpen':
+                    return {
+                        ...state,
+                        [action.field]: action.payload
+                    }
+                    default:
+                        return state
+                    }
                 }
-            default:
-                return state
-        }
-    }
-
+                
     const [updatedTask, dispatch] = useReducer(taskUpdateReducer, initialTaskState)
 
     const handleUpdate = (e:any) => {
@@ -49,6 +48,7 @@ const SingleTask = ({task, id, setTasks, lists, isPopupOpened}:any) => {
             field: e.target.id,
             payload: e.target.value ? e.target.value : e.target.getAttribute('data-type')
         })
+        console.log(task)
     }
 
     const handleToggleOpen = (value:boolean) => {
@@ -59,30 +59,36 @@ const SingleTask = ({task, id, setTasks, lists, isPopupOpened}:any) => {
         })
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setIsEditable(false)
         if (updatedTask.data.description == initialTaskState.data.description) return
-        updateTaskStatus()
+        await updateTask()
     }
 
-    const handleDelete = () => {
-        fetch('http://127.0.0.1:8888/delete-task', settings)
-        .then(data => data.json())
-        .then(res => {
-            console.log(res)
-            setTasks(res)
-        })
-    }
+    // const handleDelete = () => {
+    //     const settings = {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-type': 'application/json'
+    //         },
+    //         body: JSON.stringify(task)
+    //     }
+    //     fetch('http://127.0.0.1:8888/delete-task', settings)
+    //     .then(data => data.json())
+    //     .then(res => {
+    //         console.log(res)
+    //         setTasks(res)
+    //     })
+    // }
     
-    const settings = {
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify(updatedTask.data)
-    }
-
-    const updateTaskStatus = async () => {
+    const updateTask = async () => {
+        const settings = {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(updatedTask.data)
+        }
        fetch('http://127.0.0.1:8888/update-task', settings)
         .then(data => data.json())
         .then(res => {
@@ -96,13 +102,11 @@ const SingleTask = ({task, id, setTasks, lists, isPopupOpened}:any) => {
         
         if (todaysDate > task.date) {
             setIsExpired(true)
-            
         }
         else setIsExpired(false)
     }
 
     useEffect(()=>{
-        // handleConvertedDate(task.date)
         handleExpiredTask()
     },[isExpired])
 
@@ -151,7 +155,6 @@ const SingleTask = ({task, id, setTasks, lists, isPopupOpened}:any) => {
                             <div 
                                 className="single-task__close-btn" 
                                 onClick={()=>{
-                                    setIsTaskOpened(false)
                                     handleToggleOpen(false)
                                     setIsActionsWindowOpened(false)
                                 }}
@@ -161,11 +164,10 @@ const SingleTask = ({task, id, setTasks, lists, isPopupOpened}:any) => {
                 }
             </div>
             <TaskTitle 
-                task={task}
+                // task={task}
                 updatedTask={updatedTask} 
             />
             {updatedTask.isOpened &&
-            // <span>{initialTaskState.data.description}</span> 
                 <TaskDescription 
                     handleSubmit={handleSubmit}
                     task={task} 
@@ -176,7 +178,7 @@ const SingleTask = ({task, id, setTasks, lists, isPopupOpened}:any) => {
                     handleUpdate={handleUpdate}
                     initialTaskState={initialTaskState}
                     handleToggleOpen={handleToggleOpen}
-                    updateTaskStatus={updateTaskStatus}
+                    updateTask={updateTask}
                 />
             }
             {updatedTask.isOpened &&
@@ -193,16 +195,15 @@ const SingleTask = ({task, id, setTasks, lists, isPopupOpened}:any) => {
                     <ActionsPicker
                         isExpired={isExpired}
                         lists={lists}
-                        updateTaskStatus={updateTaskStatus}
+                        updateTask={updateTask}
                         setIsActionsWindowOpened={setIsActionsWindowOpened}
                         isActionsWindowOpened={isActionsWindowOpened}
-                        setIsTaskOpened={setIsTaskOpened}
-                        isTaskOpened={isTaskOpened}
                         task={task}
                         handleToggleOpen={handleToggleOpen}
                         updatedTask={updatedTask}
                         handleUpdate={handleUpdate}
-                        handleDelete={handleDelete}
+                        // handleDelete={handleDelete}
+                        handleSubmit={handleSubmit}
                     />
                 </div>
             }

@@ -20,7 +20,7 @@ const TaskTitle = ({updatedTask, task}:any) => {
                     }
                 }    
         >
-            {task.title}
+            {updatedTask.title ? updatedTask.title : updatedTask.data.title}
             {/* {updatedTask.title ? updatedTask.title : updatedTask.data.title} */}
         </div>
     )

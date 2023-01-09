@@ -37,7 +37,7 @@ const Popup = ({tasks, setIsPopupOpened, loggedUser, isPopupOpened}: {tasks:TTas
                             <div className="popup__tasks-list">
                                 {
                                     tasks &&
-                                    tasksByDate.filter((task:TTask) => task.asignee._id === loggedUser._id).map((task:any, id:number) => {
+                                    tasksByDate.filter((task:TTask) => task.asignee._id === loggedUser._id && task.status !== 'delete').map((task:any, id:number) => {
                                         return (
                                             <div key={id} className="task single-task" style={{height: '90px'}}>
                                                 <span>{task.innerId}</span>

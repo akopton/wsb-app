@@ -48,6 +48,12 @@ const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser,
     
     const getTasksFromDatabase = async () => {
         return fetch('http://127.0.0.1:8888/get-tasks')
+        .then((data) => data.json())
+        .then((res) => {
+            console.log('getting tasks...')
+            setTasks(res)
+            setLoadingTasks(false)
+        })
     }
     
     const handleNewTasksList = () => {
@@ -60,23 +66,12 @@ const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser,
     
     useEffect(()=>{
         getTasksFromDatabase()
-        .then((data) => data.json())
-        .then((res) => {
-            console.log('getting tasks...')
-            setTasks(res)
-            setLoadingTasks(false)
-        })
     },[])
 
 
-    // const handleSearch = (searchValue:string) => {
-    //     const results = tasks.filter((task:TTask) => task.innerId.toLowerCase().includes(searchValue))
-    //     setSearchResults(results)
-    // }
-
     return (
         <div className="main-site">
-            {/* {
+            {
                 isPopupOpened &&
                 <Popup 
                     tasks={tasks}
@@ -84,7 +79,7 @@ const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser,
                     setIsPopupOpened={setIsPopupOpened}
                     isPopupOpened={isPopupOpened}
                 />
-            } */}
+            }
             <span style={{position: 'fixed', zIndex:'10', fontSize: '20px', left: '10px', bottom: '10px'}}>Logged: {loggedUser.login}</span>
                 <MainNav 
                     isNewTaskFormOpened={isNewTaskFormOpened}
