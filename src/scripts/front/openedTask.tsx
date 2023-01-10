@@ -10,8 +10,9 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
     const [isEditable, setIsEditable] = useState<boolean>(false)
     const [isActionsWindowOpened, setIsActionsWindowOpened] = useState<boolean>(false)
     const [isExpired, setIsExpired] = useState<boolean>(false)
-    
-    // const convertedDate = useConvertedDate(task.date)
+    const convertedDate = useConvertedDate(task.date)
+    const fullName = `${task.asignee.firstName} ${task.asignee.lastName}`
+
     const initialTaskState = {
         data: {
             ...task
@@ -48,7 +49,6 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
             field: e.target.id,
             payload: e.target.value ? e.target.value : e.target.getAttribute('data-type')
         })
-        console.log(task)
     }
 
     const handleToggleOpen = (value:boolean) => {
@@ -92,44 +92,26 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
        fetch('http://127.0.0.1:8888/update-task', settings)
         .then(data => data.json())
         .then(res => {
-            console.log(res)
             setTasks(res)
         })
     }
 
-    const handleExpiredTask = () => {
-        const todaysDate = new Date().getTime()
+    // const handleExpiredTask = () => {
+    //     const todaysDate = new Date().getTime()
         
-        if (todaysDate > task.date) {
-            setIsExpired(true)
-        }
-        else setIsExpired(false)
-    }
+    //     if (todaysDate > task.date) {
+    //         setIsExpired(true)
+    //     }
+    //     else setIsExpired(false)
+    // }
 
-    useEffect(()=>{
-        handleExpiredTask()
-    },[isExpired])
+    // useEffect(()=>{
+    //     handleExpiredTask()
+    // },[isExpired])
 
     return (
         <div 
             className='opened-task'
-            style={updatedTask.isOpened ? 
-                    {
-                        height: '240px',
-                        minHeight:'240px',
-                        width: '100%',
-                        background:'#1f1f1f', 
-                        color:'white', 
-                        transition: 'all .3s ease',
-                    } 
-                : 
-                    {
-                        cursor:'pointer', 
-                        transition: 'all .3s ease', 
-                        minHeight:'70px',
-                        height: '70px'
-                    }
-                }
             key={id}
             onClick={(e)=>{
                 setTaskToOpen(task)
@@ -139,10 +121,44 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
                 // }
                 }}
         >
-            <div className="single-task__close-btn" onClick={()=>setIsTaskOpened(false)}></div>
-            <span>{task.innerId}</span>
-            <span>{task.title}</span>
-            <span>{task.asignee.login}</span>
+            <div className="opened-task__top-wrap">
+                <span className="opened-task__id">{task.innerId}</span>
+                {
+                    !isEditable ? 
+                        <div 
+                            className="opened-task__close-btn" 
+                            onClick={()=> {
+                                if (isEditable) return
+                                setIsTaskOpened(false)
+                            }}
+                        />
+                    :
+                        <div
+                            className="opened-task__submit-changes"
+                            onClick={()=>setIsEditable(false)}
+                        >
+                            Submit
+                        </div>
+                }
+            </div>
+            <div className="opened-task__content">
+                <span className="opened-task__title">{task.title}</span>
+                <>
+                    Opis
+                    <TaskDescription 
+                        updatedTask={updatedTask}
+                        setIsEditable={setIsEditable}
+                        isEditable={isEditable}
+                        handleUpdate={handleUpdate}
+                        handleSubmit={handleSubmit}
+                    />
+                </>
+                <div className="asigned-person">
+                    <span>Asigned person:</span>
+                    <span>{fullName}</span>
+                </div>
+                <span>{convertedDate}</span>
+            </div>
         </div>
     )
 }

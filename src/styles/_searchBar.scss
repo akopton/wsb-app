@@ -2,11 +2,13 @@
 
 .searchbar__wrapper {
     position: relative;
+    max-width: 70%;
 
     .searchbar {
         height: 100%;
         line-height: 100%;
         font-size: 26px;
+        width: 100%;
         padding: 0 10px 0 10px;
         border: 2px solid $light-blue;
     }
@@ -14,5 +16,6 @@
     .searchbar-tooltip {
         position: absolute;
         top: 100%;
+        font-size: 14px;
     }
 }

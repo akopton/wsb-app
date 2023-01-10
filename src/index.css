@@ -184,7 +184,9 @@
   padding-right: 50px;
 }
 .new-task-form .data-wrapper .inputs-wrapper .desc-input {
+  padding: 10px;
   height: 300px;
+  line-height: 40px;
 }
 .new-task-form .data-wrapper .pickers-wrapper {
   display: flex;
@@ -697,27 +699,36 @@
 
 .searchbar__wrapper {
   position: relative;
+  max-width: 70%;
 }
 .searchbar__wrapper .searchbar {
   height: 100%;
   line-height: 100%;
   font-size: 26px;
+  width: 100%;
   padding: 0 10px 0 10px;
   border: 2px solid rgb(57, 255, 238);
 }
 .searchbar__wrapper .searchbar-tooltip {
   position: absolute;
   top: 100%;
+  font-size: 14px;
 }
 
 .main-nav {
   position: fixed;
   display: flex;
+  justify-content: space-between;
   gap: 10px;
   width: 100%;
   z-index: 100;
+  padding: 10px;
 }
-.main-nav .add-task__button {
+.main-nav .buttons-wrapper {
+  display: flex;
+  gap: 10px;
+}
+.main-nav .buttons-wrapper .add-task__button {
   position: relative;
   width: 45px;
   height: 45px;
@@ -728,7 +739,7 @@
           user-select: none;
   z-index: 0;
 }
-.main-nav .add-task__button:before {
+.main-nav .buttons-wrapper .add-task__button:before {
   content: "";
   position: absolute;
   height: 4px;
@@ -737,7 +748,7 @@
   border-radius: 5px;
   transform: rotate(90deg);
 }
-.main-nav .add-task__button::after {
+.main-nav .buttons-wrapper .add-task__button::after {
   content: "";
   position: absolute;
   height: 4px;
@@ -745,7 +756,7 @@
   border-radius: 5px;
   background-color: black;
 }
-.main-nav .hamburger {
+.main-nav .buttons-wrapper .hamburger {
   position: relative;
   z-index: 4;
   height: 45px;
@@ -754,7 +765,7 @@
   transition: 0.1s ease;
   cursor: pointer;
 }
-.main-nav .hamburger__piece {
+.main-nav .buttons-wrapper .hamburger__piece {
   position: absolute;
   width: 100%;
   height: 5px;
@@ -762,10 +773,10 @@
   border-radius: 5px 5px 5px 5px;
   transition: ease 0.1s;
 }
-.main-nav .hamburger__piece.--top {
+.main-nav .buttons-wrapper .hamburger__piece.--top {
   top: 5px;
 }
-.main-nav .hamburger__piece.--middle-left {
+.main-nav .buttons-wrapper .hamburger__piece.--middle-left {
   background-color: rgb(57, 255, 238);
   top: 50%;
   transform: translateY(-50%);
@@ -773,7 +784,7 @@
   width: 50%;
   border-radius: 5px 0px 0px 5px;
 }
-.main-nav .hamburger__piece.--middle-right {
+.main-nav .buttons-wrapper .hamburger__piece.--middle-right {
   background-color: rgb(253, 161, 249);
   top: 50%;
   transform: translateY(-50%);
@@ -781,31 +792,40 @@
   left: 50%;
   width: 50%;
 }
-.main-nav .hamburger__piece.--bottom {
+.main-nav .buttons-wrapper .hamburger__piece.--bottom {
   position: absolute;
   bottom: 5px;
 }
 
 .opened-task {
+  padding: 15px;
+  background-color: #0f0f0f;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border: 1px solid red;
-  z-index: 100;
+  gap: 20px;
 }
-.opened-task .single-task__close-btn {
+.opened-task__top-wrap {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.opened-task__top-wrap .opened-task__id {
+  display: block;
+  font-size: 22px;
+}
+.opened-task__top-wrap .opened-task__close-btn {
   position: relative;
-  height: 16px;
-  width: 16px;
+  height: 20px;
+  width: 20px;
   cursor: pointer;
-  z-index: 100000;
 }
-.opened-task .single-task__close-btn::after, .opened-task .single-task__close-btn::before {
+.opened-task__top-wrap .opened-task__close-btn::after, .opened-task__top-wrap .opened-task__close-btn::before {
   content: "";
   position: absolute;
   top: 50%;
@@ -816,15 +836,30 @@
   background-color: rgb(57, 255, 238);
   transition: 0.3s ease;
 }
-.opened-task .single-task__close-btn::after {
+.opened-task__top-wrap .opened-task__close-btn::after {
   rotate: -45deg;
 }
-.opened-task .single-task__close-btn::before {
+.opened-task__top-wrap .opened-task__close-btn::before {
   rotate: 45deg;
 }
-.opened-task .single-task__close-btn:hover::after, .opened-task .single-task__close-btn:hover::before {
+.opened-task__top-wrap .opened-task__close-btn:hover::after, .opened-task__top-wrap .opened-task__close-btn:hover::before {
   background-color: white;
   transition: 0.3s ease;
+}
+.opened-task__content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.opened-task__content .asigned-person {
+  display: flex;
+  flex-direction: column;
+}
+.opened-task__content .opened-task__desc {
+  font-size: 18px;
+  font-family: "Roboto", sans-serif;
+  color: white;
+  border-radius: 0;
 }
 
 * {

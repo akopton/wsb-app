@@ -73,11 +73,6 @@ const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser,
         getTasksFromDatabase()
     },[])
 
-    useEffect(()=>{
-        console.log(taskToOpen)
-    },[taskToOpen])
-
-
     return (
         <div className="main-site">
             {

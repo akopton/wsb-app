@@ -1,13 +1,13 @@
 import React from "react"
 import { useEffect, useState, useCallback, useMemo, useReducer } from "react"
 
-const TaskDescription = ({updatedTask, setIsEditable, isEditable, handleUpdate, handleSubmit, task}:any) => {
+const TaskDescription = ({updatedTask, setIsEditable, isEditable, handleUpdate, handleSubmit}:any) => {
 
     return (
-        <div className="single-task__middle-wrap">
+        <>
             {isEditable ? 
                 <textarea 
-                    className="single-task__desc"
+                    className="opened-task__desc"
                     id='description'
                     name="description"
                     value={updatedTask.data.description ? updatedTask.data.description : ''}
@@ -24,14 +24,14 @@ const TaskDescription = ({updatedTask, setIsEditable, isEditable, handleUpdate, 
                 </textarea>
                 :
                 <div
-                    className="single-task__desc"
+                    className="opened-task__desc"
                     onClick={()=>setIsEditable(true)}
                 >
-                    {task.description}
+                    {updatedTask.data.description}
                     {/* {updatedTask.data.description} */}
                 </div>
             }
-        </div>
+        </>
     )
 }
 

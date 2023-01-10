@@ -36,16 +36,18 @@ const MainNav = (
                 filteredTasks={filteredTasks}
                 setFilteredTasks={setFilteredTasks}
             />
-            <NewTaskBtn
-                isNewTaskFormOpened={isNewTaskFormOpened}
-                setIsNewTaskFormOpened={setIsNewTaskFormOpened}
-                isNavMenuOpened={isNavMenuOpened}
-            />
-            <Hamburger 
-                setIsNavMenuOpened={setIsNavMenuOpened}
-                isNavMenuOpened={isNavMenuOpened}
-                isNewTaskFormOpened={isNewTaskFormOpened}
-            />
+            <div className="buttons-wrapper">
+                <NewTaskBtn
+                    isNewTaskFormOpened={isNewTaskFormOpened}
+                    setIsNewTaskFormOpened={setIsNewTaskFormOpened}
+                    isNavMenuOpened={isNavMenuOpened}
+                />
+                <Hamburger 
+                    setIsNavMenuOpened={setIsNavMenuOpened}
+                    isNavMenuOpened={isNavMenuOpened}
+                    isNewTaskFormOpened={isNewTaskFormOpened}
+                />
+            </div>
             {isNewTaskFormOpened && 
                 <NewTaskForm
                     setIsFormOpened={setIsNewTaskFormOpened}
