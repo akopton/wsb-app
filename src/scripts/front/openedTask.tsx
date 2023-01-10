@@ -5,13 +5,14 @@ import TaskDescription from "./TaskDescription"
 // import TaskTitle from "./TaskTitle"
 import useConvertedDate from "./useConvertedDate"
 
-const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, setIsTaskOpened}:any) => {
+const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, setIsTaskOpened, isTaskOpened}:any) => {
 
     const [isEditable, setIsEditable] = useState<boolean>(false)
     const [isActionsWindowOpened, setIsActionsWindowOpened] = useState<boolean>(false)
     const [isExpired, setIsExpired] = useState<boolean>(false)
     const convertedDate = useConvertedDate(task.date)
     const fullName = `${task.asignee.firstName} ${task.asignee.lastName}`
+    const [showContent, setShowContent] = useState<boolean>(false)
 
     const initialTaskState = {
         data: {
@@ -80,6 +81,13 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
     //         setTasks(res)
     //     })
     // }
+
+    useEffect(()=>{
+        handleToggleOpen(isTaskOpened)
+        setTimeout(() => {
+            setShowContent(true)
+        }, 350);
+    },[isTaskOpened])
     
     const updateTask = async () => {
         const settings = {
@@ -112,6 +120,24 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
     return (
         <div 
             className='opened-task'
+            style={
+                !updatedTask.isOpened ?
+                {
+                    height: '0',
+                    minHeight: '0',
+                    width: '0',
+                    minWidth: '0',
+                    transition: 'all .3s ease'
+                }
+                :
+                {
+                    height: '100%',
+                    minHeight: '100%',
+                    width: '100%',
+                    minWidth: '100%',
+                    transition: 'all .3s ease'
+                }
+            }
             key={id}
             onClick={(e)=>{
                 setTaskToOpen(task)
@@ -121,44 +147,66 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
                 // }
                 }}
         >
-            <div className="opened-task__top-wrap">
-                <span className="opened-task__id">{task.innerId}</span>
-                {
-                    !isEditable ? 
-                        <div 
-                            className="opened-task__close-btn" 
-                            onClick={()=> {
-                                if (isEditable) return
-                                setIsTaskOpened(false)
-                            }}
-                        />
-                    :
-                        <div
-                            className="opened-task__submit-changes"
-                            onClick={()=>setIsEditable(false)}
-                        >
-                            Submit
-                        </div>
-                }
-            </div>
-            <div className="opened-task__content">
-                <span className="opened-task__title">{task.title}</span>
+            {
+                showContent &&
                 <>
-                    Opis
-                    <TaskDescription 
+                    <div className="opened-task__top-wrap">
+                        <span className="opened-task__id">{task.innerId}</span>
+                        {
+                            !isEditable ? 
+                                <div 
+                                    className="opened-task__close-btn" 
+                                    onClick={()=> {
+                                        if (isEditable) return
+                                        setTimeout(()=>{
+                                            setIsTaskOpened(false)
+                                        },100)
+                                        setShowContent(false)
+                                        handleToggleOpen(false)
+                                    }}
+                                />
+                            :
+                                <div
+                                    className="opened-task__submit-changes"
+                                    onClick={()=>setIsEditable(false)}
+                                >
+                                    Submit
+                                </div>
+                        }
+                    </div>
+                    <div className="opened-task__content">
+                        <span className="opened-task__title">{task.title}</span>
+                        <>
+                            Opis
+                            <TaskDescription 
+                                updatedTask={updatedTask}
+                                setIsEditable={setIsEditable}
+                                isEditable={isEditable}
+                                handleUpdate={handleUpdate}
+                                handleSubmit={handleSubmit}
+                            />
+                        </>
+                        <div className="asigned-person">
+                            <span>Asigned person:</span>
+                            <span>{fullName}</span>
+                        </div>
+                        <span>{convertedDate}</span>
+                    </div>
+                    <ActionsPicker
+                        isExpired={isExpired}
+                        lists={lists}
+                        updateTask={updateTask}
+                        setIsActionsWindowOpened={setIsActionsWindowOpened}
+                        isActionsWindowOpened={isActionsWindowOpened}
+                        task={task}
+                        handleToggleOpen={handleToggleOpen}
                         updatedTask={updatedTask}
-                        setIsEditable={setIsEditable}
-                        isEditable={isEditable}
                         handleUpdate={handleUpdate}
+                        // handleDelete={handleDelete}
                         handleSubmit={handleSubmit}
                     />
                 </>
-                <div className="asigned-person">
-                    <span>Asigned person:</span>
-                    <span>{fullName}</span>
-                </div>
-                <span>{convertedDate}</span>
-            </div>
+            }
         </div>
     )
 }

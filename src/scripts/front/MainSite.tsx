@@ -192,6 +192,7 @@ const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser,
                     <OpenedTask 
                             setIsTaskOpened={setIsTaskOpened}
                             setTaskToOpen={setTaskToOpen}
+                            isTaskOpened={isTaskOpened}
                             lists={lists}
                             task={taskToOpen} 
                             setTasks={setTasks}
