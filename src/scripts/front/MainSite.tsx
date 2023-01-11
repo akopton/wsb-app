@@ -6,17 +6,16 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/effect-fade';
 import { EffectFade } from 'swiper';
 import TasksList from "./TasksList";
-import { TTask } from './interfaces';
+import { TTask } from '../interfaces/taskInterface';
 import Popup from './Popup';
 import MainNav from './MainNav';
-import SingleTask from './SingleTask';
-import OpenedTask from './openedTask';
+import OpenedTask from './OpenedTask';
+import { getTasksFromDatabase } from '../fetches/getTasks';
 
 
 
 
-
-const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser, defaultUser }: any) => {
+const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaultUser }: any) => {
     const [isPopupOpened, setIsPopupOpened] = useState<boolean>(true)
     const [loadingTasks, setLoadingTasks] = useState<boolean>(true)
     const [isNewTaskFormOpened, setIsNewTaskFormOpened] = useState<boolean>(false)
@@ -50,17 +49,6 @@ const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser,
         }
     ])
 
-    
-    const getTasksFromDatabase = async () => {
-        return fetch('http://127.0.0.1:8888/get-tasks')
-        .then((data) => data.json())
-        .then((res) => {
-            console.log('getting tasks...')
-            setTasks(res)
-            setLoadingTasks(false)
-        })
-    }
-    
     const handleNewTasksList = () => {
         setLists([...lists, {
             type:'lol',
@@ -71,6 +59,12 @@ const MainSite = ( { usersList, loggedUser, TUser, setIsLoggedIn, setLoggedUser,
     
     useEffect(()=>{
         getTasksFromDatabase()
+        .then((data) => data.json())
+        .then((res) => {
+            console.log('getting tasks...')
+            setTasks(res)
+            setLoadingTasks(false)
+        })
     },[])
 
     return (

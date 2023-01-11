@@ -11,7 +11,7 @@ const TaskDescription = ({updatedTask, setIsEditable, isEditable, handleUpdate, 
                     id='description'
                     name="description"
                     value={updatedTask.data.description ? updatedTask.data.description : ''}
-                    onBlur={handleSubmit}
+                    onBlur={() => handleSubmit(updatedTask.data)}
                     onChange={handleUpdate}
                         rows={5}
                         autoFocus={isEditable ? true : false}

@@ -4,6 +4,8 @@ import ActionsPicker from "./ActionsPicker"
 import TaskDescription from "./TaskDescription"
 // import TaskTitle from "./TaskTitle"
 import useConvertedDate from "./useConvertedDate"
+import { TTask } from "../interfaces/taskInterface"
+import { updateTask } from "../fetches/updateTask"
 
 const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, setIsTaskOpened, isTaskOpened}:any) => {
 
@@ -60,27 +62,15 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
         })
     }
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (data:TTask) => {
         setIsEditable(false)
         if (updatedTask.data.description == initialTaskState.data.description) return
-        await updateTask()
+        await updateTask(data)
+                .then(data => data.json())
+                .then(res => {
+                    setTasks(res)
+                })
     }
-
-    // const handleDelete = () => {
-    //     const settings = {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-type': 'application/json'
-    //         },
-    //         body: JSON.stringify(task)
-    //     }
-    //     fetch('http://127.0.0.1:8888/delete-task', settings)
-    //     .then(data => data.json())
-    //     .then(res => {
-    //         console.log(res)
-    //         setTasks(res)
-    //     })
-    // }
 
     useEffect(()=>{
         handleToggleOpen(isTaskOpened)
@@ -89,36 +79,8 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
         }, 350);
     },[isTaskOpened])
     
-    const updateTask = async () => {
-        const settings = {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(updatedTask.data)
-        }
-       fetch('http://127.0.0.1:8888/update-task', settings)
-        .then(data => data.json())
-        .then(res => {
-            setTasks(res)
-        })
-    }
-
-    // const handleExpiredTask = () => {
-    //     const todaysDate = new Date().getTime()
-        
-    //     if (todaysDate > task.date) {
-    //         setIsExpired(true)
-    //     }
-    //     else setIsExpired(false)
-    // }
-
-    // useEffect(()=>{
-    //     handleExpiredTask()
-    // },[isExpired])
-
     return (
-        <div 
+        <div
             className='opened-task'
             style={
                 !updatedTask.isOpened ?
@@ -157,27 +119,43 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
                                 <div 
                                     className="opened-task__close-btn" 
                                     onClick={()=> {
-                                        if (isEditable) return
                                         setTimeout(()=>{
                                             setIsTaskOpened(false)
                                         },100)
                                         setShowContent(false)
                                         handleToggleOpen(false)
                                     }}
-                                />
-                            :
-                                <div
-                                    className="opened-task__submit-changes"
-                                    onClick={()=>setIsEditable(false)}
-                                >
+                                    />
+                                    :
+                                    <div
+                                        className="opened-task__submit-changes"
+                                        onClick={() => {
+                                            handleSubmit(updatedTask.data)
+                                            setIsEditable(false)
+                                        }}
+                                    >
                                     Submit
                                 </div>
                         }
                     </div>
                     <div className="opened-task__content">
                         <span className="opened-task__title">{task.title}</span>
+                        <ActionsPicker
+                            isExpired={isExpired}
+                            lists={lists}
+                            updateTask={updateTask}
+                            setIsActionsWindowOpened={setIsActionsWindowOpened}
+                            isActionsWindowOpened={isActionsWindowOpened}
+                            task={task}
+                            handleToggleOpen={handleToggleOpen}
+                            updatedTask={updatedTask}
+                            handleUpdate={handleUpdate}
+                            // handleDelete={handleDelete}
+                            handleSubmit={handleSubmit}
+                            setTasks={setTasks}
+                        />
                         <>
-                            Opis
+                            <span style={{marginBottom: '-10px'}}>Opis</span>
                             <TaskDescription 
                                 updatedTask={updatedTask}
                                 setIsEditable={setIsEditable}
@@ -192,19 +170,6 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
                         </div>
                         <span>{convertedDate}</span>
                     </div>
-                    <ActionsPicker
-                        isExpired={isExpired}
-                        lists={lists}
-                        updateTask={updateTask}
-                        setIsActionsWindowOpened={setIsActionsWindowOpened}
-                        isActionsWindowOpened={isActionsWindowOpened}
-                        task={task}
-                        handleToggleOpen={handleToggleOpen}
-                        updatedTask={updatedTask}
-                        handleUpdate={handleUpdate}
-                        // handleDelete={handleDelete}
-                        handleSubmit={handleSubmit}
-                    />
                 </>
             }
         </div>

@@ -1,4 +1,5 @@
-import { TTask, TUser } from "./interfaces"
+import { TTask } from "../interfaces/taskInterface"
+import { TUser } from "../interfaces/userInterface"
 import { useEffect, useState } from "react"
 import useConvertedDate from "./useConvertedDate"
 import SingleTask from "./SingleTask"

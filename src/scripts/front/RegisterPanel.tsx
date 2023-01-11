@@ -1,8 +1,8 @@
-import { stat } from "fs"
 import React, { useReducer } from "react"
 import { useState } from "react"
 import { BiRightArrowCircle } from "react-icons/bi"
-import ActionsPicker from "./ActionsPicker"
+import { registerNewUser } from "../fetches/register"
+import { TUser } from "../interfaces/userInterface"
 
 const RegisterPanel = ( {defaultUser}:any ) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -19,7 +19,7 @@ const RegisterPanel = ( {defaultUser}:any ) => {
 
     const initialUser = defaultUser
 
-    const formReducer = (state:{}, action:any) => {
+    const registerReducer = (state:TUser, action:any) => {
         switch(action.type) {
             case 'input':
                 return {
@@ -41,32 +41,9 @@ const RegisterPanel = ( {defaultUser}:any ) => {
         })
     }
     
-    const [state, dispatch] = useReducer(formReducer, initialUser)
+    const [registerData, dispatch] = useReducer(registerReducer, initialUser)
 
-    const registerNewUser = async () => {
-        const settings = {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(state)
-        }
-        setIsLoading(true)
-        fetch('http://127.0.0.1:8888/register', settings)
-        .then(data => data.json())
-        .then(res => {
-            setIsLoading(false)
-            if (res) {
-                alert('Użytkownik o podanym mailu/loginie już istnieje')
-                return
-            } else {
-                alert('pomyślnie zarejestrowano')
-                clearAll()
-                setIsFirstStepDone(false)
-                return
-            }
-        })
-    }
+    
     
     const clearAll = () => {
         dispatch({
@@ -74,15 +51,30 @@ const RegisterPanel = ( {defaultUser}:any ) => {
         })
     }
 
-    const handleSubmit = () => {
-        const {email, login, password}:any = state
+    const handleSubmit = async (registerData:TUser) => {
+        const {email, login, password}:any = registerData
         if (!email) return
         if (!login) return
         if (!password) return
-        registerNewUser()
+    
+        setIsLoading(true)
+        await registerNewUser(registerData)
+                .then(data => data.json())
+                .then(res => {
+                    setIsLoading(false)
+                    if (res) {
+                        alert('Użytkownik o podanym mailu/loginie już istnieje')
+                        return
+                    } else {
+                        alert('pomyślnie zarejestrowano')
+                        clearAll()
+                        setIsFirstStepDone(false)
+                        return
+                    }
+                })
     }
 
-    const {firstName, lastName, email, login, password}:any = state
+    const {firstName, lastName, email, login, password} = registerData
 
     return (
         <div className="register-panel__wrapper">
@@ -177,7 +169,7 @@ const RegisterPanel = ( {defaultUser}:any ) => {
                         type='submit'
                         onClick={e => {
                             e.preventDefault()
-                            handleSubmit()
+                            handleSubmit(registerData)
                         }}
                         value="Register"
                     />

@@ -163,7 +163,7 @@
   z-index: 4;
   overflow: scroll;
   gap: 10px;
-  padding: 0 10px;
+  padding: 2px 10px;
 }
 @media screen and (min-width: 430px) {
   .new-task-form {
@@ -447,7 +447,12 @@
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+  gap: 10px;
   position: relative;
+}
+.single-task__bottom-wrap .task-content__asignee {
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .slide-indicator {
@@ -556,9 +561,6 @@
   border: 1px solid white;
   background-color: #1c1c1c;
   border-radius: 4px;
-  position: absolute;
-  bottom: 0;
-  right: 0;
 }
 .actions-picker .picked-action__wrapper {
   padding: 0 5px;
@@ -588,8 +590,12 @@
   padding: 5px 5px;
   display: flex;
   flex-direction: column;
-  font-size: 18px;
   width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+  font-size: 18px;
   overflow: scroll;
   z-index: 50;
 }
@@ -816,7 +822,7 @@
 }
 .opened-task__top-wrap .opened-task__id {
   display: block;
-  font-size: 22px;
+  font-size: 18px;
 }
 .opened-task__top-wrap .opened-task__close-btn {
   position: relative;
@@ -854,8 +860,11 @@
   display: flex;
   flex-direction: column;
 }
+.opened-task__content .opened-task__title {
+  font-size: 22px;
+}
 .opened-task__content .opened-task__desc {
-  font-size: 18px;
+  font-size: 20px;
   font-family: "Roboto", sans-serif;
   color: white;
   border-radius: 0;

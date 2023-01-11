@@ -2,10 +2,14 @@ import { isDocument } from '@testing-library/user-event/dist/utils';
 import React from 'react';
 import { useReducer, useMemo, useEffect, useState, useCallback, forwardRef } from 'react';
 import { BiDownArrow } from 'react-icons/bi'
-import { TUser } from './interfaces';
+import { TUser } from '../interfaces/userInterface';
 import { BiCalendar } from 'react-icons/bi';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { addTaskToDatabase } from '../fetches/addTask';
+import { updateIdForGenerator } from '../fetches/updateId';
+import { getIdForGenerator } from '../fetches/getId';
+import { getUsersFromDatabase } from '../fetches/getUsers';
 
 const DateCustomInput = forwardRef(({ value, onClick, isCalendarOpen }:any, ref:any) => (
     <div className="date-custom-input" onClick={onClick} ref={ref}>
@@ -42,20 +46,7 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
     const [addingNewTask, setAddingNewTask] = useState<boolean>(false)
     const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false)
     
-    const getIdForGenerator = async () => {
-        fetch('http://127.0.0.1:8888/get-id')
-        .then(data => data.json())
-        .then(res => {
-            const {id} = res
-            setUpdatedId(id+1)
-            dispatch({
-                type: 'generate',
-                field: 'innerId',
-                payload: `PROJECT-${id}`
-            })
-            console.log(`wygenerowano id ${id}`)
-        })
-    }
+    
 
     const initialState = {
         innerId: '',
@@ -88,7 +79,7 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
         }
     }
 
-    const [newTaskState, dispatch] = useReducer(newTaskReducer, initialState)
+    const [newTask, dispatch] = useReducer(newTaskReducer, initialState)
     
     const handleInput = (e:any) => {
         dispatch({
@@ -106,59 +97,45 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
         })
     }
 
-    const addTaskToDatabase = async () => {
-        setAddingNewTask(true)
-        const settings = {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(newTaskState)
-        }
-        fetch('http://127.0.0.1:8888/tasks', settings)
-        .then(data => data.json())
-        .then(res => setTasks(res))
-    }
-
-    const updateIdForGenerator = async () => {
-        const settings = {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({updatedId})
-        }
-        fetch('http://127.0.0.1:8888/update-id', settings)
-            .then((data) => data)
-    }
-
-    const getUsersFromDatabase = async () => {
-        fetch('http://127.0.0.1:8888/users')
-        .then(data => data.json())
-        .then(res => setUsersList(res))
-    }
+    
 
     const getDataForNewTask = async () => {
         await getIdForGenerator()
+                .then(data => data.json())
+                .then(res => {
+                    const {id} = res
+                    setUpdatedId(id+1)
+                    dispatch({
+                        type: 'generate',
+                        field: 'innerId',
+                        payload: `PROJECT-${id}`
+                    })
+                    console.log(`wygenerowano id ${id}`)
+                })
         await getUsersFromDatabase()
+                .then(data => data.json())
+                .then(res => setUsersList(res))
     }
 
     useEffect(() => {
         getDataForNewTask()
     },[])
     
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        if(!newTaskState.title) return
-        if(!newTaskState.description) return
-        await addTaskToDatabase()
-        await updateIdForGenerator()
+        if(!newTask.title) return
+        if(!newTask.description) return
+        await addTaskToDatabase(newTask)
+                .then(data => data.json())
+                .then(res => setTasks(res))
+
+        await updateIdForGenerator(updatedId)
+                .then((data) => data)
+
         setIsFormOpened(false)
     }
+
     return (
-        <>
-        {!addingNewTask ?
             <form 
                 className='new-task-form' 
                 onSubmit={handleSubmit}
@@ -169,14 +146,14 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
                             className='title-input form-input'
                             placeholder='Title...'
                             name='title'
-                            value={newTaskState.title}
+                            value={newTask.title}
                             onChange={handleInput}
                         />
                         <textarea 
                             className='desc-input form-input'
                             placeholder='Description...'
                             name='description'
-                            value={newTaskState.description}
+                            value={newTask.description}
                             onChange={handleInput}
                         />
                     </div>
@@ -196,7 +173,7 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
                                 >
                                     <span style={{width:'205px', overflow:'scroll'}}>
                                     {asignee ? 
-                                        `${newTaskState.asignee.firstName} ${newTaskState.asignee.lastName}`
+                                        `${newTask.asignee.firstName} ${newTask.asignee.lastName}`
                                         : 
                                         'Pick from list...'
                                     }
@@ -240,7 +217,7 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
                             <span className='picker-title' style={{fontSize: '24px'}}>Pick ending date:</span>
                             <DatePicker 
                                 dateFormat='dd MMMM yyyy'
-                                selected={newTaskState.date}
+                                selected={newTask.date}
                                 onCalendarOpen={() => setIsCalendarOpen(true)}
                                 onCalendarClose={() => setIsCalendarOpen(false)}
                                 onChange={(date:Date, e:any) => {
@@ -264,12 +241,6 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
                     />
                 }
             </form>
-            :
-            <div>
-                Dodaje
-            </div>    
-    }
-        </>
     )
 }
 

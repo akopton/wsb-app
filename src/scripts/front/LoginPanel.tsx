@@ -1,15 +1,16 @@
 import React, { useReducer } from "react";
 import { useEffect, useState } from "react";
+import { login } from "../fetches/login";
 
 const LoginPanel = ( { setLoggedUser, setIsLoggedIn }: any) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     
-    const loginData = {
+    const initialLoginData = {
         login: '',
         password: '',
     }
     
-    const reducer = (state:any, action:any) => {
+    const loginReducer = (state:any, action:any) => {
         switch (action.type) {
             case 'input':
                 return {
@@ -19,7 +20,7 @@ const LoginPanel = ( { setLoggedUser, setIsLoggedIn }: any) => {
         }
     }
             
-    const [state, dispatch] = useReducer(reducer, loginData)
+    const [loginData, dispatch] = useReducer(loginReducer, initialLoginData)
 
     const handleInput = (e: any) => {
         dispatch({
@@ -29,28 +30,23 @@ const LoginPanel = ( { setLoggedUser, setIsLoggedIn }: any) => {
         })
     }
 
-    const settings = {
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify(state)
+    const validateLogin = async (loginData:{login:string, password:string}) => {
+        setIsLoading(true)
+
+        await login(loginData)
+                .then(data => data.json())
+                .then(res => {
+                    setLoggedUser(res)
+                    setIsLoading(false)
+                    setIsLoggedIn(true)
+                })
+                .catch(() => {
+                    alert('niepoprawny login lub hasło')
+                    setIsLoading(false)
+                })
     }
     
-    const validateLogin = async () => {
-        setIsLoading(true)
-        fetch('http://127.0.0.1:8888/sign-in', settings)
-        .then(data => data.json())
-        .then(res=>{
-            setLoggedUser(res)
-            setIsLoading(false)
-            setIsLoggedIn(true)
-        })
-        .catch(()=>{
-            alert('niepoprawny login lub hasło')
-            setIsLoading(false)
-        })
-    }
+    
 
     return (
             <div className="login-panel__wrapper">
@@ -58,7 +54,7 @@ const LoginPanel = ( { setLoggedUser, setIsLoggedIn }: any) => {
                     className="login-panel panel-form" 
                     onSubmit={(e)=>{
                         e.preventDefault()
-                        validateLogin()
+                        validateLogin(loginData)
                     }} 
                     autoComplete="on"
                 >

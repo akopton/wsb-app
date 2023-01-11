@@ -30,7 +30,7 @@
 
         .opened-task__id {
             display: block;
-            font-size: 22px;
+            font-size: 18px;
         }
         
         .opened-task__close-btn {
@@ -78,10 +78,11 @@
         }
 
         .opened-task__title {
+            font-size: 22px;
         }
 
         .opened-task__desc {
-            font-size: 18px;
+            font-size: 20px;
             font-family: $main-font;
             color: white;
             border-radius: 0;

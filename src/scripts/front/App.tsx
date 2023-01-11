@@ -2,16 +2,9 @@ import { useEffect, useState } from "react";
 import RegisterPanel from './RegisterPanel';
 import LoginPanel from "./LoginPanel";
 import MainSite from "./MainSite";
+import { TUser } from "../interfaces/userInterface";
 
 const App = () => {
-
-  type TUser = {
-    firstName: string,
-    lastName: string,
-    email: string,
-    login: string,
-    password: string,
-  }
 
  const defaultUser: TUser = {
     firstName: '',

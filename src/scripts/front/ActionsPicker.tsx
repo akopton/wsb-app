@@ -1,9 +1,11 @@
 import React from "react"
 import { useEffect, useState, useCallback, useMemo, useRef } from "react"
 import { BiDownArrow, BiUpArrow, BiRightArrow } from 'react-icons/bi'
+import { TTask } from "../interfaces/taskInterface"
+import { updateTask } from "../fetches/updateTask"
 
 const ActionsPicker = ( 
-    {lists, handleSubmit, handleUpdate, handleDelete, handleToggleOpen, updatedTask, setIsActionsWindowOpened, isActionsWindowOpened, updateTask, task, setIsTaskOpened, isExpired}: any 
+    {lists, handleToggleOpen, updatedTask, setIsActionsWindowOpened, isActionsWindowOpened, task, setTasks}: any 
     ) => {
 
     const {status} = task
@@ -45,11 +47,12 @@ const ActionsPicker = (
                     <span 
                         style={{lineHeight: '30px'}}
                     >
-                        {isActionPicked ? pickedAction.desc : 'Pick an action...'}
+                        {/* {isActionPicked ? pickedAction.desc : 'Pick an action...'} */}
+                        {updatedTask.data.status}
                     </span>
                     
                 </div>
-                <div 
+                {/* <div 
                     className="submit-action"
                     onClick={()=>{
                         if (isActionsWindowOpened) return
@@ -79,7 +82,7 @@ const ActionsPicker = (
                             {transition:'.3s ease'}
                         }
                     />
-                </div>
+                </div> */}
             </div>
             <ul
                 className="actions-window" 
@@ -89,13 +92,17 @@ const ActionsPicker = (
                     {height: '0', padding: '0 5px', transition: 'height .3s ease'}}
             >
                 {
-                    actions.filter(e => e.type !== status && e.type !== 'expired').map((action:any, id:any) => {
-                        return <li className="action" id='status' data-type={action.type} key={id} onClick={(e) => {
-                                                console.log(e)
-                                                handleUpdate(e)
+                    actions.filter(e => e.type !== status && e.type !== 'expired' && e.type !== 'delete').map((action:any, id:any) => {
+                        return <li className="action" id='status' data-type={action.type} key={id} onClick={async () => {
                                                 setPickedAction(action)
                                                 setIsActionPicked(true)
                                                 setIsActionsWindowOpened(false)
+                                                // handleUpdate(e)
+                                                await updateTask(updatedTask.data, action.type)
+                                                        .then((data:any) => data.json())
+                                                        .then((res:TTask[]) => {
+                                                            setTasks(res)
+                                                        })
                                             }}>
                                     {action.desc}
                                 </li>
