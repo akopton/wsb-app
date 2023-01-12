@@ -47,7 +47,6 @@ const App = () => {
               setIsLoggedIn={setIsLoggedIn}
               setLoggedUser={setLoggedUser}
               defaultUser={defaultUser}
-              TUser
             />
           }
         </>

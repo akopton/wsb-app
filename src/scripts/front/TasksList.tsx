@@ -3,7 +3,7 @@ import { TTask } from "../interfaces/taskInterface"
 import SingleTask from "./SingleTask"
 
 
-const TasksList = ({list, tasks, showUserTasks, loggedUser, searchValue, setTaskToOpen, setIsTaskOpened}:any) => {
+const TasksList = ({list, tasks, showUserTasks, loggedUser, searchValue, setTaskToOpen, setIsTaskOpened, setTasks}:any) => {
 
     const removePolishLetters = (str:string) => {
         return str.toLowerCase().replace(/ą/g, 'a')
@@ -44,6 +44,7 @@ const TasksList = ({list, tasks, showUserTasks, loggedUser, searchValue, setTask
                                             task={task} 
                                             key={id}
                                             searchValue={searchValue}
+                                            setTasks={setTasks}
                                         />
                             }
                         })
@@ -57,6 +58,7 @@ const TasksList = ({list, tasks, showUserTasks, loggedUser, searchValue, setTask
                                             task={task} 
                                             key={id}
                                             searchValue={searchValue}
+                                            setTasks={setTasks}
                                         />
                             }
                         })
@@ -68,7 +70,8 @@ const TasksList = ({list, tasks, showUserTasks, loggedUser, searchValue, setTask
                                             setIsTaskOpened={setIsTaskOpened}
                                             task={task} 
                                             key={id}
-                                            searchValue={searchValue} 
+                                            searchValue={searchValue}
+                                            setTasks={setTasks} 
                                         />
                             }
                         })

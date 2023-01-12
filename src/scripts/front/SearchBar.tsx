@@ -30,7 +30,7 @@ const SearchBar = ({tasks, setSearchValue, searchValue}:any) => {
                 onChange={handleTaskToFind}
             />
             <div className='searchbar-tooltip' style={{display: showTooltip ? 'block' : 'none'}}>
-                search by task id{tasks.length && `, eg. ${tasks[0].innerId}`}
+                search by task id, title or asignee name
             </div>
         </div>
     )

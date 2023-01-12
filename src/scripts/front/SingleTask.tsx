@@ -5,8 +5,9 @@ import TaskDescription from "./TaskDescription"
 // import TaskTitle from "./TaskTitle"
 import useConvertedDate from "./useConvertedDate"
 import { TTask } from "../interfaces/taskInterface"
+import { updateTask } from "../fetches/updateTask"
 
-const SingleTask = ({ task, setTaskToOpen, setIsTaskOpened, searchValue }:{ task:TTask, setTaskToOpen:any, setIsTaskOpened:any, searchValue:string }) => {
+const SingleTask = ({ task, setTaskToOpen, setIsTaskOpened, searchValue, setTasks }:{ task:TTask, setTaskToOpen:any, setIsTaskOpened:any, searchValue:string, setTasks:any }) => {
     const [isExpired, setIsExpired] = useState<boolean>(false)
     const convertedDate = useConvertedDate(task.date, searchValue)
     const {title} = task
@@ -15,10 +16,17 @@ const SingleTask = ({ task, setTaskToOpen, setIsTaskOpened, searchValue }:{ task
         setTaskToOpen(task)
     }
 
-    const handleExpiredTask = () => {
+    const handleExpiredTask = async () => {
     const todaysDate = new Date().getTime()
     
         if (todaysDate > task.date) {
+            if (task.status !== 'expired') {
+                await updateTask(task, 'expired')
+                    .then((data:any) => data.json())
+                    .then((res:TTask[]) => {
+                        setTasks(res)
+                    })
+            }
             setIsExpired(true)
         }
         else setIsExpired(false)

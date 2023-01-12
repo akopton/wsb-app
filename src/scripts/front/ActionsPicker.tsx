@@ -5,12 +5,15 @@ import { TTask } from "../interfaces/taskInterface"
 import { updateTask } from "../fetches/updateTask"
 
 const ActionsPicker = ( 
-    {lists, handleToggleOpen, updatedTask, setIsActionsWindowOpened, isActionsWindowOpened, task, setTasks}: any 
+    {lists, handleToggleOpen, updatedTask, setIsActionsWindowOpened, isActionsWindowOpened, task, setTasks, windowWidth}: any 
     ) => {
 
     const {status} = task
     const [isActionPicked, setIsActionPicked] = useState<boolean>(false)
-    const [pickedAction, setPickedAction] = useState<{type: string, desc: string} | any>()
+    const [pickedAction, setPickedAction] = useState<{type: string, desc: string}>()
+    const [statusToShow, setStatusToShow] = useState<{type: string, desc: string}>({type:'',desc:''})
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [error, setError] = useState<string>()
     const [actions, setActions] = useState([
         {
             type: 'delete',
@@ -20,7 +23,7 @@ const ActionsPicker = (
     const handleActions = () => {
         for (const list of lists) {
             if (actions.filter(e => e.type === list.type).length > 0) return
-            actions.push({type:list.type, desc:`Set as ${list.type}`})
+            actions.push({type:list.type, desc:list.title})
         }
         setActions(actions)
     }
@@ -28,6 +31,11 @@ const ActionsPicker = (
     useEffect(()=>{
         handleActions()
     },[updatedTask.data])
+
+    useEffect(()=>{
+        const statusToShow = actions.filter(action => action.type === updatedTask.data.status)
+        setStatusToShow(statusToShow[0])
+    },[pickedAction])
 
     return (
         <div className="actions-picker">
@@ -38,77 +46,81 @@ const ActionsPicker = (
                             setIsActionsWindowOpened(!isActionsWindowOpened)
                         }
                     }
+                    // style={isActionsWindowOpened ? 
+                    //     {borderTop: 'none'}
+                    //     :
+                    //     {borderTop: 'none'}
+                    // }
+                >
+                        
+                        <span>{isLoading ? 'Loading' : `${statusToShow.desc}`}</span>
+                </div>
+                {
+                    windowWidth > 768 &&
+                    <div 
+                        className="submit-action"
+                    >
+                        <BiDownArrow 
+                            className="submit-action__btn"
+                            style={isActionsWindowOpened ? 
+                                {transform:'rotate(180deg)', transition:'.15s ease', color: 'rgb(57, 255, 238)'}
+                                :
+                                {transition:'.15s ease'}
+                            }
+                        />
+                    </div>
+                }
+            </div>
+            {updatedTask.data.status !== 'expired' &&
+                <ul
+                    className="actions-window" 
                     style={isActionsWindowOpened ? 
-                        {borderTop: 'none'}
-                        :
-                        {borderTop: 'none'}
+                        {
+                            display: windowWidth > 768 ? 'block' : '',
+                            height: 'fit-content',
+                            bottom: windowWidth < 768 ? '0' : '', 
+                            transition: 'bottom .3s ease', 
+                            border: windowWidth > 768 ? '1px solid rgb(57, 255, 238)' : ''
+                        } 
+                        : 
+                        {
+                            display: windowWidth > 768 ? 'none' : '',
+                            bottom: windowWidth < 768 ? `-${actions.length * 28}px` : '', 
+                            transition: 'bottom .3s ease'
+                        }
                     }
                 >
-                    <span 
-                        style={{lineHeight: '30px'}}
-                    >
-                        {/* {isActionPicked ? pickedAction.desc : 'Pick an action...'} */}
-                        {updatedTask.data.status}
-                    </span>
-                    
-                </div>
-                {/* <div 
-                    className="submit-action"
-                    onClick={()=>{
-                        if (isActionsWindowOpened) return
-                        // if (pickedAction && pickedAction.type !== 'delete') {
-                        //     updateTask()
-                        // }
-                        // if (pickedAction && pickedAction.type === 'delete') {
-                        //     setTimeout(()=>{
-                        //         handleDelete()
-                        //     },500)
-                        // }
-                        updateTask()
-                        setPickedAction({})
-                        handleToggleOpen(false)
-                        setIsActionPicked(false)
-                        handleToggleOpen(false)
-                        setIsActionsWindowOpened(false)
-                    }} 
+                    {windowWidth < 768 ? <span style={{paddingBottom: '10px'}}>Wybierz status</span> : <></>}
+                    {
+                        actions.filter(e => e.type !== status && e.type !== 'expired' && e.type !== 'delete').map((action:any, id:any) => {
+                            return <li className="action" id='status' data-type={action.type} key={id} onClick={async () => {
+                                                    setPickedAction(action)
+                                                    setIsActionPicked(true)
+                                                    setIsActionsWindowOpened(false)
+                                                    // handleUpdate(e)
+                                                    setIsLoading(true)
+                                                    await updateTask(updatedTask.data, action.type)
+                                                            .then((data:any) => data.json())
+                                                            .then((res:TTask[]) => {
+                                                                setTasks(res)
+                                                                setIsLoading(false)
+                                                            })
+                                                            .catch(() => setError('Something went wrong, try again later.'))
+                                                }}>
+                                        {action.desc}
+                                    </li>
+                        })
+                    }
+                </ul>
+            }
+            {
+                error &&
+                <div 
+                    className="error"
                 >
-                    <BiDownArrow 
-                        className="submit-action__btn"
-                        style={isActionsWindowOpened ? 
-                            {transform:'rotate(180deg)', transition:'.3s ease'}
-                            : pickedAction ? 
-                            {transform:'rotate(270deg)', transition:'.3s ease', color: 'rgb(57, 255, 238)'}
-                            :
-                            {transition:'.3s ease'}
-                        }
-                    />
-                </div> */}
-            </div>
-            <ul
-                className="actions-window" 
-                style={isActionsWindowOpened ? 
-                    {height: '100px', transition: 'height .3s ease'} 
-                    : 
-                    {height: '0', padding: '0 5px', transition: 'height .3s ease'}}
-            >
-                {
-                    actions.filter(e => e.type !== status && e.type !== 'expired' && e.type !== 'delete').map((action:any, id:any) => {
-                        return <li className="action" id='status' data-type={action.type} key={id} onClick={async () => {
-                                                setPickedAction(action)
-                                                setIsActionPicked(true)
-                                                setIsActionsWindowOpened(false)
-                                                // handleUpdate(e)
-                                                await updateTask(updatedTask.data, action.type)
-                                                        .then((data:any) => data.json())
-                                                        .then((res:TTask[]) => {
-                                                            setTasks(res)
-                                                        })
-                                            }}>
-                                    {action.desc}
-                                </li>
-                    })
-                }
-            </ul>
+                    {error}
+                </div>
+            }
         </div>
     )
 }

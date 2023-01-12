@@ -15,6 +15,15 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
     const convertedDate = useConvertedDate(task.date)
     const fullName = `${task.asignee.firstName} ${task.asignee.lastName}`
     const [showContent, setShowContent] = useState<boolean>(false)
+    const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth)
+
+    const handleWindowWidth = () => {
+        setWindowWidth(window.innerWidth)
+    }
+
+    useEffect(()=> {
+        window.addEventListener('resize', handleWindowWidth)
+    },[window.innerWidth])
 
     const initialTaskState = {
         data: {
@@ -78,101 +87,117 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
             setShowContent(true)
         }, 350);
     },[isTaskOpened])
-    
+
     return (
-        <div
-            className='opened-task'
-            style={
-                !updatedTask.isOpened ?
-                {
-                    height: '0',
-                    minHeight: '0',
-                    width: '0',
-                    minWidth: '0',
-                    transition: 'all .3s ease'
+        <>
+            <div
+                className='opened-task'
+                style={
+                    !updatedTask.isOpened ?
+                    {
+                        height: '0',
+                        minHeight: '0',
+                        width: '0',
+                        minWidth: '0',
+                        transition: 'all .3s ease'
+                    }
+                    : windowWidth < 768 ?
+                    {
+                        height: '100%',
+                        minHeight: '100%',
+                        width: '100%',
+                        minWidth: '100%',
+                        transition: 'all .3s ease',
+                        overflow: 'hidden',
+                    }
+                    :
+                    {
+                        height: '60%',
+                        minHeight: '60%',
+                        width: '80%',
+                        minWidth: '80%',
+                        transition: 'all .3s ease'
+                    }
                 }
-                :
+                key={id}
+                onClick={(e)=>{
+                    setTaskToOpen(task)
+                    if (isPopupOpened) return
+                    // if (!updatedTask.isOpened) {
+                        // handleToggleOpen(true)
+                    // }
+                    }}
+            >
                 {
-                    height: '100%',
-                    minHeight: '100%',
-                    width: '100%',
-                    minWidth: '100%',
-                    transition: 'all .3s ease'
-                }
-            }
-            key={id}
-            onClick={(e)=>{
-                setTaskToOpen(task)
-                if (isPopupOpened) return
-                // if (!updatedTask.isOpened) {
-                    // handleToggleOpen(true)
-                // }
-                }}
-        >
-            {
-                showContent &&
-                <>
-                    <div className="opened-task__top-wrap">
-                        <span className="opened-task__id">{task.innerId}</span>
-                        {
-                            !isEditable ? 
-                                <div 
-                                    className="opened-task__close-btn" 
-                                    onClick={()=> {
-                                        setTimeout(()=>{
-                                            setIsTaskOpened(false)
-                                        },100)
-                                        setShowContent(false)
-                                        handleToggleOpen(false)
-                                    }}
-                                    />
-                                    :
-                                    <div
-                                        className="opened-task__submit-changes"
-                                        onClick={() => {
-                                            handleSubmit(updatedTask.data)
-                                            setIsEditable(false)
+                    showContent &&
+                    <>
+                        <div className="opened-task__top-wrap">
+                            <span className="opened-task__id">{task.innerId}</span>
+                            {
+                                !isEditable ? 
+                                    <div 
+                                        className="opened-task__close-btn" 
+                                        onClick={()=> {
+                                            setTimeout(()=>{
+                                                setIsTaskOpened(false)
+                                            },100)
+                                            setShowContent(false)
+                                            handleToggleOpen(false)
                                         }}
-                                    >
-                                    Submit
-                                </div>
-                        }
-                    </div>
-                    <div className="opened-task__content">
-                        <span className="opened-task__title">{task.title}</span>
-                        <ActionsPicker
-                            isExpired={isExpired}
-                            lists={lists}
-                            updateTask={updateTask}
-                            setIsActionsWindowOpened={setIsActionsWindowOpened}
-                            isActionsWindowOpened={isActionsWindowOpened}
-                            task={task}
-                            handleToggleOpen={handleToggleOpen}
-                            updatedTask={updatedTask}
-                            handleUpdate={handleUpdate}
-                            // handleDelete={handleDelete}
-                            handleSubmit={handleSubmit}
-                            setTasks={setTasks}
-                        />
-                        <>
-                            <span style={{marginBottom: '-10px'}}>Opis</span>
-                            <TaskDescription 
-                                updatedTask={updatedTask}
-                                setIsEditable={setIsEditable}
-                                isEditable={isEditable}
-                                handleUpdate={handleUpdate}
-                                handleSubmit={handleSubmit}
-                            />
-                        </>
-                        <div className="asigned-person">
-                            <span>Asigned person:</span>
-                            <span>{fullName}</span>
+                                        />
+                                        :
+                                        <div
+                                            className="opened-task__submit-changes"
+                                            onClick={() => {
+                                                handleSubmit(updatedTask.data)
+                                                setIsEditable(false)
+                                            }}
+                                        >
+                                        Submit
+                                    </div>
+                            }
                         </div>
-                        <span>{convertedDate}</span>
-                    </div>
-                </>
+                        <div className="opened-task__content">
+                            <span className="opened-task__title">{task.title}</span>
+                            <ActionsPicker
+                                isExpired={isExpired}
+                                lists={lists}
+                                updateTask={updateTask}
+                                setIsActionsWindowOpened={setIsActionsWindowOpened}
+                                isActionsWindowOpened={isActionsWindowOpened}
+                                task={task}
+                                handleToggleOpen={handleToggleOpen}
+                                updatedTask={updatedTask}
+                                handleUpdate={handleUpdate}
+                                // handleDelete={handleDelete}
+                                handleSubmit={handleSubmit}
+                                setTasks={setTasks}
+                                windowWidth={windowWidth}
+                            />
+                            <>
+                                <span style={{marginBottom: '-10px'}}>Opis</span>
+                                <TaskDescription 
+                                    updatedTask={updatedTask}
+                                    setIsEditable={setIsEditable}
+                                    isEditable={isEditable}
+                                    handleUpdate={handleUpdate}
+                                    handleSubmit={handleSubmit}
+                                />
+                            </>
+                            <div className="asigned-person">
+                                <span>Asigned person:</span>
+                                <span>{fullName}</span>
+                            </div>
+                            <span>{convertedDate}</span>
+                        </div>
+                    </>
+                }
+            </div>
+            {
+                updatedTask.isOpened &&
+                <div className="blur"/>
             }
-        </div>
+        </>
     )
 }
 

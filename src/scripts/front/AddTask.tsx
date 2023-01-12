@@ -190,7 +190,7 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
                                 <ul 
                                     className='asignee-list' 
                                     style={isUsersListOpened ? 
-                                        {maxHeight:'200px', transition:'all .3s ease', padding:'10px'} 
+                                        {maxHeight:'230px', transition:'all .3s ease', padding:'10px'} 
                                         : 
                                         {maxHeight: '0', padding: '0 10px', transition:'all .3s ease'}}
                                 >
@@ -234,12 +234,12 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
                     className='submit-btn form__btn btn --margin'
                     type='submit'
                 />
-                {isUsersListOpened && 
+                {/* {isUsersListOpened && 
                     <div 
                         className='blur'
                         onClick={()=>setIsUsersListOpened(false)}    
                     />
-                }
+                } */}
             </form>
     )
 }

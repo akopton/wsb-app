@@ -33,19 +33,19 @@ const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaul
     const [lists, setLists] = useState<{}[]>([
         {
             type: 'todo',
-            title: 'Todo Tasks'
+            title: 'Do zrobienia'
         },
         {
             type: 'active',
-            title: 'Active Tasks'
+            title: 'W trakcie'
         },
         {
             type: 'done',
-            title: 'Done Tasks'
+            title: 'Zrobione'
         },
         {
             type: 'expired',
-            title: 'Expired Tasks'
+            title: 'Po terminie'
         }
     ])
 
