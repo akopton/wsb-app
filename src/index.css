@@ -98,7 +98,133 @@
   position: relative;
   color: white;
 }
-.main-site .nav-menu {
+
+@media screen and (min-width: 1420px) {
+  .main-site {
+    padding-right: 20%;
+  }
+}
+.main-nav {
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  z-index: 100;
+  padding: 10px;
+}
+.main-nav .buttons-wrapper {
+  display: flex;
+  gap: 10px;
+}
+.main-nav .buttons-wrapper .add-task__button {
+  position: relative;
+  width: 45px;
+  height: 45px;
+  transition: ease 0.2s;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  z-index: 0;
+}
+.main-nav .buttons-wrapper .add-task__button:before {
+  content: "";
+  position: absolute;
+  height: 4px;
+  width: 60%;
+  background-color: black;
+  border-radius: 5px;
+  transform: rotate(90deg);
+}
+.main-nav .buttons-wrapper .add-task__button::after {
+  content: "";
+  position: absolute;
+  height: 4px;
+  width: 60%;
+  border-radius: 5px;
+  background-color: black;
+}
+@media screen and (min-width: 1420px) {
+  .main-nav .buttons-wrapper .add-task__button {
+    position: fixed;
+    right: 100px;
+    top: 30px;
+    width: 100px;
+    height: 35px;
+    font-size: 20px;
+    border-radius: 10px;
+    z-index: 10;
+  }
+  .main-nav .buttons-wrapper .add-task__button:before, .main-nav .buttons-wrapper .add-task__button:after {
+    display: none;
+  }
+  .main-nav .buttons-wrapper .add-task__button:hover {
+    border-radius: 15px;
+  }
+}
+.main-nav .buttons-wrapper .add-task__button.icon {
+  color: rgb(57, 255, 238);
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  top: 10px;
+  right: 10px;
+  font-size: 50px;
+  background: none;
+}
+.main-nav .buttons-wrapper .add-task__button.icon:hover {
+  color: white;
+}
+.main-nav .buttons-wrapper .hamburger {
+  position: relative;
+  z-index: 4;
+  height: 45px;
+  width: 45px;
+  padding: 10px 0;
+  transition: 0.1s ease;
+  cursor: pointer;
+}
+.main-nav .buttons-wrapper .hamburger__piece {
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  background-color: white;
+  border-radius: 5px 5px 5px 5px;
+  transition: ease 0.1s;
+}
+.main-nav .buttons-wrapper .hamburger__piece.--top {
+  top: 5px;
+}
+.main-nav .buttons-wrapper .hamburger__piece.--middle-left {
+  background-color: rgb(57, 255, 238);
+  top: 50%;
+  transform: translateY(-50%);
+  right: 50%;
+  width: 50%;
+  border-radius: 5px 0px 0px 5px;
+}
+.main-nav .buttons-wrapper .hamburger__piece.--middle-right {
+  background-color: rgb(253, 161, 249);
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 0px 5px 5px 0px;
+  left: 50%;
+  width: 50%;
+}
+.main-nav .buttons-wrapper .hamburger__piece.--bottom {
+  position: absolute;
+  bottom: 5px;
+}
+@media screen and (min-width: 1420px) {
+  .main-nav .buttons-wrapper .hamburger {
+    display: none;
+  }
+}
+.main-nav .nav-menu {
   position: fixed;
   top: 0;
   right: 0;
@@ -111,11 +237,17 @@
   width: 100%;
 }
 @media screen and (min-width: 768px) {
-  .main-site .nav-menu {
+  .main-nav .nav-menu {
     width: 300px;
   }
 }
-.main-site .nav-menu__items {
+@media screen and (min-width: 1420px) {
+  .main-nav .nav-menu {
+    border-left: 3px solid rgb(57, 255, 238);
+    background: #2c2c2c;
+  }
+}
+.main-nav .nav-menu__items {
   padding-top: 120px;
   display: flex;
   flex-direction: column;
@@ -123,11 +255,11 @@
   align-items: center;
   gap: 50px;
 }
-.main-site .nav-menu__items .item {
+.main-nav .nav-menu__items .item {
   font-size: 36px;
   position: relative;
 }
-.main-site .nav-menu__items .item:after {
+.main-nav .nav-menu__items .item:after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -137,19 +269,14 @@
   background-color: rgb(57, 255, 238);
   transition: 0.15s ease;
 }
-.main-site .nav-menu__items .item:hover {
+.main-nav .nav-menu__items .item:hover {
   cursor: pointer;
 }
-.main-site .nav-menu__items .item:hover:after {
+.main-nav .nav-menu__items .item:hover:after {
   transition: 0.15s ease;
   width: 100%;
 }
 
-@media screen and (min-width: 1420px) {
-  .main-site {
-    padding-right: 20%;
-  }
-}
 .new-task-form {
   position: fixed;
   top: 0;
@@ -474,6 +601,12 @@
   height: 4px;
   width: 100%;
 }
+@media screen and (min-width: 1420px) {
+  .slide-indicator {
+    width: 50%;
+    left: calc(50% - 150px);
+  }
+}
 
 .loader, .loader:before, .loader:after {
   border-radius: 50%;
@@ -760,95 +893,16 @@
   line-height: 100%;
   font-size: 26px;
   width: 100%;
-  padding: 0 10px 0 10px;
+  padding: 5px 10px 5px 10px;
   border: 2px solid rgb(57, 255, 238);
+}
+.searchbar__wrapper .searchbar:focus {
+  border-color: white;
 }
 .searchbar__wrapper .searchbar-tooltip {
   position: absolute;
   top: 100%;
   font-size: 14px;
-}
-
-.main-nav {
-  position: fixed;
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  width: 100%;
-  z-index: 100;
-  padding: 10px;
-}
-.main-nav .buttons-wrapper {
-  display: flex;
-  gap: 10px;
-}
-.main-nav .buttons-wrapper .add-task__button {
-  position: relative;
-  width: 45px;
-  height: 45px;
-  transition: ease 0.2s;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  z-index: 0;
-}
-.main-nav .buttons-wrapper .add-task__button:before {
-  content: "";
-  position: absolute;
-  height: 4px;
-  width: 60%;
-  background-color: black;
-  border-radius: 5px;
-  transform: rotate(90deg);
-}
-.main-nav .buttons-wrapper .add-task__button::after {
-  content: "";
-  position: absolute;
-  height: 4px;
-  width: 60%;
-  border-radius: 5px;
-  background-color: black;
-}
-.main-nav .buttons-wrapper .hamburger {
-  position: relative;
-  z-index: 4;
-  height: 45px;
-  width: 45px;
-  padding: 10px 0;
-  transition: 0.1s ease;
-  cursor: pointer;
-}
-.main-nav .buttons-wrapper .hamburger__piece {
-  position: absolute;
-  width: 100%;
-  height: 5px;
-  background-color: white;
-  border-radius: 5px 5px 5px 5px;
-  transition: ease 0.1s;
-}
-.main-nav .buttons-wrapper .hamburger__piece.--top {
-  top: 5px;
-}
-.main-nav .buttons-wrapper .hamburger__piece.--middle-left {
-  background-color: rgb(57, 255, 238);
-  top: 50%;
-  transform: translateY(-50%);
-  right: 50%;
-  width: 50%;
-  border-radius: 5px 0px 0px 5px;
-}
-.main-nav .buttons-wrapper .hamburger__piece.--middle-right {
-  background-color: rgb(253, 161, 249);
-  top: 50%;
-  transform: translateY(-50%);
-  border-radius: 0px 5px 5px 0px;
-  left: 50%;
-  width: 50%;
-}
-.main-nav .buttons-wrapper .hamburger__piece.--bottom {
-  position: absolute;
-  bottom: 5px;
 }
 
 .opened-task {
@@ -921,6 +975,9 @@
   font-family: "Roboto", sans-serif;
   color: white;
   border-radius: 0;
+}
+.opened-task__content .opened-task__desc:focus {
+  border: none;
 }
 
 .blur {
@@ -1001,6 +1058,10 @@ input, textarea {
 
 ::-webkit-scrollbar:horizontal {
   height: 0px;
+}
+
+input:focus, textarea:focus {
+  border: 3px solid white;
 }
 
 input:-webkit-autofill,

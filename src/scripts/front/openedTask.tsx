@@ -7,7 +7,7 @@ import useConvertedDate from "./useConvertedDate"
 import { TTask } from "../interfaces/taskInterface"
 import { updateTask } from "../fetches/updateTask"
 
-const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, setIsTaskOpened, isTaskOpened}:any) => {
+const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, setIsTaskOpened, isTaskOpened, windowWidth}:any) => {
 
     const [isEditable, setIsEditable] = useState<boolean>(false)
     const [isActionsWindowOpened, setIsActionsWindowOpened] = useState<boolean>(false)
@@ -15,15 +15,7 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
     const convertedDate = useConvertedDate(task.date)
     const fullName = `${task.asignee.firstName} ${task.asignee.lastName}`
     const [showContent, setShowContent] = useState<boolean>(false)
-    const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth)
-
-    const handleWindowWidth = () => {
-        setWindowWidth(window.innerWidth)
-    }
-
-    useEffect(()=> {
-        window.addEventListener('resize', handleWindowWidth)
-    },[window.innerWidth])
+    
 
     const initialTaskState = {
         data: {

@@ -15,7 +15,7 @@ import { getTasksFromDatabase } from '../fetches/getTasks';
 
 
 
-const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaultUser }: any) => {
+const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaultUser, windowWidth }: any) => {
     const [isPopupOpened, setIsPopupOpened] = useState<boolean>(true)
     const [loadingTasks, setLoadingTasks] = useState<boolean>(true)
     const [isNewTaskFormOpened, setIsNewTaskFormOpened] = useState<boolean>(false)
@@ -67,6 +67,11 @@ const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaul
         })
     },[])
 
+    useEffect(()=>{
+        if (windowWidth > 1420) setIsNavMenuOpened(true)
+        else setIsNavMenuOpened(false)
+    },[windowWidth])
+
     return (
         <div className="main-site">
             {
@@ -97,6 +102,7 @@ const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaul
                     searchValue={searchValue}
                     setFilteredTasks={setFilteredTasks}
                     filteredTasks={filteredTasks}
+                    windowWidth={windowWidth}
                 />
                 <Swiper
                     style={{height:'100vh', display:'flex'}}
@@ -144,6 +150,7 @@ const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaul
                                             // searchResults={searchResults}
                                             searchValue={searchValue}
                                             filteredTasks={filteredTasks}
+                                            windowWidth={windowWidth}
                                             
                                         />
                                     }
@@ -179,6 +186,7 @@ const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaul
                     </SwiperSlide>
                     <SlideIndicator 
                         slides={slides} 
+                        windowWidth={windowWidth}
                     /> 
                 </Swiper>
                 {
@@ -190,6 +198,7 @@ const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaul
                             lists={lists}
                             task={taskToOpen} 
                             setTasks={setTasks}
+                            windowWidth={windowWidth}
                     />
                 }
         </div>

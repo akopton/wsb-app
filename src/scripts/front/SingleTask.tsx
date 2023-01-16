@@ -7,7 +7,7 @@ import useConvertedDate from "./useConvertedDate"
 import { TTask } from "../interfaces/taskInterface"
 import { updateTask } from "../fetches/updateTask"
 
-const SingleTask = ({ task, setTaskToOpen, setIsTaskOpened, searchValue, setTasks }:{ task:TTask, setTaskToOpen:any, setIsTaskOpened:any, searchValue:string, setTasks:any }) => {
+const SingleTask = ({ task, setTaskToOpen, setIsTaskOpened, searchValue, setTasks, windowWidth }:{ task:TTask, setTaskToOpen:any, setIsTaskOpened:any, searchValue:string, setTasks:any, windowWidth:number }) => {
     const [isExpired, setIsExpired] = useState<boolean>(false)
     const convertedDate = useConvertedDate(task.date, searchValue)
     const {title} = task

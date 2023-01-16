@@ -1,23 +1,13 @@
 import {Swiper, SwiperSlide, useSwiper} from 'swiper/react';
 import { useEffect, useState } from "react"
 
-const SlideIndicator = ({slides} : any) => {
+const SlideIndicator = ({slides, windowWidth} : any) => {
     const [currentSlide, setCurrentSlide] = useState<number>(0)
-    const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth)
     const swiper = useSwiper()
     
     swiper.on('transitionEnd', ()=>{
         setCurrentSlide(swiper.realIndex)
     })
-
-    const handleWindowWidth = () => {
-        setWindowWidth(window.innerWidth)
-    }
-
-    useEffect(()=> {
-        window.addEventListener('resize', handleWindowWidth)
-    },[window.innerWidth])
-
 
     return (
         <div className="slide-indicator">

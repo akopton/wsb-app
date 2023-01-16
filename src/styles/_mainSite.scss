@@ -4,56 +4,7 @@
     position: relative;
     color: white;
 
-    .nav-menu {
-        position: fixed;
-        top: 0;
-        right: 0;
-        height: 0;
-        background: rgba(#ffffff, 0.3);
-        backdrop-filter: blur(5px);
-        z-index: 0;
-        transition: ease .5s;
-        width: 100%;
-        
-        @media screen and (min-width: 768px) {
-            width: 300px;
-        }
-        
-        &__items {
-            padding-top: 120px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 50px;
-
-
-            .item {
-                font-size: 36px;
-                position: relative;
-
-                &:after {
-                    content: '';
-                    position: absolute;
-                    bottom: 0;
-                    left: 0;
-                    height: 2px;
-                    width: 0%;
-                    background-color: $light-blue;
-                    transition: .15s ease;
-                }
-
-                &:hover {
-                    cursor: pointer;
-
-                    &:after {
-                        transition: .15s ease;
-                        width: 100%;
-                    }
-                }
-            }
-        }
-    }
+    
 }
 
 @media screen and (min-width: 1420px) { 

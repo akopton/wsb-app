@@ -22,7 +22,8 @@ const MainNav = (
             setIsLoggedIn, 
             setShowUserTasks, 
             filteredTasks, 
-            setFilteredTasks
+            setFilteredTasks,
+            windowWidth
         }: any
     ) => {
 
@@ -41,6 +42,7 @@ const MainNav = (
                     isNewTaskFormOpened={isNewTaskFormOpened}
                     setIsNewTaskFormOpened={setIsNewTaskFormOpened}
                     isNavMenuOpened={isNavMenuOpened}
+                    windowWidth={windowWidth}
                 />
                 <Hamburger 
                     setIsNavMenuOpened={setIsNavMenuOpened}
@@ -63,6 +65,7 @@ const MainNav = (
                 setLoggedUser={setLoggedUser}
                 defaultUser={defaultUser}
                 setShowUserTasks={setShowUserTasks}
+                windowWidth={windowWidth}
             />
         </div>
     )

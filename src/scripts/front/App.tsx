@@ -17,6 +17,15 @@ const App = () => {
   const [isRegisterPanelOpened, setIsRegisterPanelOpened] = useState<boolean>(false)
   const [loggedUser, setLoggedUser] = useState<{}>(defaultUser)
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth)
+
+    const handleWindowWidth = () => {
+        setWindowWidth(window.innerWidth)
+    }
+
+    useEffect(()=> {
+        window.addEventListener('resize', handleWindowWidth)
+    },[window.innerWidth])
 
   return (
     <div className="app-container">
@@ -47,6 +56,7 @@ const App = () => {
               setIsLoggedIn={setIsLoggedIn}
               setLoggedUser={setLoggedUser}
               defaultUser={defaultUser}
+              windowWidth={windowWidth}
             />
           }
         </>

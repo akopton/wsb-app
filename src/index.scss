@@ -1,6 +1,7 @@
 @import './styles/app';
 @import './styles/loginSite';
 @import './styles/mainSite';
+@import './styles/mainNav';
 @import './styles/newTaskForm';
 @import './styles/tasksList';
 @import './styles/singleTask';
@@ -11,7 +12,6 @@
 @import './styles/actionsPicker';
 @import './styles/popup';
 @import './styles/searchBar';
-@import './styles/mainNav';
 @import './styles/openedTask';
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto:wght@300;400;500;700&display=swap');
 
@@ -81,6 +81,10 @@ input, textarea {
     height: 0px;
   }
   
+input:focus, textarea:focus {
+  border: 3px solid white;
+}
+
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover, 

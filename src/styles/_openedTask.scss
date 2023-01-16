@@ -79,6 +79,10 @@
             font-family: $main-font;
             color: white;
             border-radius: 0;
+
+            &:focus {
+                border: none
+            }
         }
     }
 

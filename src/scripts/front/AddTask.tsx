@@ -1,7 +1,7 @@
 import { isDocument } from '@testing-library/user-event/dist/utils';
 import React from 'react';
 import { useReducer, useMemo, useEffect, useState, useCallback, forwardRef } from 'react';
-import { BiDownArrow } from 'react-icons/bi'
+import { BiDownArrow, BiTime, BiX } from 'react-icons/bi'
 import { TUser } from '../interfaces/userInterface';
 import { BiCalendar } from 'react-icons/bi';
 import DatePicker from "react-datepicker";
@@ -18,23 +18,38 @@ const DateCustomInput = forwardRef(({ value, onClick, isCalendarOpen }:any, ref:
     </div>
   ));
 
-const NewTaskBtn = ( {isNavMenuOpened,isSingleTaskOpened,isNewTaskFormOpened, setIsNewTaskFormOpened}:any ) => {
+const NewTaskBtn = ( {isNavMenuOpened,isSingleTaskOpened,isNewTaskFormOpened, setIsNewTaskFormOpened, windowWidth}:any ) => {
 
     return (
-        <div 
-            className="add-task__button button--round"
-            style={isNavMenuOpened ? 
-                    {} 
-                    : isNewTaskFormOpened ? 
-                    {transform: 'rotate(45deg)', zIndex: '50', transition: 'ease .2s'}
-                    : isSingleTaskOpened ? 
-                    {zIndex:'4'}
-                    :
-                    {zIndex:'10'}
-                }
-                onClick={()=>setIsNewTaskFormOpened(!isNewTaskFormOpened)}
-        >
-        </div>
+        <>
+            {windowWidth > 1420 ? 
+                    <>
+                        {
+                            isNewTaskFormOpened ? 
+                                <BiX 
+                                    className='add-task__button button--round icon'
+                                    onClick={()=>setIsNewTaskFormOpened(false)}
+                                />
+                            :
+                                <div className='add-task__button button--round' onClick={()=>setIsNewTaskFormOpened(true)}>
+                                    Dodaj
+                                </div>
+                        }
+                    </>
+                :
+                    <div 
+                        className="add-task__button button--round"
+                        style={isNewTaskFormOpened ? 
+                                {transform: 'rotate(45deg)', zIndex: '50', transition: 'ease .2s'}
+                                : isSingleTaskOpened ? 
+                                {zIndex:'4'}
+                                :
+                                {zIndex:'10'}
+                            }
+                            onClick={()=>setIsNewTaskFormOpened(!isNewTaskFormOpened)}
+                    />
+            }
+        </>
     )
 }
 

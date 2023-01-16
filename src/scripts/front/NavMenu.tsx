@@ -23,7 +23,7 @@ const Hamburger = ({isNewTaskFormOpened, isNavMenuOpened, setIsNavMenuOpened, is
     )
 }
 
-const NavMenu = ({isNavMenuOpened, setLoggedUser, setIsLoggedIn, defaultUser, setShowUserTasks}:any) => {
+const NavMenu = ({isNavMenuOpened, setLoggedUser, setIsLoggedIn, defaultUser, setShowUserTasks, windowWidth}:any) => {
 
     const handleLogout = () => {
         setLoggedUser(defaultUser)

@@ -22,4 +22,9 @@
         height: 4px;
         width: 100%;
     }
+
+    @media screen and (min-width: 1420px) {
+        width: 50%;
+        left: calc(50% - 150px)
+    }
 }
