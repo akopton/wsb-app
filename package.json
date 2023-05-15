@@ -17,6 +17,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "jsdom-quokka-plugin": "^1.0.16",
+    "mongodb": "^4.9.1",
     "nodemon": "^2.0.20",
     "react": "^18.2.0",
     "react-datepicker": "^4.8.0",
@@ -27,8 +28,7 @@
     "react-scripts": "5.0.1",
     "request": "^2.88.2",
     "swiper": "^8.4.4",
-    "web-vitals": "^2.1.4",
-    "mongodb": "^4.9.1"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
