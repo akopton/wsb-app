@@ -1,8 +1,7 @@
-import React from "react"
-import { useEffect, useState, useCallback, useMemo, useRef } from "react"
-import { BiDownArrow, BiUpArrow, BiRightArrow } from 'react-icons/bi'
+import { useEffect, useState } from "react"
+import { BiDownArrow } from 'react-icons/bi'
 import { TTask } from "../interfaces/taskInterface"
-import { updateTask } from "../fetches/updateTask"
+import { updateTask } from "../methods/updateTask"
 
 const ActionsPicker = ( 
     {lists, handleToggleOpen, updatedTask, setIsActionsWindowOpened, isActionsWindowOpened, task, setTasks, windowWidth}: any 
@@ -46,14 +45,8 @@ const ActionsPicker = (
                             setIsActionsWindowOpened(!isActionsWindowOpened)
                         }
                     }
-                    // style={isActionsWindowOpened ? 
-                    //     {borderTop: 'none'}
-                    //     :
-                    //     {borderTop: 'none'}
-                    // }
                 >
-                        
-                        <span>{isLoading ? 'Loading' : `${statusToShow.desc}`}</span>
+                    <span>{isLoading ? 'Loading' : `${statusToShow.desc}`}</span>
                 </div>
                 {
                     windowWidth > 768 &&
@@ -97,7 +90,6 @@ const ActionsPicker = (
                                                     setPickedAction(action)
                                                     setIsActionPicked(true)
                                                     setIsActionsWindowOpened(false)
-                                                    // handleUpdate(e)
                                                     setIsLoading(true)
                                                     await updateTask(updatedTask.data, action.type)
                                                             .then((data:any) => data.json())

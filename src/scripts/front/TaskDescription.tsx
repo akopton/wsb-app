@@ -1,6 +1,3 @@
-import React from "react"
-import { useEffect, useState, useCallback, useMemo, useReducer } from "react"
-
 const TaskDescription = ({updatedTask, setIsEditable, isEditable, handleUpdate, handleSubmit}:any) => {
 
     return (
@@ -25,10 +22,8 @@ const TaskDescription = ({updatedTask, setIsEditable, isEditable, handleUpdate, 
                 :
                 <div
                     className="opened-task__desc"
-                    onClick={()=>setIsEditable(true)}
                 >
                     {updatedTask.data.description}
-                    {/* {updatedTask.data.description} */}
                 </div>
             }
         </>

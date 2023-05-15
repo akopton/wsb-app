@@ -2,33 +2,31 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const dotenv = require('dotenv');
-const request = require('request')
 dotenv.config();
 const app = express()
 const port = 8888
 
-app.use(bodyParser.urlencoded({extended: true}))
-// app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors());
 app.use(express.json())
 
 
 const uri = 'mongodb+srv://olek:zaqwsxcde@app.t3wuhzm.mongodb.net/?retryWrites=true&w=majority'
-const {MongoClient} = require('mongodb')
+const { MongoClient } = require('mongodb')
 const client = new MongoClient(uri)
 
 const {
-        getListOfTasks,
-        registerNewUser,
-        addNewTaskToDatabase,
-        getListOfUsers,
-        checkIfUserExists,
-        updateTaskStatus,
-        getIdFromDatabase,
-        updateIdFromDatabase,
-        findUserInDatabase,
-        deleteTask
-    } = require('./DB/index.js')
+    getListOfTasks,
+    registerNewUser,
+    addNewTaskToDatabase,
+    getListOfUsers,
+    checkIfUserExists,
+    updateTaskStatus,
+    getIdFromDatabase,
+    updateIdFromDatabase,
+    findUserInDatabase,
+    deleteTask
+} = require('./DB/index.js')
 
 
 
@@ -62,8 +60,8 @@ app.post('/delete-task', async (req, res) => {
 })
 
 app.get('/get-tasks', async (req, res) => {
-        const TASKS_LIST = await getListOfTasks(client)
-        res.send(TASKS_LIST)
+    const TASKS_LIST = await getListOfTasks(client)
+    res.send(TASKS_LIST)
 })
 
 

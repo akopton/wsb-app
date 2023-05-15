@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const {MongoClient} = require('mongodb')
+const { MongoClient } = require('mongodb')
 const uri = 'mongodb+srv://olek:zaqwsxcde@app.t3wuhzm.mongodb.net/?retryWrites=true&w=majority'
 const client = new MongoClient(uri)
 const usersCollection = client.db('wsb_app_database').collection('usersList')
@@ -10,11 +10,9 @@ const ObjectId = require('mongodb').ObjectId
 async function checkIfUserExists(client, newUser) {
     try {
         await client.connect()
-        const result = await usersCollection.findOne({login: newUser.login})
+        const result = await usersCollection.findOne({ login: newUser.login })
         if (result == null) return false
-        else {
-            return true
-        }
+        else return true
     } catch (e) {
         console.error(e)
     } finally {
@@ -74,10 +72,10 @@ async function addNewTaskToDatabase(client, newTask) {
 }
 
 async function deleteTask(client, TASK_TO_DELETE) {
-    const {_id} = TASK_TO_DELETE
+    const { _id } = TASK_TO_DELETE
 
     try {
-        await tasksCollection.deleteOne({"_id": ObjectId(_id)})
+        await tasksCollection.deleteOne({ "_id": ObjectId(_id) })
         const result = await tasksCollection.find({}).toArray()
         return result
     } catch (e) {
@@ -89,11 +87,11 @@ async function deleteTask(client, TASK_TO_DELETE) {
 }
 
 async function updateTaskStatus(client, UPDATED_TASK) {
-    const {_id, title, description, status} = UPDATED_TASK
+    const { _id, title, description, status } = UPDATED_TASK
 
     try {
         await client.connect()
-        await tasksCollection.updateOne({"_id": ObjectId(_id)}, {$set:{title: title, description:description, status:status}})
+        await tasksCollection.updateOne({ "_id": ObjectId(_id) }, { $set: { title: title, description: description, status: status } })
         const result = await tasksCollection.find({}).toArray()
         return result
     } catch (e) {
@@ -120,7 +118,7 @@ async function updateIdFromDatabase(client, updatedId) {
     const id = updatedId.updatedId
     try {
         await client.connect()
-        const result = await generatedId.updateOne({}, {$set:{id:id}})
+        const result = await generatedId.updateOne({}, { $set: { id: id } })
         return result
     } catch (e) {
         console.log(e)
@@ -130,13 +128,13 @@ async function updateIdFromDatabase(client, updatedId) {
 }
 
 async function findUserInDatabase(client, loginData) {
-    const {login, password} = loginData
+    const { login, password } = loginData
     try {
         await client.connect()
-        const result = await usersCollection.findOne({login:login, password:password})
+        const result = await usersCollection.findOne({ login: login, password: password })
         return result
     } catch (e) {
-        console.error(e)        
+        console.error(e)
     } finally {
         await client.close()
     }
@@ -148,7 +146,7 @@ module.exports = {
     findUserInDatabase: findUserInDatabase,
     updateIdFromDatabase: updateIdFromDatabase,
     getIdFromDatabase: getIdFromDatabase,
-    getListOfUsers: getListOfUsers, 
+    getListOfUsers: getListOfUsers,
     checkIfUserExists: checkIfUserExists,
     addNewTaskToDatabase: addNewTaskToDatabase,
     registerNewUser: registerNewUser,

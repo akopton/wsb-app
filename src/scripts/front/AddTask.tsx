@@ -1,15 +1,13 @@
-import { isDocument } from '@testing-library/user-event/dist/utils';
 import React from 'react';
-import { useReducer, useMemo, useEffect, useState, useCallback, forwardRef } from 'react';
-import { BiDownArrow, BiTime, BiX } from 'react-icons/bi'
-import { TUser } from '../interfaces/userInterface';
+import { useReducer, useEffect, useState, forwardRef } from 'react';
+import { BiDownArrow, BiX } from 'react-icons/bi'
 import { BiCalendar } from 'react-icons/bi';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { addTaskToDatabase } from '../fetches/addTask';
-import { updateIdForGenerator } from '../fetches/updateId';
-import { getIdForGenerator } from '../fetches/getId';
-import { getUsersFromDatabase } from '../fetches/getUsers';
+import { addTaskToDatabase } from '../methods/addTask';
+import { updateIdForGenerator } from '../methods/updateId';
+import { getIdForGenerator } from '../methods/getId';
+import { getUsersFromDatabase } from '../methods/getUsers';
 
 const DateCustomInput = forwardRef(({ value, onClick, isCalendarOpen }:any, ref:any) => (
     <div className="date-custom-input" onClick={onClick} ref={ref}>
@@ -32,7 +30,7 @@ const NewTaskBtn = ( {isNavMenuOpened,isSingleTaskOpened,isNewTaskFormOpened, se
                                 />
                             :
                                 <div className='add-task__button button--round' onClick={()=>setIsNewTaskFormOpened(true)}>
-                                    Dodaj
+                                    Add new task
                                 </div>
                         }
                     </>
@@ -138,8 +136,14 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
     
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        if(!newTask.title) return
-        if(!newTask.description) return
+        if(!newTask.title) {
+            alert('Title is required!')
+            return
+        }
+        if(!newTask.description) {
+            alert('Description is required!')
+            return
+        }
         await addTaskToDatabase(newTask)
                 .then(data => data.json())
                 .then(res => setTasks(res))

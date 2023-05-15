@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import { TTask } from '../interfaces/taskInterface'
+import { useEffect, useState } from 'react'
 
 const SearchBar = ({tasks, setSearchValue, searchValue}:any) => {
     const [showTooltip, setShowToolTip] = useState<boolean>(false)

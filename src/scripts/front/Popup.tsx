@@ -1,9 +1,6 @@
 import { TTask } from "../interfaces/taskInterface"
 import { TUser } from "../interfaces/userInterface"
 import { useEffect, useState } from "react"
-import useConvertedDate from "./useConvertedDate"
-import SingleTask from "./SingleTask"
-import TaskTitle from "./TaskTitle"
 
 const Popup = ({tasks, setIsPopupOpened, loggedUser, isPopupOpened}: {tasks:TTask[], setIsPopupOpened:any, loggedUser:TUser, isPopupOpened:any}) => {
     const [tasksByDate, setTasksByDate] = useState<TTask[]>([])

@@ -1,4 +1,4 @@
-import {Swiper, SwiperSlide, useSwiper} from 'swiper/react';
+import {Swiper, SwiperSlide} from 'swiper/react';
 import { useEffect, useState } from "react"
 import SlideIndicator from "./SlideIndicator";
 import 'swiper/css';
@@ -10,7 +10,7 @@ import { TTask } from '../interfaces/taskInterface';
 import Popup from './Popup';
 import MainNav from './MainNav';
 import OpenedTask from './OpenedTask';
-import { getTasksFromDatabase } from '../fetches/getTasks';
+import { getTasksFromDatabase } from '../methods/getTasks';
 
 
 
@@ -23,6 +23,7 @@ const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaul
     const [isNavMenuOpened, setIsNavMenuOpened] = useState<boolean>(false)
     const [slides, setSlides] = useState<number[]>([])
     const [showUserTasks, setShowUserTasks] = useState<boolean>(false)
+    const [isNewListWindowOpened, setIsNewListWindowOpened] = useState<boolean>(false)
 
     const [taskToOpen, setTaskToOpen] = useState<TTask | undefined>(undefined)
     const [isTaskOpened, setIsTaskOpened] = useState<boolean>(false)
@@ -33,30 +34,22 @@ const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaul
     const [lists, setLists] = useState<{}[]>([
         {
             type: 'todo',
-            title: 'Do zrobienia'
+            title: 'To do'
         },
         {
             type: 'active',
-            title: 'W trakcie'
+            title: 'In progress'
         },
         {
             type: 'done',
-            title: 'Zrobione'
+            title: 'Done'
         },
         {
             type: 'expired',
-            title: 'Po terminie'
+            title: 'Expired'
         }
     ])
 
-    const handleNewTasksList = () => {
-        setLists([...lists, {
-            type:'lol',
-            title: 'Lol Tasks'
-        }])
-        setSlides([...slides, 0])
-    }
-    
     useEffect(()=>{
         getTasksFromDatabase()
         .then((data) => data.json())
@@ -158,32 +151,9 @@ const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaul
                             )
                         })
                     }
-                    <SwiperSlide>
-                        <div className="todo-tasks list-wrap">
-                            <div className="wrapper">
-                                <div 
-                                    className='add-new-list-btn'
-                                    onClick={handleNewTasksList} 
-                                    style={{
-                                        position: 'absolute', 
-                                        top: '35%', 
-                                        left: '50%', 
-                                        transform: 'translate(-50%,-50%)', 
-                                        fontSize: '100px', 
-                                        cursor:'pointer', 
-                                        height: '100px', 
-                                        width:'100px', 
-                                        borderRadius:'50%', 
-                                        display:'flex',
-                                        alignItems:'center',
-                                        justifyContent:'center'
-                                    }}
-                                >
-                                    <span>+</span>
-                                </div>
-                            </div>
-                        </div>
-                    </SwiperSlide>
+                    {/* <SwiperSlide>
+                        <AddTasksList handleNewTasksList={handleNewTasksList}/>
+                    </SwiperSlide> */}
                     <SlideIndicator 
                         slides={slides} 
                         windowWidth={windowWidth}
@@ -201,6 +171,10 @@ const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaul
                             windowWidth={windowWidth}
                     />
                 }
+                {/* {
+                    isNewListWindowOpened &&
+                    <NewListWindow closeNewListWindow={closeNewListWindow}/>
+                } */}
         </div>
     )
 }

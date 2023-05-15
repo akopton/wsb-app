@@ -1,8 +1,4 @@
-import React from "react"
-import { useEffect, useState, useCallback, useMemo, useReducer } from "react"
-
 const TaskTitle = ({title}:any) => {
-    // const {data: {title}} = updatedTask
     return (
         <div 
             className="single-task__title" 
@@ -16,7 +12,6 @@ const TaskTitle = ({title}:any) => {
                 }    
         >
             {title}
-            {/* {updatedTask.title ? updatedTask.title : updatedTask.data.title} */}
         </div>
     )
 }

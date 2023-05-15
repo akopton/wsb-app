@@ -1,11 +1,12 @@
-import React from "react"
-import { useEffect, useState, useCallback, useMemo, useReducer } from "react"
+import { useEffect, useState, useReducer } from "react"
 import ActionsPicker from "./ActionsPicker"
 import TaskDescription from "./TaskDescription"
-// import TaskTitle from "./TaskTitle"
-import useConvertedDate from "./useConvertedDate"
+import useConvertedDate from "../methods/useConvertedDate"
 import { TTask } from "../interfaces/taskInterface"
-import { updateTask } from "../fetches/updateTask"
+import { updateTask } from "../methods/updateTask"
+import { BsTrash } from "react-icons/bs"
+import { DeleteTaskWindow } from "./DeleteTaskWindow"
+import {HiOutlinePencilAlt} from 'react-icons/hi'
 
 const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, setIsTaskOpened, isTaskOpened, windowWidth}:any) => {
 
@@ -15,7 +16,7 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
     const convertedDate = useConvertedDate(task.date)
     const fullName = `${task.asignee.firstName} ${task.asignee.lastName}`
     const [showContent, setShowContent] = useState<boolean>(false)
-    
+    const [isDeleteWindowOpened, setIsDeleteWindowOpened] = useState<boolean>(false)
 
     const initialTaskState = {
         data: {
@@ -73,6 +74,16 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
                 })
     }
 
+    const handleDelete = async (task: TTask) => {
+        handleToggleOpen(false)
+        setIsTaskOpened(false)
+        await updateTask(task, 'deleted')
+                .then(data => data.json())
+                .then(res => {
+                    setTasks(res)
+                })
+    }
+
     useEffect(()=>{
         handleToggleOpen(isTaskOpened)
         setTimeout(() => {
@@ -106,8 +117,8 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
                     {
                         height: '60%',
                         minHeight: '60%',
-                        width: '80%',
-                        minWidth: '80%',
+                        width: '40%',
+                        minWidth: '40%',
                         transition: 'all .3s ease'
                     }
                 }
@@ -115,10 +126,7 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
                 onClick={(e)=>{
                     setTaskToOpen(task)
                     if (isPopupOpened) return
-                    // if (!updatedTask.isOpened) {
-                        // handleToggleOpen(true)
-                    // }
-                    }}
+                }}
             >
                 {
                     showContent &&
@@ -167,7 +175,7 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
                                 windowWidth={windowWidth}
                             />
                             <>
-                                <span style={{marginBottom: '-10px'}}>Opis</span>
+                                <span className="description-title">Opis <HiOutlinePencilAlt className="description-title__icon" onClick={()=>setIsEditable(true)}/></span>
                                 <TaskDescription 
                                     updatedTask={updatedTask}
                                     setIsEditable={setIsEditable}
@@ -184,10 +192,15 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
                         </div>
                     </>
                 }
+                <div className="delete-btn" onClick={()=>setIsDeleteWindowOpened(true)}><BsTrash className="delete-btn__icon"/></div>
             </div>
             {
                 updatedTask.isOpened &&
                 <div className="blur"/>
+            }
+            {
+                isDeleteWindowOpened &&
+                <DeleteTaskWindow setIsDeleteWindowOpened={setIsDeleteWindowOpened} task={updatedTask.data} handleDelete={handleDelete}/>
             }
         </>
     )

@@ -1,21 +1,12 @@
-import React, { useReducer } from "react"
+import  { useReducer } from "react"
 import { useState } from "react"
 import { BiRightArrowCircle } from "react-icons/bi"
-import { registerNewUser } from "../fetches/register"
+import { registerNewUser } from "../methods/register"
 import { TUser } from "../interfaces/userInterface"
 
 const RegisterPanel = ( {defaultUser}:any ) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isFirstStepDone, setIsFirstStepDone] = useState<boolean>(false)
-    const [isRegistered, setIsRegistered] = useState<boolean>(false)
-
-    // type TUser = {
-    //     firstName: {value: string, isValid: boolean},
-    //     lastName: {value: string, isValid: boolean},
-    //     email: {value: string, isValid: boolean},
-    //     login: {value: string, isValid: boolean},
-    //     password: {value: string, isValid: boolean},
-    // }
 
     const initialUser = defaultUser
 
@@ -42,8 +33,6 @@ const RegisterPanel = ( {defaultUser}:any ) => {
     }
     
     const [registerData, dispatch] = useReducer(registerReducer, initialUser)
-
-    
     
     const clearAll = () => {
         dispatch({
@@ -51,22 +40,48 @@ const RegisterPanel = ( {defaultUser}:any ) => {
         })
     }
 
+
+    const handleFirstStep = (e:any) => {
+        e.preventDefault()
+        if (!registerData.firstName) {
+            alert('First name is required!')
+            return
+        }
+        if (!registerData.lastName) {
+            alert('Last name is required!')
+            return
+        }
+        setIsFirstStepDone(true)
+    }
+
     const handleSubmit = async (registerData:TUser) => {
-        const {email, login, password}:any = registerData
-        if (!email) return
-        if (!login) return
-        if (!password) return
+        const {email, login, password}:{email: string, login: string, password: string} = registerData
+        if (!email) {
+            alert('Email is required!')
+            return
+        }
+        if (!login) {
+            alert('Login is required!')
+            return
+        }
+        if (!password) {
+            alert('Password is required!')
+            return
+        }
     
         setIsLoading(true)
         await registerNewUser(registerData)
-                .then(data => data.json())
+                .then(data => {
+                    return data.json()
+                })
                 .then(res => {
                     setIsLoading(false)
+                    console.log(res)
                     if (res) {
-                        alert('Użytkownik o podanym mailu/loginie już istnieje')
+                        alert('User with this login already exists!')
                         return
                     } else {
-                        alert('pomyślnie zarejestrowano')
+                        alert('Successfully registered!')
                         clearAll()
                         setIsFirstStepDone(false)
                         return
@@ -105,10 +120,7 @@ const RegisterPanel = ( {defaultUser}:any ) => {
                 <button
                     className="register-panel__next-step-button form__btn btn"
                     type='submit'
-                    onClick={(e) => {
-                        e.preventDefault()
-                        setIsFirstStepDone(true)
-                    }}
+                    onClick={handleFirstStep}
                 >
                     <BiRightArrowCircle />
                 </button>

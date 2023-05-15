@@ -13,5 +13,4 @@ export const updateTask = async (data:TTask, status?:string) => {
     }
    
     return fetch('http://127.0.0.1:8888/update-task', settings)
-    
 }

@@ -1,6 +1,3 @@
-import React from "react"
-import { useEffect, useState } from "react"
-
 const Hamburger = ({isNewTaskFormOpened, isNavMenuOpened, setIsNavMenuOpened, isSingleTaskOpened}:any) => {
     return (
         <div 

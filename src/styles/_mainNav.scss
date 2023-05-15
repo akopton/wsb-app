@@ -13,8 +13,6 @@
 
         .add-task__button {
             position: relative;
-            width: 45px;
-            height: 45px;
             transition: ease .2s;
             user-select: none;
             z-index: 0;
@@ -39,10 +37,10 @@
             }
 
             @media screen and (min-width: 1420px) {
-                position: fixed;
-                right: 100px;
+                position: absolute;
+                right: 72px;
                 top: 30px;
-                width: 100px;
+                width: 150px;
                 height: 35px;
                 font-size: 20px;
                 border-radius: 10px;

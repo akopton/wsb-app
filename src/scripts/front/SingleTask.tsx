@@ -1,11 +1,7 @@
-import React from "react"
-import { useEffect, useState, useCallback, useMemo, useReducer } from "react"
-import ActionsPicker from "./ActionsPicker"
-import TaskDescription from "./TaskDescription"
-// import TaskTitle from "./TaskTitle"
-import useConvertedDate from "./useConvertedDate"
+import { useEffect, useState } from "react"
+import useConvertedDate from "../methods/useConvertedDate"
 import { TTask } from "../interfaces/taskInterface"
-import { updateTask } from "../fetches/updateTask"
+import { updateTask } from "../methods/updateTask"
 
 const SingleTask = ({ task, setTaskToOpen, setIsTaskOpened, searchValue, setTasks, windowWidth }:{ task:TTask, setTaskToOpen:any, setIsTaskOpened:any, searchValue:string, setTasks:any, windowWidth:number }) => {
     const [isExpired, setIsExpired] = useState<boolean>(false)

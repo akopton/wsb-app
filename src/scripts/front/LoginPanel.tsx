@@ -1,6 +1,5 @@
-import React, { useReducer } from "react";
-import { useEffect, useState } from "react";
-import { login } from "../fetches/login";
+import {  useState, useReducer } from "react";
+import { login } from "../methods/login";
 
 const LoginPanel = ( { setLoggedUser, setIsLoggedIn }: any) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -41,7 +40,7 @@ const LoginPanel = ( { setLoggedUser, setIsLoggedIn }: any) => {
                     setIsLoggedIn(true)
                 })
                 .catch(() => {
-                    alert('niepoprawny login lub hasło')
+                    alert('Invalid login or password')
                     setIsLoading(false)
                 })
     }
@@ -65,8 +64,7 @@ const LoginPanel = ( { setLoggedUser, setIsLoggedIn }: any) => {
                         style={{padding: '2px 10px'}}
                         type='text'
                         placeholder='login'
-                        onChange={(e)=>handleInput(e)}
-                        // onLoad={handleLogin}
+                        onChange={handleInput}
                     />
                     <input 
                         className="login-panel__password-input form-input"
@@ -74,12 +72,10 @@ const LoginPanel = ( { setLoggedUser, setIsLoggedIn }: any) => {
                         name="password"
                         type='password'
                         placeholder='password'
-                        onChange={(e)=>handleInput(e)}
-                        // onLoad={handlePassword}
+                        onChange={handleInput}
                     />
                     <input 
                         className="login-panel__login-button form__btn btn"
-                        // style={{fontSize: '20px', lineHeight: '100%'}}
                         type="submit"
                         value="Sign in"
                     />
@@ -89,7 +85,6 @@ const LoginPanel = ( { setLoggedUser, setIsLoggedIn }: any) => {
                         </div>
                     }
                 </form>
-                
             </div>
     )
 }
