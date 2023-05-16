@@ -34,7 +34,8 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
         getIdFromDatabase,
         updateIdFromDatabase,
         findUserInDatabase,
-        deleteTask
+        deleteTask,
+        getTasksLists
     } = require('./DB/index.js');
 
 

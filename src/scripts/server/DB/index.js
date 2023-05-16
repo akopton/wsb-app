@@ -10,12 +10,11 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     })
-    const usersCollection = client.db('wsb_app_database').collection('usersList')
-    const tasksCollection = client.db('wsb_app_database').collection('tasksList')
+    const usersCollection = client.db('wsb_app_database').collection('users_collection')
+    const tasksCollection = client.db('wsb_app_database').collection('tasks_collection')
+    const taskListsCollection = client.db('wsb_app_database').collection('taskLists_collection')
     const generatedId = client.db('wsb_app_database').collection('taskIdGenerator')
     const ObjectId = require('mongodb').ObjectId
-
-
 
     async function checkIfUserExists(client, newUser) {
         try {
@@ -67,10 +66,26 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
         }
     }
 
+    async function getTasksLists(client) {
+        try {
+            await client.connect()
+            const result = await taskListsCollection.find({}).toArray()
+            return result
+        } catch (e) {
+            console.error(e)
+        } finally {
+            client.close()
+        }
+    }
+
     async function addNewTaskToDatabase(client, newTask) {
         try {
             await client.connect()
             await tasksCollection.insertOne(newTask)
+            // await taskListsCollection.updateOne(
+            //     { type: newTask.status },
+            //     { $push: { tasks: newTask } }
+            // );
             const result = await tasksCollection.find({}).toArray()
             return result
         } catch (e) {
@@ -97,11 +112,14 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
     }
 
     async function updateTaskStatus(client, UPDATED_TASK) {
-        const { _id, title, description, status } = UPDATED_TASK
+        const { _id, innerId, title, description, status } = UPDATED_TASK
 
         try {
             await client.connect()
             await tasksCollection.updateOne({ "_id": ObjectId(_id) }, { $set: { title: title, description: description, status: status } })
+            // await taskListsCollection.updateOne({ type: prevStatus }, { $pull: { tasks: { innerId: innerId } } })
+            // await taskListsCollection.updateOne({ type: UPDATED_TASK.status }, { $push: { tasks: UPDATED_TASK } })
+
             const result = await tasksCollection.find({}).toArray()
             return result
         } catch (e) {
@@ -149,6 +167,8 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
             await client.close()
         }
     }
+
+
     module.exports = MongoClient
     module.exports = {
         findUserInDatabase: findUserInDatabase,
@@ -160,7 +180,8 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
         registerNewUser: registerNewUser,
         getListOfTasks: getListOfTasks,
         updateTaskStatus: updateTaskStatus,
-        deleteTask: deleteTask
+        deleteTask: deleteTask,
+        getTasksLists: getTasksLists
     }
 } else {
     console.log('błąd')
