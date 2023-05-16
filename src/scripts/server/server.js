@@ -36,7 +36,7 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
         findUserInDatabase,
         deleteTask,
         getTasksLists
-    } = require('./DB/index.js');
+    } = require('./DB/database.js');
 
 
 
