@@ -185,7 +185,7 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
                                 />
                             </>
                             <div className="asigned-person">
-                                <span>Asigned person:</span>
+                                <span>Osoba przydzielona:</span>
                                 <span>{fullName}</span>
                             </div>
                             <span>{convertedDate}</span>

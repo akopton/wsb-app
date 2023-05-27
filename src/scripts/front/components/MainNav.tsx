@@ -23,50 +23,56 @@ const MainNav = (
             setShowUserTasks, 
             filteredTasks, 
             setFilteredTasks,
-            windowWidth
+            windowWidth,
+            setIsSettingsOpened,
+            isSettingsOpened,
+            setIsAdminPanelOpened
         }: any
     ) => {
 
     return (
         <div className='main-nav'>
-            <SearchBar
-                tasks={tasks}
-                handleSearch={handleSearch}
-                searchValue={searchValue}
-                setSearchValue={setSearchValue}
-                filteredTasks={filteredTasks}
-                setFilteredTasks={setFilteredTasks}
-            />
-            <div className="buttons-wrapper">
-                <NewTaskBtn
-                    isNewTaskFormOpened={isNewTaskFormOpened}
-                    setIsNewTaskFormOpened={setIsNewTaskFormOpened}
-                    isNavMenuOpened={isNavMenuOpened}
-                    windowWidth={windowWidth}
-                />
-                <Hamburger 
-                    setIsNavMenuOpened={setIsNavMenuOpened}
-                    isNavMenuOpened={isNavMenuOpened}
-                    isNewTaskFormOpened={isNewTaskFormOpened}
-                />
-            </div>
-            {isNewTaskFormOpened && 
-                <NewTaskForm
-                    setIsFormOpened={setIsNewTaskFormOpened}
-                    usersList={usersList}
-                    tasks={tasks}
-                    setTasks={setTasks}
-                    loggedUser={loggedUser}
-                />
-            }
-            <NavMenu
-                isNavMenuOpened={isNavMenuOpened}
-                setIsLoggedIn={setIsLoggedIn}
-                setLoggedUser={setLoggedUser}
-                defaultUser={defaultUser}
-                setShowUserTasks={setShowUserTasks}
-                windowWidth={windowWidth}
-            />
+                    <SearchBar
+                        tasks={tasks}
+                        handleSearch={handleSearch}
+                        searchValue={searchValue}
+                        setSearchValue={setSearchValue}
+                        filteredTasks={filteredTasks}
+                        setFilteredTasks={setFilteredTasks}
+                    />
+                    <div className="buttons-wrapper">
+                        <NewTaskBtn
+                            isNewTaskFormOpened={isNewTaskFormOpened}
+                            setIsNewTaskFormOpened={setIsNewTaskFormOpened}
+                            isNavMenuOpened={isNavMenuOpened}
+                            windowWidth={windowWidth}
+                        />
+                        <Hamburger 
+                            setIsNavMenuOpened={setIsNavMenuOpened}
+                            isNavMenuOpened={isNavMenuOpened}
+                            isNewTaskFormOpened={isNewTaskFormOpened}
+                        />
+                    </div>
+                    {isNewTaskFormOpened && 
+                        <NewTaskForm
+                            setIsFormOpened={setIsNewTaskFormOpened}
+                            usersList={usersList}
+                            tasks={tasks}
+                            setTasks={setTasks}
+                            loggedUser={loggedUser}
+                        />
+                    }
+                    <NavMenu
+                        isNavMenuOpened={isNavMenuOpened}
+                        setIsLoggedIn={setIsLoggedIn}
+                        setLoggedUser={setLoggedUser}
+                        defaultUser={defaultUser}
+                        setShowUserTasks={setShowUserTasks}
+                        windowWidth={windowWidth}
+                        setIsSettingsOpened={setIsSettingsOpened}
+                        loggedUser={loggedUser}
+                        setIsAdminPanelOpened={setIsAdminPanelOpened}
+                    />
         </div>
     )
 }

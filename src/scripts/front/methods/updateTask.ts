@@ -1,6 +1,6 @@
 import { TTask } from "../interfaces/taskInterface"
 
-export const updateTask = async (data:TTask, status?:string, prevStatus?: string) => {
+export const updateTask = async (data:TTask, status?:string) => {
 
     if (status) data.status = status
     

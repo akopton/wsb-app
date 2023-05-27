@@ -20,7 +20,7 @@ const Hamburger = ({isNewTaskFormOpened, isNavMenuOpened, setIsNavMenuOpened, is
     )
 }
 
-const NavMenu = ({isNavMenuOpened, setLoggedUser, setIsLoggedIn, defaultUser, setShowUserTasks, windowWidth}:any) => {
+const NavMenu = ({isNavMenuOpened, setLoggedUser, setIsLoggedIn, defaultUser, setShowUserTasks, windowWidth, setIsSettingsOpened, loggedUser, setIsAdminPanelOpened}:any) => {
 
     const handleLogout = () => {
         setLoggedUser(defaultUser)
@@ -35,6 +35,14 @@ const NavMenu = ({isNavMenuOpened, setLoggedUser, setIsLoggedIn, defaultUser, se
         setShowUserTasks(false)
     }
 
+    const handleOpenSettings = () => {
+        setIsSettingsOpened(true)
+    }
+
+    const handleOpenAdminPanel = () => {
+        setIsAdminPanelOpened(true)
+    }
+
     return (
         <div className="nav-menu" style={isNavMenuOpened ? {height: '100%', transition: 'ease .5s'} : undefined}>
             {isNavMenuOpened && 
@@ -43,19 +51,28 @@ const NavMenu = ({isNavMenuOpened, setLoggedUser, setIsLoggedIn, defaultUser, se
                     className="item"
                     onClick={handleUserTasks}
                 >
-                    Your tasks
+                    Twoje zadania
                 </li>
                 <li 
                     className="item"
                     onClick={handleAllTasks}
                 >
-                    All tasks
+                    Wszystkie zadania
                 </li>
+                <li 
+                    className="item"
+                    onClick={handleOpenSettings}
+                >
+                    Ustawienia
+                </li>
+                {
+                    loggedUser.role === 'admin' ? <li className="item" onClick={handleOpenAdminPanel}>Panel administratora</li>: null
+                }
                 <li 
                     className="item"
                     onClick={handleLogout}
                 >
-                    Log out
+                    Wyloguj
                 </li>
             </ul>
             }

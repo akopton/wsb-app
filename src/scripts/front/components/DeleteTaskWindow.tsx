@@ -1,11 +1,8 @@
 import { useEffect } from "react"
 import { TTask } from "../interfaces/taskInterface"
 
-export const DeleteTaskWindow = ({setIsDeleteWindowOpened, task, handleDelete}: {setIsDeleteWindowOpened: any, task: TTask, handleDelete:any}) => {
+export const DeleteTaskWindow = ({setIsDeleteWindowOpened, task, handleDelete}: {setIsDeleteWindowOpened: any, task: TTask, handleDelete: any}) => {
 
-    useEffect(()=>{
-        console.log(task)
-    },[])
     return (
         <div className="delete-window__wrapper">
             <div className="delete-window">

@@ -4,20 +4,27 @@ import LoginPanel from "./LoginPanel";
 import MainSite from "./MainSite";
 import { TUser } from "../interfaces/userInterface";
 
-const App = () => {
-
- const defaultUser: TUser = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    login: '',
-    password: '',
+const defaultUser: TUser = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  login: '',
+  password: '',
+  role: 'user',
+  settings: {
+    taskDaysLeft: 7
   }
+} 
 
-  const [isRegisterPanelOpened, setIsRegisterPanelOpened] = useState<boolean>(false)
-  const [loggedUser, setLoggedUser] = useState<{}>(defaultUser)
+const App = () => {
+  const [loggedUser, setLoggedUser] = useState<TUser>(defaultUser)
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
+
+  
+  const [isRegisterPanelOpened, setIsRegisterPanelOpened] = useState<boolean>(false)
   const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth)
+  
+
 
     const handleWindowWidth = () => {
         setWindowWidth(window.innerWidth)
@@ -39,14 +46,14 @@ const App = () => {
               />
               <div className="site-aside">
                 <span>
-                  Still not registered?<br/>
-                  You can do this by clicking button below!
+                  Jeszcze nie zarejestrowany?<br/>
+                  Możesz to zrobić naciskając przycisk poniżej!
                 </span>
                 <button 
                   className="panel-switch-btn btn"
                   onClick={()=>setIsRegisterPanelOpened(true)} 
                 >
-                  Register here
+                  Zarejestruj się
                 </button>
               </div>
             </div>
@@ -62,13 +69,13 @@ const App = () => {
         </>
         : 
         <div className="register-site">
-          <RegisterPanel defaultUser={defaultUser}/>
+          <RegisterPanel defaultUser={defaultUser} setIsRegisterPanelOpened={setIsRegisterPanelOpened}/>
           <div className="site-aside">
-            <span>Already have an accout?</span>
+            <span>Masz już konto?</span>
             <button 
               className="panel-switch-btn btn"
               onClick={()=>setIsRegisterPanelOpened(false)}>
-              Sign in
+              Zaloguj się
             </button>
           </div>
         </div>

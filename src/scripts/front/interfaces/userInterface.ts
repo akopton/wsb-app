@@ -5,4 +5,8 @@ export type TUser = {
     email: string,
     login: string,
     password: string,
+    role: string,
+    settings: {
+      taskDaysLeft: number
+    }
   }

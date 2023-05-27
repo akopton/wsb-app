@@ -6,8 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { addTaskToDatabase } from '../methods/addTask';
 import { updateIdForGenerator } from '../methods/updateId';
-import { getIdForGenerator } from '../methods/getId';
-import { getUsersFromDatabase } from '../methods/getUsers';
+import { getData } from '../methods/getData';
 
 const DateCustomInput = forwardRef(({ value, onClick, isCalendarOpen }:any, ref:any) => (
     <div className="date-custom-input" onClick={onClick} ref={ref}>
@@ -30,7 +29,7 @@ const NewTaskBtn = ( {isNavMenuOpened,isSingleTaskOpened,isNewTaskFormOpened, se
                                 />
                             :
                                 <div className='add-task__button button--round' onClick={()=>setIsNewTaskFormOpened(true)}>
-                                    Add new task
+                                    Dodaj zadanie
                                 </div>
                         }
                     </>
@@ -42,7 +41,7 @@ const NewTaskBtn = ( {isNavMenuOpened,isSingleTaskOpened,isNewTaskFormOpened, se
                                 : isSingleTaskOpened ? 
                                 {zIndex:'4'}
                                 :
-                                {zIndex:'10'}
+                                {zIndex:'0'}
                             }
                             onClick={()=>setIsNewTaskFormOpened(!isNewTaskFormOpened)}
                     />
@@ -113,7 +112,7 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
     
 
     const getDataForNewTask = async () => {
-        await getIdForGenerator()
+        await getData('http://127.0.0.1:8888/get-id')
                 .then(data => data.json())
                 .then(res => {
                     const {id} = res
@@ -125,7 +124,7 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
                     })
                     console.log(`wygenerowano id ${id}`)
                 })
-        await getUsersFromDatabase()
+        await getData('http://127.0.0.1:8888/users')
                 .then(data => data.json())
                 .then(res => setUsersList(res))
     }
@@ -149,9 +148,9 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
                 .then(res => setTasks(res))
 
         await updateIdForGenerator(updatedId)
-                .then((data) => data)
 
         setIsFormOpened(false)
+        console.log('siemka')
     }
 
     return (
@@ -163,14 +162,14 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
                     <div className='inputs-wrapper'>
                         <input
                             className='title-input form-input'
-                            placeholder='Title...'
+                            placeholder='Tytuł...'
                             name='title'
                             value={newTask.title}
                             onChange={handleInput}
                         />
                         <textarea 
                             className='desc-input form-input'
-                            placeholder='Description...'
+                            placeholder='Opis...'
                             name='description'
                             value={newTask.description}
                             onChange={handleInput}
@@ -179,7 +178,7 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
                     
                     <div className='pickers-wrapper'>
                         <div className='asignee-picker' style={isCalendarOpen ? {zIndex:'-2'} : {zIndex:'50'}}>
-                            <span className='picker-title'>Asigned person:</span>
+                            <span className='picker-title'>Osoba przydzielona:</span>
                             <div 
                                 className='asignee-picker__custom-list custom-list'
                             >
@@ -194,7 +193,7 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
                                     {asignee ? 
                                         `${newTask.asignee.firstName} ${newTask.asignee.lastName}`
                                         : 
-                                        'Pick from list...'
+                                        'Wybierz z listy...'
                                     }
                                     </span>
                                     <BiDownArrow 
@@ -233,7 +232,7 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
                             </div>
                         </div>
                         <div className='date-picker-wrapper'>
-                            <span className='picker-title' style={{fontSize: '24px'}}>Pick ending date:</span>
+                            <span className='picker-title' style={{fontSize: '24px'}}>Data zakończenia:</span>
                             <DatePicker 
                                 dateFormat='dd MMMM yyyy'
                                 selected={newTask.date}

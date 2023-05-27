@@ -24,12 +24,12 @@ const SearchBar = ({tasks, setSearchValue, searchValue}:any) => {
         <div className="searchbar__wrapper">
             <input 
                 className="searchbar" 
-                placeholder="Find task..."
+                placeholder="Znajdź..."
                 value={searchValue}
                 onChange={handleTaskToFind}
             />
             <div className='searchbar-tooltip' style={{display: showTooltip ? 'block' : 'none'}}>
-                search by task id, title or asignee name
+                Kryteria wyszukiwania: ID, tytuł, imię i nazwisko
             </div>
         </div>
     )

@@ -16,7 +16,7 @@ const SingleTask = ({ task, setTaskToOpen, setIsTaskOpened, searchValue, setTask
     const todaysDate = new Date().getTime()
     
         if (todaysDate > task.date) {
-            if (task.status !== 'expired') {
+            if (task.status !== 'expired' && task.status !== 'done') {
                 await updateTask(task, 'expired')
                     .then((data:any) => data.json())
                     .then((res:TTask[]) => {

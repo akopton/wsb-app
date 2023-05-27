@@ -10,11 +10,15 @@ import { TTask } from '../interfaces/taskInterface';
 import Popup from './Popup';
 import MainNav from './MainNav';
 import OpenedTask from './OpenedTask';
-import { getTasksFromDatabase } from '../methods/getTasks';
+import { getData } from '../methods/getData';
+import { SettingsSite } from './SettingsSite';
+import { TUser } from '../interfaces/userInterface';
+import { AdminPanel } from './AdminPanel';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 
 
 
-
+// {usersList: any, loggedUser:TUser, setIsLoggedIn: any, setLoggedUser: any, defaultUser: TUser, windowWidth: number}
 const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaultUser, windowWidth }: any) => {
     const [isPopupOpened, setIsPopupOpened] = useState<boolean>(true)
     const [loadingTasks, setLoadingTasks] = useState<boolean>(true)
@@ -24,41 +28,46 @@ const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaul
     const [slides, setSlides] = useState<number[]>([])
     const [showUserTasks, setShowUserTasks] = useState<boolean>(false)
     const [isNewListWindowOpened, setIsNewListWindowOpened] = useState<boolean>(false)
+    const [isSettingsOpened, setIsSettingsOpened] = useState<boolean>(false)
+    const [isAdminPanelOpened, setIsAdminPanelOpened] = useState<boolean>(false)
 
     const [taskToOpen, setTaskToOpen] = useState<TTask | undefined>(undefined)
     const [isTaskOpened, setIsTaskOpened] = useState<boolean>(false)
 
     const [searchValue, setSearchValue] = useState<string>('')
     const [filteredTasks, setFilteredTasks] = useState<TTask[]>([])
+    
+    const [taskDaysLeftToShow, setTaskDaysLeftToShow] = useState<number>()
 
     const [lists, setLists] = useState<{}[]>([
         {
             type: 'todo',
-            title: 'To do'
+            title: 'Do zrobienia'
         },
         {
             type: 'active',
-            title: 'In progress'
+            title: 'W trakcie'
         },
         {
             type: 'done',
-            title: 'Done'
+            title: 'Zrobione'
         },
         {
             type: 'expired',
-            title: 'Expired'
+            title: 'Przeterminowane'
         }
     ])
 
-    useEffect(()=>{
-        getTasksFromDatabase()
+    useEffect(() => {
+        setLoadingTasks(true)
+        getData('http://127.0.0.1:8888/get-tasks')
         .then((data) => data.json())
         .then((res) => {
             console.log('getting tasks...')
             setTasks(res)
             setLoadingTasks(false)
         })
-    },[])
+    }, [])
 
     useEffect(()=>{
         if (windowWidth > 1420) setIsNavMenuOpened(true)
@@ -68,35 +77,42 @@ const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaul
     return (
         <div className="main-site">
             {
-                isPopupOpened &&
+                isPopupOpened && tasks ?
                 <Popup 
                     tasks={tasks}
                     loggedUser={loggedUser}
                     setIsPopupOpened={setIsPopupOpened}
                     isPopupOpened={isPopupOpened}
-                />
+                /> : null
             }
-            <span style={{position: 'fixed', zIndex:'10', fontSize: '20px', left: '10px', bottom: '10px'}}>Logged: {loggedUser.login}</span>
-                <MainNav 
-                    isNewTaskFormOpened={isNewTaskFormOpened}
-                    setIsNewTaskFormOpened={setIsNewTaskFormOpened}
-                    isNavMenuOpened={isNavMenuOpened}
-                    setIsNavMenuOpened={setIsNavMenuOpened}
-                    usersList={usersList}
-                    tasks={tasks}
-                    setTasks={setTasks}
-                    loggedUser={loggedUser}
-                    setLoggedUser={setLoggedUser}
-                    defaultUser={defaultUser}
-                    setIsLoggedIn={setIsLoggedIn}
-                    setShowUserTasks={setShowUserTasks}
-                    // handleSearch={handleSearch}
-                    setSearchValue={setSearchValue}
-                    searchValue={searchValue}
-                    setFilteredTasks={setFilteredTasks}
-                    filteredTasks={filteredTasks}
-                    windowWidth={windowWidth}
-                />
+            <span style={{position: 'fixed', zIndex:'10', fontSize: '20px', padding: '10px', width:'100%',left: '0', bottom: '0', background:'#0f0f0f'}}>Zalogowany: {loggedUser.firstName + " " + loggedUser.lastName}</span>
+                {!isSettingsOpened && !isAdminPanelOpened ? 
+                    <MainNav 
+                        isNewTaskFormOpened={isNewTaskFormOpened}
+                        setIsNewTaskFormOpened={setIsNewTaskFormOpened}
+                        isNavMenuOpened={isNavMenuOpened}
+                        setIsNavMenuOpened={setIsNavMenuOpened}
+                        usersList={usersList}
+                        tasks={tasks}
+                        setTasks={setTasks}
+                        loggedUser={loggedUser}
+                        setLoggedUser={setLoggedUser}
+                        defaultUser={defaultUser}
+                        setIsLoggedIn={setIsLoggedIn}
+                        setShowUserTasks={setShowUserTasks}
+                        // handleSearch={handleSearch}
+                        setSearchValue={setSearchValue}
+                        searchValue={searchValue}
+                        setFilteredTasks={setFilteredTasks}
+                        filteredTasks={filteredTasks}
+                        windowWidth={windowWidth}
+                        setIsSettingsOpened={setIsSettingsOpened}
+                        isSettingsOpened={isSettingsOpened}
+                        setIsAdminPanelOpened={setIsAdminPanelOpened}
+                    /> : null
+                }
+                {isSettingsOpened ? <SettingsSite setIsSettingsOpened={setIsSettingsOpened} loggedUser={loggedUser} setIsLoggedIn={setIsLoggedIn} setLoggedUser={setLoggedUser} defaultUser={defaultUser}/> :
+                isAdminPanelOpened ? <AdminPanel/> :
                 <Swiper
                     style={{height:'100vh', display:'flex'}}
                     modules={[EffectFade]}
@@ -120,6 +136,8 @@ const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaul
                     onSwiper={(swiper) => {
                         setSlides(Array(swiper.wrapperEl.childElementCount).fill(0))
                     }}
+                    scrollbar={{draggable: true}}
+                    grabCursor={true}
                 >
                     {
                         lists.map((list, id) => {
@@ -151,14 +169,11 @@ const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaul
                             )
                         })
                     }
-                    {/* <SwiperSlide>
-                        <AddTasksList handleNewTasksList={handleNewTasksList}/>
-                    </SwiperSlide> */}
                     <SlideIndicator 
                         slides={slides} 
                         windowWidth={windowWidth}
                     /> 
-                </Swiper>
+                </Swiper>}
                 {
                     isTaskOpened &&
                     <OpenedTask 
@@ -171,10 +186,6 @@ const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaul
                             windowWidth={windowWidth}
                     />
                 }
-                {/* {
-                    isNewListWindowOpened &&
-                    <NewListWindow closeNewListWindow={closeNewListWindow}/>
-                } */}
         </div>
     )
 }

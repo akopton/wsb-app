@@ -63,7 +63,7 @@ const LoginPanel = ( { setLoggedUser, setIsLoggedIn }: any) => {
                         name="login"
                         style={{padding: '2px 10px'}}
                         type='text'
-                        placeholder='login'
+                        placeholder='Login'
                         onChange={handleInput}
                     />
                     <input 
@@ -71,13 +71,13 @@ const LoginPanel = ( { setLoggedUser, setIsLoggedIn }: any) => {
                         style={{padding: '2px 10px'}}
                         name="password"
                         type='password'
-                        placeholder='password'
+                        placeholder='Hasło'
                         onChange={handleInput}
                     />
                     <input 
                         className="login-panel__login-button form__btn btn"
                         type="submit"
-                        value="Sign in"
+                        value="Zaloguj"
                     />
                     {isLoading && 
                         <div className="logging-screen">

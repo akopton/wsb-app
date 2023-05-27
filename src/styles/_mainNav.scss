@@ -152,13 +152,13 @@
 
 
             .item {
-                font-size: 36px;
+                font-size: 30px;
                 position: relative;
 
                 &:after {
                     content: '';
                     position: absolute;
-                    bottom: 0;
+                    bottom: -2px;
                     left: 0;
                     height: 2px;
                     width: 0%;

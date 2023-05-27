@@ -1,13 +1,12 @@
 const express = require('express')
 const cors = require('cors')
-const bodyParser = require('body-parser')
-const dotenv = require('dotenv');
-dotenv.config();
+const dotenv = require('dotenv')
+
 const app = express()
 const port = 8888
 
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(cors());
+dotenv.config()
+app.use(cors())
 app.use(express.json())
 
 
@@ -35,7 +34,8 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
         updateIdFromDatabase,
         findUserInDatabase,
         deleteTask,
-        getTasksLists
+        updateUser,
+        deleteUser
     } = require('./DB/database.js');
 
 
@@ -76,19 +76,19 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
 
 
     app.get('/get-id', async (req, res) => {
-        const generatedId = await getIdFromDatabase(client)
-        res.send(generatedId)
+        const GENERATED_ID = await getIdFromDatabase(client)
+        res.send(GENERATED_ID)
     })
 
     app.post('/update-id', async (req, res) => {
-        res.send(req.body)
-        const updatedId = req.body
-        await updateIdFromDatabase(client, updatedId)
+        res.send()
+        const UPDATED_ID = req.body
+        await updateIdFromDatabase(client, UPDATED_ID)
     })
 
     app.post('/sign-in', async (req, res) => {
-        const loginData = req.body
-        const result = await findUserInDatabase(client, loginData)
+        const LOGIN_DATA = req.body
+        const result = await findUserInDatabase(client, LOGIN_DATA)
         res.send(result)
     })
 
@@ -99,6 +99,19 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
         if (EXISTING_USER) return
         await registerNewUser(client, NEW_USER_TO_REGISTER)
     })
+
+    app.post('/update-user', async (req, res) => {
+        const USER_DETAILS = req.body
+        const result = await updateUser(client, USER_DETAILS)
+        res.send(result)
+    })
+
+    app.post('/delete-user', async (req, res) => {
+        const id = req.body
+        const result = await deleteUser(client, id)
+        res.send(result)
+    })
+
 } else {
     console.log('Missing environment variables');
 }

@@ -4,7 +4,7 @@ import { BiRightArrowCircle } from "react-icons/bi"
 import { registerNewUser } from "../methods/register"
 import { TUser } from "../interfaces/userInterface"
 
-const RegisterPanel = ( {defaultUser}:any ) => {
+const RegisterPanel = ( {defaultUser, setIsRegisterPanelOpened}:any ) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isFirstStepDone, setIsFirstStepDone] = useState<boolean>(false)
 
@@ -44,11 +44,11 @@ const RegisterPanel = ( {defaultUser}:any ) => {
     const handleFirstStep = (e:any) => {
         e.preventDefault()
         if (!registerData.firstName) {
-            alert('First name is required!')
+            alert('Imię jest wymagane!')
             return
         }
         if (!registerData.lastName) {
-            alert('Last name is required!')
+            alert('Nazwisko jest wymagane!')
             return
         }
         setIsFirstStepDone(true)
@@ -57,15 +57,15 @@ const RegisterPanel = ( {defaultUser}:any ) => {
     const handleSubmit = async (registerData:TUser) => {
         const {email, login, password}:{email: string, login: string, password: string} = registerData
         if (!email) {
-            alert('Email is required!')
+            alert('Email jest wymagany!')
             return
         }
         if (!login) {
-            alert('Login is required!')
+            alert('Login jest wymagany!')
             return
         }
         if (!password) {
-            alert('Password is required!')
+            alert('Hasło jest wymagane!')
             return
         }
     
@@ -83,7 +83,8 @@ const RegisterPanel = ( {defaultUser}:any ) => {
                     } else {
                         alert('Successfully registered!')
                         clearAll()
-                        setIsFirstStepDone(false)
+                        // setIsFirstStepDone(false)
+                        setIsRegisterPanelOpened(false)
                         return
                     }
                 })
@@ -102,7 +103,7 @@ const RegisterPanel = ( {defaultUser}:any ) => {
                     name="firstName"
                     key="firstName"
                     type='text'
-                    placeholder="First name"
+                    placeholder="Imię"
                     onChange={handleInput}
                     value={firstName}
                     autoComplete="off"
@@ -114,7 +115,7 @@ const RegisterPanel = ( {defaultUser}:any ) => {
                     type='text'
                     onChange={handleInput}
                     value={lastName}
-                    placeholder="Last name"
+                    placeholder="Nazwisko"
                     autoComplete="off"
                 />
                 <button
@@ -159,7 +160,7 @@ const RegisterPanel = ( {defaultUser}:any ) => {
                     type='password'
                     onChange={handleInput}
                     value={password}
-                    placeholder="Password"
+                    placeholder="Hasło"
                     autoComplete="new-password"
                 />
                 <div style={{display: 'flex', alignItems:'center', justifyContent:'space-between', width: '100%'}}>
@@ -183,7 +184,7 @@ const RegisterPanel = ( {defaultUser}:any ) => {
                             e.preventDefault()
                             handleSubmit(registerData)
                         }}
-                        value="Register"
+                        value="Zarejestruj"
                     />
                 </div>
                 {isLoading && 

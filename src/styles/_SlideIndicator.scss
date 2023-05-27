@@ -19,12 +19,19 @@
     justify-content: space-around;
 
     &__dot {
-        height: 4px;
+        height: 10px;
         width: 100%;
     }
 
     @media screen and (min-width: 1420px) {
         width: 50%;
-        left: calc(50% - 150px)
+        left: calc(50% - 150px);
+
+        .slide-indicator__dot {
+            &:hover {
+                height: 30px;
+                cursor: pointer;
+            }
+        }
     }
 }

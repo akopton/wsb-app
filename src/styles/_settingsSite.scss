@@ -1,0 +1,72 @@
+@import './_colors';
+
+.settings-site {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    padding: 20px 20px 50px 20px;
+
+    .site-title {
+        font-size: 40px;
+    }
+
+    .task-days-left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        text-align: center;
+
+        .days-input {
+            width: 20%;
+            text-align: center;
+            &::-webkit-inner-spin-button {
+                // -webkit-appearance: none;
+                width: 20px;
+                border-left: 1px solid #BBB;
+                // opacity: .5; /* shows Spin Buttons per default (Chrome >= 39) */
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                background: red;
+            }
+            &::-webkit-inner-spin-button:hover,
+            &::-webkit-inner-spin-button:active
+            &::-webkit-inner-spin-button:active{
+                box-shadow: 0 0 2px #0CF;
+                opacity: .8;
+            }
+        }
+    }
+
+    .settings-btn {}
+
+    .settings-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+
+        .form-title {
+            font-size: 25px;
+        }
+
+        .change-psw-input {
+            width: 80%;
+            @media screen and (max-width: 768px) {
+                font-size: 22px;
+                height: 50px;
+            }
+        }
+
+        .submit-changes-btn {}
+
+        @media screen and (max-width: 768px) {
+        }
+    }
+}
