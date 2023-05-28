@@ -188,11 +188,13 @@ const OpenedTask = ({task, id, setTasks, lists, isPopupOpened, setTaskToOpen, se
                                 <span>Osoba przydzielona:</span>
                                 <span>{fullName}</span>
                             </div>
-                            <span>{convertedDate}</span>
+                            <div className="bottom-wrap">
+                                <span style={{fontSize: '20px'}}>{convertedDate}</span>
+                                <div className="delete-btn" onClick={()=>setIsDeleteWindowOpened(true)}><BsTrash className="delete-btn__icon"/></div>
+                            </div>
                         </div>
                     </>
                 }
-                <div className="delete-btn" onClick={()=>setIsDeleteWindowOpened(true)}><BsTrash className="delete-btn__icon"/></div>
             </div>
             {
                 updatedTask.isOpened &&
