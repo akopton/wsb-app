@@ -1162,11 +1162,11 @@
   }
 }
 .admin-panel {
-  height: 100vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 20px 20px 70px 20px;
 }
 .admin-panel .users-content__wrapper .users-content__title {
   text-align: center;
@@ -1175,10 +1175,16 @@
 }
 .admin-panel .users-content__wrapper .users-content {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-bottom: 50px;
   gap: 20px;
+}
+@media screen and (min-width: 768px) {
+  .admin-panel .users-content__wrapper .users-content {
+    flex-direction: row;
+  }
 }
 .admin-panel .users-content__wrapper .users-content .users-list {
   height: 360px;
@@ -1217,23 +1223,88 @@
 .admin-panel .users-content__wrapper .users-content .users-list .user-item .details-list {
   list-style-type: none;
 }
+.admin-panel .users-content__wrapper .users-content .selected-user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  position: relative;
+}
+.admin-panel .users-content__wrapper .users-content .selected-user .user-role {
+  font-size: 24px;
+}
 .admin-panel .users-content__wrapper .users-content .selected-user .details-list {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   gap: 5px;
   text-align: center;
+}
+@media screen and (min-width: 768px) {
+  .admin-panel .users-content__wrapper .users-content .selected-user .details-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 .admin-panel .users-content__wrapper .users-content .selected-user .details-list__item {
   font-size: 20px;
 }
-.admin-panel .users-content__wrapper .users-content .selected-user .details-list__item:first-of-type {
-  grid-column: span 2;
+@media screen and (min-width: 768px) {
+  .admin-panel .users-content__wrapper .users-content .selected-user .details-list__item:first-of-type {
+    grid-column: span 2;
+  }
 }
 .admin-panel .users-content__wrapper .users-content .selected-user .buttons-wrapper {
   margin-top: 30px;
   display: flex;
   align-items: center;
   gap: 20px;
+}
+@media screen and (max-width: 767px) {
+  .admin-panel .users-content__wrapper .users-content .selected-user .buttons-wrapper button {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+}
+.admin-panel .users-content__wrapper .users-content .selected-user .role-selection {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 8px;
+}
+.admin-panel .users-content__wrapper .users-content .selected-user .role-selection button {
+  color: #0f0f0f;
+  border-color: #0f0f0f;
+}
+.admin-panel .users-content__wrapper .users-content .selected-user .role-selection button:hover {
+  background-color: #0f0f0f;
+  color: white;
+}
+.admin-panel .project-name {
+  margin-bottom: 50px;
+}
+.admin-panel .project-name__label {
+  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.admin-panel .project-name__label input {
+  text-align: center;
+  width: 70%;
+}
+.admin-panel .project-name .save-name-btn {
+  width: 50%;
 }
 
 * {

@@ -87,6 +87,7 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
         const { _id } = TASK_TO_DELETE
 
         try {
+            client.connect()
             await tasksCollection.deleteOne({ "_id": ObjectId(_id) })
             const result = await tasksCollection.find({}).toArray()
             return result
@@ -153,10 +154,11 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
     }
 
     async function updateUser(client, data) {
-        const { _id, password, settings: { taskDaysLeft } } = data
+        const { _id, password, role, settings: { taskDaysLeft } } = data
         try {
             await client.connect()
-            const result = await usersCollection.updateOne({ "_id": ObjectId(_id) }, { $set: { password: password, settings: { taskDaysLeft: taskDaysLeft } } })
+            await usersCollection.updateOne({ "_id": ObjectId(_id) }, { $set: { password: password, role: role, settings: { taskDaysLeft: taskDaysLeft } } })
+            const result = await usersCollection.find({}).toArray()
             return result
         } catch (e) {
             console.error(e)
@@ -168,7 +170,8 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
     async function deleteUser(client, id) {
         try {
             await client.connect()
-            const result = await usersCollection.deleteOne({ "_id": ObjectId(id) })
+            await usersCollection.deleteOne({ "_id": ObjectId(id) })
+            const result = await usersCollection.find({}).toArray()
             return result
         } catch (e) {
             console.error(e)

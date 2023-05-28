@@ -1,11 +1,11 @@
 @import './_colors';
 
 .admin-panel {
-    height: 100vh;
     width: 100vw;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 20px 20px 70px 20px;
 
     .users-content__wrapper {
 
@@ -17,11 +17,16 @@
 
         .users-content {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             margin-bottom: 50px;
             gap: 20px;
     
+            @media screen and (min-width: 768px) {
+                flex-direction: row;
+            }
+
             .users-list {
                 height: 360px;
                 overflow-y: scroll;
@@ -69,17 +74,35 @@
             }
 
             .selected-user {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+                position: relative;
+
+                .user-role {
+                    font-size: 24px;
+                }
+
                 .details-list {
                     display: grid;
-                    grid-template-columns: repeat(2, 1fr);
+                    grid-template-columns: repeat(1, 1fr);
                     gap: 5px;
                     text-align: center;
+                    
+                    
+                    @media screen and (min-width: 768px) {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
 
                     &__item {
                         font-size: 20px;
 
                         &:first-of-type {
-                            grid-column: span 2;
+                            @media screen and (min-width: 768px) {
+                                grid-column: span 2;
+                            }
                         }
                     }
                 }
@@ -89,8 +112,62 @@
                     display: flex;
                     align-items: center;
                     gap: 20px;
+
+                    button {
+                        @media screen and (max-width: 767px) {
+                            padding-right: 15px;
+                            padding-left: 15px;
+                        }
+                    }
+                }
+
+                .role-selection {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    background: rgba(#ffffff, 0.6);
+                    backdrop-filter: blur(4px);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: space-evenly;
+                    border-radius: 8px;
+
+                    button {
+                        color: $background-grey;
+                        border-color: $background-grey;
+
+                        &:hover {
+                            background-color: $background-grey;
+                            color: white;
+                        }
+                    }
                 }
             }
+        }
+    }
+
+    .project-name {
+        margin-bottom: 50px;
+
+        &__label {
+            font-size: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+
+            input {
+                text-align: center;
+                width: 70%;
+            }
+        }
+
+        .save-name-btn {
+            width: 50%;
         }
     }
 }
