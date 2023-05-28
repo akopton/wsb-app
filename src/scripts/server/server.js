@@ -36,7 +36,8 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
         deleteTask,
         updateUser,
         deleteUser,
-        getProjectName
+        getProjectName,
+        updateProjectName
     } = require('./DB/database.js');
 
 
@@ -118,6 +119,11 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
         res.send(PROJECT_NAME)
     })
 
+    app.post('/update-project-name', async (req, res) => {
+        const PROJECT_NAME = req.body.name
+        const result = await updateProjectName(client, PROJECT_NAME)
+        res.send(result)
+    })
 } else {
     console.log('Missing environment variables');
 }

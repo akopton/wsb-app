@@ -192,6 +192,18 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
         }
     }
 
+    async function updateProjectName(client, name) {
+        try {
+            await client.connect()
+            const result = await projectName.updateOne({}, { $set: { name: name } })
+            return result
+        } catch (e) {
+            console.error(e)
+        } finally {
+            await client.close()
+        }
+    }
+
     module.exports = MongoClient
     module.exports = {
         findUserInDatabase: findUserInDatabase,
@@ -206,7 +218,8 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
         deleteTask: deleteTask,
         updateUser: updateUser,
         deleteUser: deleteUser,
-        getProjectName: getProjectName
+        getProjectName: getProjectName,
+        updateProjectName: updateProjectName
     }
 } else {
     console.log('błąd')

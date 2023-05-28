@@ -4,9 +4,11 @@ import { TTask } from "../interfaces/taskInterface"
 import { getData } from "../methods/getData"
 import { deleteUser } from "../methods/deleteUser"
 import { updateUser } from "../methods/updateUser"
+import { DeleteUserWindow } from "./DeleteUserWindow"
 
 export const UserItem = ({user, tasks, setUsers}: {user: TUser, tasks:TTask[], setUsers:any}) => {
     const [showRoleSelection, setShowRoleSelection] = useState<boolean>(false)
+    const [showDeleteWindow, setShowDeleteWindow] = useState<boolean>(false)
 
     const getTasksCountForUser = (user: TUser, status: string) => {
         switch (status) {
@@ -29,6 +31,7 @@ export const UserItem = ({user, tasks, setUsers}: {user: TUser, tasks:TTask[], s
             const result = await deleteUser(user._id)
             const newData:TUser[] = await result.json()
             setUsers(newData)
+            setShowDeleteWindow(false)
         }
     }
 
@@ -60,7 +63,7 @@ export const UserItem = ({user, tasks, setUsers}: {user: TUser, tasks:TTask[], s
             <div className="user-role">Uprawnienia: {user.role === 'user' ? 'użytkownik' : 'administrator'}</div>
             <div className="buttons-wrapper">
                 <button className="btn form__btn" onClick={()=>setShowRoleSelection(true)}>Nadaj uprawnienia</button>
-                <button className="btn form__btn" onClick={()=>deleteUserFromDatabase(user)}>Usuń użytkownika</button>
+                <button className="btn form__btn" onClick={()=>setShowDeleteWindow(true)}>Usuń użytkownika</button>
             </div>
             {
                 showRoleSelection &&
@@ -68,6 +71,10 @@ export const UserItem = ({user, tasks, setUsers}: {user: TUser, tasks:TTask[], s
                     <button className="btn form__btn" onClick={() => handleUserRole(user, 'user')}>Użytkownik</button>
                     <button className="btn form__btn" onClick={() => handleUserRole(user, 'admin')}>Administrator</button>
                 </div>
+            }
+            {
+                showDeleteWindow &&
+                <DeleteUserWindow setShowDeleteWindow={setShowDeleteWindow} handleDeleteAccount={()=>deleteUserFromDatabase(user)}/>
             }
         </div>
     )

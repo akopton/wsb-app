@@ -5,6 +5,8 @@ import { TTask } from "../interfaces/taskInterface"
 import { UserItem } from "./UserItem"
 import { deleteUser } from "../methods/deleteUser"
 import { updateUser } from "../methods/updateUser"
+import { updateProjectName } from "../methods/updateProjectName"
+import { DeleteUserWindow } from "./DeleteUserWindow"
 
 export const AdminPanel = ({setIsAdminPanelOpened}:any) => {
     const [users, setUsers] = useState<TUser[]>([])
@@ -39,8 +41,10 @@ export const AdminPanel = ({setIsAdminPanelOpened}:any) => {
     const handleProjectName = (e: React.FormEvent<HTMLInputElement>) => {
         setProjectName(e.currentTarget.value)
     }
-    const changeProjectName = (e: React.FormEvent) => {
+    const changeProjectName = async (e: React.FormEvent) => {
         e.preventDefault()
+        await updateProjectName(projectName)
+        alert('Nazwa projektu zmieniona pomyślnie.')
     }
 
     const showUserDetails = (user: TUser) => {

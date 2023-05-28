@@ -356,12 +356,10 @@
   overflow-y: scroll;
   left: -1px;
   gap: 15px;
-  display: flex;
-  justify-content: space-around;
-  flex-direction: column-reverse;
 }
 .new-task-form .data-wrapper .pickers-wrapper .asignee-picker .custom-list .asignee-list__item {
   line-height: 25px;
+  margin-bottom: 15px;
 }
 .new-task-form .data-wrapper .pickers-wrapper .asignee-picker .custom-list .asignee-list__item:hover {
   color: rgb(57, 255, 238);

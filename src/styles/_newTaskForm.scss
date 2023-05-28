@@ -89,12 +89,10 @@
                         overflow-y: scroll;
                         left: -1px;
                         gap: 15px;
-                        display: flex;
-                        justify-content: space-around;
-                        flex-direction: column-reverse;
+
                         &__item {
                             line-height: 25px;
-            
+                            margin-bottom: 15px;
                             &:hover {
                                 color: $light-blue
                             }

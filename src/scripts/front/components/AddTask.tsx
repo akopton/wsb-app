@@ -57,7 +57,7 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
     const [updatedId, setUpdatedId] = useState<number>()
     const [addingNewTask, setAddingNewTask] = useState<boolean>(false)
     const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false)
-    
+    const [projectName, setProjectName] = useState<string>()
     
 
     const initialState = {
@@ -112,18 +112,23 @@ const NewTaskForm = ( {setIsFormOpened, loggedUser, setTasks}:any ) => {
     
 
     const getDataForNewTask = async () => {
-        await getData('http://127.0.0.1:8888/get-id')
-                .then(data => data.json())
-                .then(res => {
-                    const {id} = res
-                    setUpdatedId(id+1)
-                    dispatch({
-                        type: 'generate',
-                        field: 'innerId',
-                        payload: `PROJECT-${id}`
-                    })
-                    console.log(`wygenerowano id ${id}`)
+        await getData('http://127.0.0.1:8888/get-project-name')
+            .then((res) => res.json())
+            .then((data) => {
+                return data[0].name
+            })
+            .then(name => getData('http://127.0.0.1:8888/get-id')
+            .then(data => data.json())
+            .then(res => {
+                const {id} = res
+                setUpdatedId(id+1)
+                dispatch({
+                    type: 'generate',
+                    field: 'innerId',
+                    payload: `${name}-${id}`
                 })
+                console.log(`wygenerowano id ${id}`)
+            }))
         await getData('http://127.0.0.1:8888/users')
                 .then(data => data.json())
                 .then(res => setUsersList(res))
