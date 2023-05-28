@@ -50,6 +50,11 @@ export const SettingsSite = ({setIsSettingsOpened, loggedUser, setIsLoggedIn, se
         setLoggedUser(defaultUser)
     }
 
+    const clearForm = () => {
+        setCurrentPassword("")
+        setNewPassword("")
+        setConfirmNewPassword("")
+    }
 
     const handleUpdateSettings = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -60,6 +65,7 @@ export const SettingsSite = ({setIsSettingsOpened, loggedUser, setIsLoggedIn, se
             newUserDetails.settings.taskDaysLeft = newDaysLeftCount
             try {
                 await updateUser(newUserDetails)
+                clearForm()
                 alert('Ilość dni została zmieniona!')
             } catch (e) {
                 console.log(e)
@@ -74,6 +80,7 @@ export const SettingsSite = ({setIsSettingsOpened, loggedUser, setIsLoggedIn, se
                     newUserDetails.password = newPassword
                     try {
                         await updateUser(newUserDetails)
+                        clearForm()
                         alert('Hasło zostało zmienione!')
                     } catch (e) {
                         console.log(e)
@@ -95,7 +102,7 @@ export const SettingsSite = ({setIsSettingsOpened, loggedUser, setIsLoggedIn, se
             newUserDetails.password = newPassword
             try {
                 await updateUser(newUserDetails)
-                alert('Ustawienia zapisane poprawnie!')
+                clearForm()
             } catch (e) {
                 console.log(e)
             }
@@ -114,7 +121,7 @@ export const SettingsSite = ({setIsSettingsOpened, loggedUser, setIsLoggedIn, se
                 </label>
                 {
                     showPasswordChangeForm &&
-                    <NewPasswordForm handlePasswords={handlePasswords}/>
+                    <NewPasswordForm currentPassword={currentPassword} newPasword={newPassword} confirmNewPassword={confirmNewPassword} handlePasswords={handlePasswords}/>
                 }
                 {showUpdateBtn && <input type="submit" value="Zapisz ustawienia" onClick={handleUpdateSettings} className="submit-changes-btn btn form__btn"/>}
             </form>

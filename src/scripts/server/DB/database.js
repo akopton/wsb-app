@@ -16,6 +16,7 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
     const usersCollection = db.collection('users_collection')
     const tasksCollection = db.collection('tasks_collection')
     const generatedId = db.collection('taskIdGenerator')
+    const projectName = db.collection('projectName')
     const ObjectId = require('mongodb').ObjectId
 
     async function checkIfUserExists(client, newUser) {
@@ -67,18 +68,6 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
             await client.close()
         }
     }
-
-    // async function getTasksLists(client) {
-    //     try {
-    //         await client.connect()
-    //         const result = await taskListsCollection.find({}).toArray()
-    //         return result
-    //     } catch (e) {
-    //         console.error(e)
-    //     } finally {
-    //         client.close()
-    //     }
-    // }
 
     async function addNewTaskToDatabase(client, newTask) {
         try {
@@ -188,6 +177,18 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
         }
     }
 
+    async function getProjectName(client) {
+        try {
+            await client.connect()
+            const result = await projectName.find({}).toArray()
+            return result
+        } catch (e) {
+            console.error(e)
+        } finally {
+            await client.close()
+        }
+    }
+
     module.exports = MongoClient
     module.exports = {
         findUserInDatabase: findUserInDatabase,
@@ -201,7 +202,8 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
         updateTaskStatus: updateTaskStatus,
         deleteTask: deleteTask,
         updateUser: updateUser,
-        deleteUser: deleteUser
+        deleteUser: deleteUser,
+        getProjectName: getProjectName
     }
 } else {
     console.log('błąd')

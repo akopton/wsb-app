@@ -112,7 +112,7 @@ const MainSite = ( { usersList, loggedUser, setIsLoggedIn, setLoggedUser, defaul
                     /> : null
                 }
                 {isSettingsOpened ? <SettingsSite setIsSettingsOpened={setIsSettingsOpened} loggedUser={loggedUser} setIsLoggedIn={setIsLoggedIn} setLoggedUser={setLoggedUser} defaultUser={defaultUser}/> :
-                isAdminPanelOpened ? <AdminPanel/> :
+                isAdminPanelOpened ? <AdminPanel setIsAdminPanelOpened={setIsAdminPanelOpened}/> :
                 <Swiper
                     style={{height:'100vh', display:'flex'}}
                     modules={[EffectFade]}

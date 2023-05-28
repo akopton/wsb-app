@@ -35,7 +35,8 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
         findUserInDatabase,
         deleteTask,
         updateUser,
-        deleteUser
+        deleteUser,
+        getProjectName
     } = require('./DB/database.js');
 
 
@@ -110,6 +111,11 @@ if (DB_USERNAME && DB_PASSWORD && DB_URL) {
         const id = req.body
         const result = await deleteUser(client, id)
         res.send(result)
+    })
+
+    app.get('/get-project-name', async (req, res) => {
+        const PROJECT_NAME = await getProjectName(client)
+        res.send(PROJECT_NAME)
     })
 
 } else {

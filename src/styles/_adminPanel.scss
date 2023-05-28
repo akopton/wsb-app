@@ -1,0 +1,96 @@
+@import './_colors';
+
+.admin-panel {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .users-content__wrapper {
+
+        .users-content__title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 30px;
+        }
+
+        .users-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 50px;
+            gap: 20px;
+    
+            .users-list {
+                height: 360px;
+                overflow-y: scroll;
+                font-size: 30px;
+                padding: 0 20px;
+                
+                &::-webkit-scrollbar {
+                    width: 3px;
+                    background: $light-blue;
+                }
+                  
+                  /* Track */
+                &::-webkit-scrollbar-track {
+                    background: $dark-grey;
+                }
+                
+                /* Handle */
+                &::-webkit-scrollbar-thumb {
+                    background: $light-blue;
+                }
+                
+                /* Handle on hover */
+                &::-webkit-scrollbar-thumb:hover {
+                    background: $light-blue;
+                }
+
+                .user-item {
+                    text-align: center;
+                    padding: 10px;
+                    border-bottom: 2px solid $light-blue;
+                    cursor: pointer;
+        
+                    &:hover {
+                        color: $light-blue;
+                    }
+
+                    &.active {
+                        color: $light-blue;
+                    }
+
+                    .details-list {
+                        list-style-type: none;
+                    }
+                }
+            }
+
+            .selected-user {
+                .details-list {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 5px;
+                    text-align: center;
+
+                    &__item {
+                        font-size: 20px;
+
+                        &:first-of-type {
+                            grid-column: span 2;
+                        }
+                    }
+                }
+
+                .buttons-wrapper {
+                    margin-top: 30px;
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                }
+            }
+        }
+    }
+}
